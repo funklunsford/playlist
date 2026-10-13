@@ -421,3 +421,233 @@ button:disabled {
   align-items: center;
   gap: 16px;
 }
+
+/* ---- Playing: the big ▶, rows that play, and their menus. ---- */
+
+.big-play {
+  margin-left: auto;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 40%, transparent);
+  transition: transform 0.12s ease;
+}
+
+/* The triangle sits a little right of centre, so it looks centred. */
+.big-play svg {
+  margin-left: 3px;
+}
+
+.big-play:not(:disabled):active {
+  transform: scale(0.95);
+}
+
+.big-play:disabled {
+  opacity: 1;
+  background: var(--raise);
+  color: var(--ok);
+  box-shadow: none;
+}
+
+.big-play:disabled svg {
+  margin-left: 0;
+}
+
+.row.playable {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+}
+
+.row-main {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 22px auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 10px 8px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  text-align: left;
+}
+
+.row-main:hover {
+  background: var(--raise);
+}
+
+.row-main .n {
+  display: grid;
+  justify-items: end;
+}
+
+.row.current .n,
+.row.current .name {
+  color: var(--accent);
+}
+
+.row.done .n {
+  color: var(--ok);
+}
+
+.row.skipped .name,
+.row.skipped .tile {
+  opacity: 0.55;
+}
+
+.row-menu {
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  right: 4px;
+  top: calc(100% - 4px);
+  z-index: 5;
+  min-width: 168px;
+  padding: 6px;
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow), 0 0 0 1px var(--line);
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 11px 12px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  text-align: left;
+  font-weight: 600;
+}
+
+.menu button:hover {
+  background: var(--raise);
+}
+
+/* ---- The player bar along the bottom. ---- */
+
+.page.with-player {
+  padding-bottom: calc(96px + env(safe-area-inset-bottom));
+}
+
+.player {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border-top: 1px solid var(--line);
+}
+
+.progress {
+  height: 3px;
+  background: var(--line);
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.player-inner {
+  max-width: 680px;
+  min-height: 72px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
+}
+
+.np {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.np-line,
+.np-sub {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.np-line {
+  font-weight: 700;
+}
+
+.np-line svg {
+  color: var(--ok);
+  vertical-align: -3px;
+}
+
+.np-sub {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.not-yet {
+  flex-shrink: 0;
+  padding: 8px 2px;
+}
+
+.pill.small {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  font-size: 15px;
+}
+
+/* ▶ Next: the biggest thing to tap on the screen. */
+.next {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 50px;
+  padding: 0 20px 0 16px;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 17px;
+  font-weight: 800;
+  transition: transform 0.12s ease;
+}
+
+.next:active {
+  transform: scale(0.96);
+}
+
+/* A narrow phone keeps the bar's room for names: its tile goes. */
+@media (max-width: 420px) {
+  .player-inner > .tile {
+    display: none;
+  }
+}
+
+.np-all-done {
+  flex: 1;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--ok);
+}

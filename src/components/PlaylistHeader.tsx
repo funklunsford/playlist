@@ -1,15 +1,21 @@
 import { longDate } from '../day';
+import { CheckIcon, PlayIcon } from './icons';
 
 interface Props {
   date: string;
-  count: number;
+  total: number;
+  done: number;
   editing: boolean;
   /** Absent while there's nothing to edit. */
   onEdit?: () => void;
+  /** Plays the first unplayed puzzle; absent when there's none. */
+  onPlay?: () => void;
+  /** Extra buttons beside Edit. */
+  children?: React.ReactNode;
 }
 
-/** The top of the page: today's date and how many puzzles, over a wash of colour, like a playlist's cover. */
-export function PlaylistHeader({ date, count, editing, onEdit }: Props) {
+/** The top of the page: today's date and progress over a wash of colour, like a playlist's cover, and its big ▶. */
+export function PlaylistHeader({ date, total, done, editing, onEdit, onPlay, children }: Props) {
   return (
     <header className="hero">
       <div className="hero-inner">
@@ -17,12 +23,18 @@ export function PlaylistHeader({ date, count, editing, onEdit }: Props) {
         <h1>Today</h1>
         <p className="meta">
           {longDate(date)}
-          {count > 0 && ` · ${count} ${count === 1 ? 'puzzle' : 'puzzles'}`}
+          {total > 0 && ` · ${done} of ${total} done`}
         </p>
         <div className="actions">
           {onEdit && (
             <button type="button" className={editing ? 'pill' : 'pill outline'} onClick={onEdit}>
               {editing ? 'Done' : 'Edit'}
+            </button>
+          )}
+          {!editing && children}
+          {total > 0 && !editing && (
+            <button type="button" className="big-play" onClick={onPlay} disabled={!onPlay} aria-label={onPlay ? 'Play the next puzzle' : 'All done for today'}>
+              {onPlay ? <PlayIcon size={28} /> : <CheckIcon size={28} />}
             </button>
           )}
         </div>

@@ -12,3 +12,10 @@ const midnight = (date: string) => {
 
 /** A YYYY-MM-DD date for the page, in the device's language: "Tuesday, October 13". */
 export const longDate = (date: string) => midnight(date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+
+/** The YYYY-MM-DD date `n` days after `date` (before it, for negative n). */
+export function addDays(date: string, n: number): string {
+  const d = midnight(date);
+  d.setDate(d.getDate() + n);
+  return localDate(d);
+}

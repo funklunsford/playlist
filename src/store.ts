@@ -1,6 +1,9 @@
 // What the playlist keeps in this browser's localStorage, under keys that start "playlist:". The origin is
 // shared with Strokes ("strokes:…") and Mountweazel ("mountweazel-…"), so the prefix keeps them apart.
 
+import { addDays } from './day';
+import { signalDate } from './firstParty';
+import type { Day, Launch, Mark } from './player';
 import { EMPTY, type LinkPuzzle, type Playlist } from './playlist';
 
 /** The part of localStorage the playlist uses, so tests can hand it a stand-in. */
@@ -73,3 +76,56 @@ export function loadPlaylist(kv: KeyValue): Playlist {
 }
 
 export const savePlaylist = (kv: KeyValue, list: Playlist) => writeJson(kv, ITEMS_KEY, list);
+
+// ---- Today's marks, and the puzzle ▶ last opened. ----
+
+export const dayKey = (date: string) => `playlist:day:${date}`;
+export const LAUNCH_KEY = 'playlist:launch';
+const DAY_PREFIX = 'playlist:day:';
+
+const STATUSES = new Set(['done', 'skipped', 'todo']);
+
+/** The marks for a date, leaving out any that can't be read. */
+export function loadDay(kv: KeyValue, date: string): Day {
+  const v = readJson(kv, dayKey(date));
+  if (!v || typeof v !== 'object') return {};
+  const day: Day = {};
+  for (const [id, m] of Object.entries(v as Record<string, Partial<Mark>>))
+    if (m && STATUSES.has(m.status as string) && typeof m.at === 'number') day[id] = { status: m.status as Mark['status'], at: m.at };
+  return day;
+}
+
+export const saveDay = (kv: KeyValue, date: string, day: Day) => writeJson(kv, dayKey(date), day);
+
+export function loadLaunch(kv: KeyValue): Launch | null {
+  const v = readJson(kv, LAUNCH_KEY) as Partial<Launch> | null;
+  if (!v || typeof v.id !== 'string' || typeof v.date !== 'string' || typeof v.at !== 'number') return null;
+  return { id: v.id, date: v.date, at: v.at, handled: v.handled === true };
+}
+
+export function saveLaunch(kv: KeyValue, launch: Launch | null) {
+  if (launch) writeJson(kv, LAUNCH_KEY, launch);
+  else
+    try {
+      kv.removeItem(LAUNCH_KEY);
+    } catch {
+      /* blocked: nothing was saved either */
+    }
+}
+
+/** Forgets days older than `keepDays`: the playlist's marks, and your games' done signals. */
+export function prune(kv: KeyValue, today: string, keepDays = 90) {
+  const oldest = addDays(today, -keepDays);
+  const stale: string[] = [];
+  for (let i = 0; i < kv.length; i++) {
+    const key = kv.key(i);
+    const date = key?.startsWith(DAY_PREFIX) ? key.slice(DAY_PREFIX.length) : key && signalDate(key);
+    if (key && date && date < oldest) stale.push(key);
+  }
+  for (const key of stale)
+    try {
+      kv.removeItem(key);
+    } catch {
+      /* blocked: nothing to tidy */
+    }
+}
