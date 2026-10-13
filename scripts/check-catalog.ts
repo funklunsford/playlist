@@ -30,7 +30,8 @@ async function check(url: string): Promise<{ verdict: Verdict; detail: string }>
 }
 
 const results: { id: string; url: string; verdict: Verdict; detail: string }[] = [];
-const queue = [...CATALOG];
+// (Only real addresses: on the dev server the catalog also has a stand-in game, by a relative one.)
+const queue = CATALOG.filter((p) => /^https?:/.test(p.url));
 await Promise.all(
   Array.from({ length: 6 }, async () => {
     for (let p = queue.shift(); p; p = queue.shift()) results.push({ id: p.id, url: p.url, ...(await check(p.url)) });

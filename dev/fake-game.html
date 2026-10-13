@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fake game</title>
+    <style>
+      body { font: 18px/1.5 system-ui, sans-serif; margin: 40px 20px; max-width: 32em; }
+      button { font: inherit; font-weight: 700; padding: 12px 22px; border-radius: 999px; border: 2px solid; background: none; margin-right: 8px; }
+    </style>
+  </head>
+  <body>
+    <!--
+      A stand-in for one of your games, for trying the playlist on localhost, where it isn't on the same
+      origin as the real Strokes. Vite serves it in development only (the build takes just index.html).
+      Finish says it's done the way Strokes and Mountweazel do (see src/firstParty.ts).
+    -->
+    <h1>Fake game</h1>
+    <p>Finish says today's game is done, as your own games do. Then go back to the playlist.</p>
+    <button id="finish">Finish</button>
+    <button id="back">Back to the playlist</button>
+    <p id="said" role="status"></p>
+    <script>
+      const localDate = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      document.getElementById('finish').onclick = () => {
+        localStorage.setItem(`puzzle-done:fake-game:${localDate()}`, JSON.stringify({ at: Date.now() }));
+        document.getElementById('said').textContent = 'Done. The playlist will tick it.';
+      };
+      document.getElementById('back').onclick = () => history.back();
+    </script>
+  </body>
+</html>
