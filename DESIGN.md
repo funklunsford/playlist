@@ -198,6 +198,7 @@ A small ranking function written for this, with tests. The catalog is about 40 e
 1. **Play three puzzles in a row with ▶ Next, using Safari's real Back button or edge swipe.** Each Back should land on the playlist in one step, and the puzzle should be ticked. Some sites' redirects or in-page routes may need a second Back; any that do get a note in the catalog.
 2. **A Safari tab or a home-screen app?** A home-screen app opens other sites in a sheet rather than in its own view, so there's no Back, and its storage is separate from Safari's. v1 targets a Safari tab (a favorite or bookmark); the home-screen version needs testing.
 3. **Finishing Strokes, then going Back,** ticks it, and leaving it unfinished doesn't.
+4. **Back restoring the page from the cache:** Safari may show the playlist as it was left, firing `pageshow` with `persisted`, rather than load it again. That path should tick the puzzle and show ▶ Next too. The built-in browser always loads the page again, so the phone is the only place this path gets tried.
 
 ## Verification
 - **`npm test`:**
@@ -232,6 +233,7 @@ A small ranking function written for this, with tests. The catalog is about 40 e
   - **Your games:** Strokes without its signal stays unticked, with Done offered.
   - **Ending a day:** skip, mark done, and "All done for today".
   - **Playlist links:** Share, then Add and Replace mine on a cleared playlist.
+- **The built site:** `vite preview` of the production build ran the loop the same way. Back loaded the page again rather than restoring it, even without the dev server's live reload. That leaves the restore path for the iPhone checks.
 - **Your games' signal:** a stand-in, `dev/fake-game.html`, is listed in the catalog on the dev server only, and the build leaves it out.
   - Finish then Back ticks it.
   - Back without Finish doesn't.
