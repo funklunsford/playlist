@@ -1,0 +1,73 @@
+/* Light by default; dark when the device is (there's no setting for it). */
+:root {
+  --bg: #f7f6fb;
+  --surface: #ffffff;
+  --raise: #edebf6;
+  --ink: #17171c;
+  --muted: #5f5e6b;
+  --line: #e2e0ec;
+  --accent: #5b3df5;
+  --on-accent: #ffffff;
+  --ok: #1f8a4c;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121214;
+    --surface: #1b1b20;
+    --raise: #26262d;
+    --ink: #f3f3f6;
+    --muted: #a4a3ae;
+    --line: #2b2b33;
+    --accent: #8b74ff;
+    --on-accent: #121214;
+    --ok: #3ccf7e;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: max(24px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 24px max(16px, env(safe-area-inset-left));
+}
+
+.head h1 {
+  margin: 0;
+  font-size: 40px;
+  letter-spacing: -0.02em;
+}
+
+.sub {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.empty {
+  margin-top: 32px;
+  color: var(--muted);
+}
