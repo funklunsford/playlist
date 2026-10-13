@@ -221,3 +221,31 @@ A small ranking function written for this, with tests. The catalog is about 40 e
 - **After deploying:**
   - Play Strokes from the playlist at funklunsford.github.io/playlist/, solve it, and go back. It should be ticked, with ▶ Next on Connections.
   - Run the iPhone checklist on both phones.
+
+## Phase 1 built, locally (2026-10-13)
+- **Built:** steps 1–5 below, each on its own branch and merged. 74 tests cover search, the play loop, storage, links and signals. Not on GitHub yet, so not published.
+- **Tried in a browser** (the desktop app's built-in Chromium, at 375 × 812 and desktop, light and dark):
+  - Adding puzzles by chips, a typo ("conections") and a partial name, and by link.
+  - Edit's drag, arrows and remove.
+  - **Three puzzles in a row** (Octordle, Framed, Squaredle): ▶, Back, ▶ Next. Each Back landed on the playlist with that puzzle ticked.
+  - **Not yet:** it un-ticks, and Forward then Back doesn't re-tick.
+  - **Your games:** Strokes without its signal stays unticked, with Done offered.
+  - **Ending a day:** skip, mark done, and "All done for today".
+  - **Playlist links:** Share, then Add and Replace mine on a cleared playlist.
+- **Your games' signal:** a stand-in, `dev/fake-game.html`, is listed in the catalog on the dev server only, and the build leaves it out.
+  - Finish then Back ticks it.
+  - Back without Finish doesn't.
+  - Finishing it in another tab ticks the open playlist at once.
+- **Strokes:** sends its signal in funklunsford/word-puzzle PR #37 (branch `playlist-done`). Mountweazel's waits for `climb`.
+- **Catalog checks:**
+  - `npm run check-catalog` found all 42 addresses answering, with no redirects.
+  - Bracket City turns scripts away, but its page checked out by hand.
+  - The Washington Post turns automated browsers away, so **Keyword's address is unconfirmed**.
+  - The built-in browser won't open nytimes.com at all, so the loop was tried with other sites.
+- **The dev server:** `.claude/launch.json` calls it "playlist", with `autoPort`, and `vite.config.ts` takes the port from `PORT` (else 5174).
+- **Still to do:**
+  - Put the repo on GitHub and turn on Pages.
+  - Run the iPhone checks above.
+  - Merge PR #37.
+  - Add Mountweazel's signal.
+  - Phase 2.
