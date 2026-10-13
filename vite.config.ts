@@ -6,8 +6,8 @@ export default defineConfig({
   plugins: [react()],
   // Relative asset paths, so the built site works from any folder (GitHub Pages serves it at /playlist/).
   base: './',
-  // Strokes' dev server has 5173.
-  server: { port: 5174, strictPort: true },
+  // Strokes' dev server has 5173. A preview tool that assigns a port says which in PORT.
+  server: { port: Number(process.env.PORT) || 5174, strictPort: true },
   // Agents' worktrees live under .claude/worktrees: their copies of the tests aren't this checkout's.
   test: { exclude: [...configDefaults.exclude, '.claude/**'] },
 });
