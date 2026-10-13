@@ -3,9 +3,12 @@ import { catalogPuzzle } from './catalog';
 import { localDate } from './day';
 import { parseDoneKey, readSignals } from './firstParty';
 import { applySignals, arrive, barFor, mark, nextUp, type Arrival, type Back, type Day, type Status } from './player';
+import { fromShared, playlistLink, readLink, withShared, type Shared } from './link';
 import { add, addLink, move, puzzlesOf, remove, type Playlist } from './playlist';
 import { browserStorage, ITEMS_KEY, loadDay, loadLaunch, loadPlaylist, prune, saveDay, saveLaunch, savePlaylist } from './store';
 import { EditList } from './components/EditList';
+import { ShareIcon } from './components/icons';
+import { ImportSheet } from './components/ImportSheet';
 import { PlayerBar } from './components/PlayerBar';
 import { PlaylistHeader } from './components/PlaylistHeader';
 import { PuzzleRow } from './components/PuzzleRow';
@@ -67,6 +70,9 @@ export function App() {
   const [today, setToday] = useState(() => (opening ??= settle(list.ids, arrivalNow())));
   const [editing, setEditing] = useState(false);
   const [menu, setMenu] = useState<string | null>(null);
+  // A playlist link this page was opened with (#add=…), waiting for Add or Replace mine.
+  const [incoming, setIncoming] = useState<Shared | null>(() => readLink(location.hash));
+  const [toast, setToast] = useState<string | null>(null);
   const puzzles = puzzlesOf(list);
   const ids = puzzles.map((p) => p.id);
 
@@ -100,6 +106,20 @@ export function App() {
     };
   }, []);
 
+  // A playlist link pasted into the address bar while the page is open.
+  useEffect(() => {
+    const onHash = () => setIncoming(readLink(location.hash));
+    addEventListener('hashchange', onHash);
+    return () => removeEventListener('hashchange', onHash);
+  }, []);
+
+  // A toast says its piece, then goes.
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 2400);
+    return () => clearTimeout(t);
+  }, [toast]);
+
   // Editing ends when there's nothing left to edit.
   useEffect(() => {
     if (!puzzles.length) setEditing(false);
@@ -111,6 +131,32 @@ export function App() {
     if (!p) return;
     saveLaunch(kv, { id, date: localDate(), at: Date.now(), handled: false });
     location.assign(p.url);
+  };
+
+  /** Done with a playlist link: its #add= part leaves the address, so a reload doesn't ask again. */
+  const closeIncoming = (next?: Playlist) => {
+    if (next) update(next);
+    setIncoming(null);
+    history.replaceState(history.state, '', location.pathname + location.search);
+  };
+
+  /** Sends the playlist as a link: the share sheet where there is one (iPhone), else the clipboard. */
+  const share = async () => {
+    const url = playlistLink(list, location.origin + location.pathname);
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'Puzzle Playlist', text: 'My daily puzzles', url });
+        return;
+      } catch (e) {
+        if ((e as Error).name === 'AbortError') return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setToast('Link copied');
+    } catch {
+      prompt('Copy this link', url);
+    }
   };
 
   const setMark = (id: string, status: Status) => {
@@ -146,7 +192,13 @@ export function App() {
         editing={editing}
         onEdit={puzzles.length ? () => setEditing(!editing) : undefined}
         onPlay={first ? () => play(first) : undefined}
-      />
+      >
+        {puzzles.length > 0 && (
+          <button type="button" className="pill outline" onClick={share}>
+            <ShareIcon size={16} /> Share
+          </button>
+        )}
+      </PlaylistHeader>
       <main className={puzzles.length && !editing ? 'page with-player' : 'page'}>
         {!puzzles.length ? (
           finder(true)
@@ -182,6 +234,20 @@ export function App() {
           onPlay={play}
           onMark={(id, isDone) => setMark(id, isDone ? 'done' : 'todo')}
         />
+      )}
+      {incoming && (
+        <ImportSheet
+          shared={incoming}
+          mine={list}
+          onAdd={() => closeIncoming(withShared(list, incoming))}
+          onReplace={() => closeIncoming(fromShared(incoming))}
+          onCancel={() => closeIncoming()}
+        />
+      )}
+      {toast && (
+        <p className="toast" role="status">
+          {toast}
+        </p>
       )}
     </div>
   );
