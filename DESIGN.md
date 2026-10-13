@@ -251,3 +251,11 @@ A small ranking function written for this, with tests. The catalog is small, so 
   - The iPhone checks.
   - Mountweazel's signal.
   - Phase 2.
+
+## Published (2026-10-13)
+- **Live at https://funklunsford.github.io/playlist/.** The repo is public at funklunsford/playlist, and Pages builds from Actions. The first run's tests, build and deploy all passed.
+- **Strokes' signal is live:** PR #37 was merged, and the deployed Strokes bundle writes `puzzle-done:strokes:<date>`.
+- **On the live site:**
+  - The playlist reads the same storage as Strokes and Mountweazel.
+  - Tapping Strokes, writing its done key by hand on the Strokes page as a stand-in for a solve, then going Back ticked Strokes, with ▶ Next on the next puzzle.
+  - A real solve in Strokes wasn't played through, because a test browser can't easily draw its strokes.
