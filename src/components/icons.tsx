@@ -117,6 +117,14 @@ export const SkipIcon = (p: Props) => (
   </Svg>
 );
 
+/** pencil: rename. */
+export const PencilIcon = (p: Props) => (
+  <Svg {...p}>
+    <path d="M15.6 4.4a2 2 0 0 1 2.8 0l1.2 1.2a2 2 0 0 1 0 2.8L8.5 19.5 3.5 20.5l1-5z" />
+    <path d="M13.5 6.5l4 4" />
+  </Svg>
+);
+
 /** link */
 export const LinkIcon = (p: Props) => (
   <Svg {...p}>

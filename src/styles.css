@@ -463,7 +463,16 @@ button:disabled {
   letter-spacing: 0.01em;
 }
 
-/* Renaming, while editing: the name in a field, plainly one to type in. */
+/* The pencil beside the name: renames it in place. It sits in the line without making it taller. */
+.hero h1 .rename {
+  width: 40px;
+  height: 40px;
+  margin: -8px -8px -8px 2px;
+  color: var(--tint);
+  vertical-align: middle;
+}
+
+/* Renaming, while editing or with the pencil: the name in a field, plainly one to type in. */
 .name-field {
   width: 100%;
   margin: 0;
