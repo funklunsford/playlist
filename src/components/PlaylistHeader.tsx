@@ -1,70 +1,59 @@
+import type { Puzzle } from '../catalog';
 import { longDate } from '../day';
-import { ArrowIcon, GearIcon } from './icons';
-
-/** How a puzzle stands today, for its progress dot. */
-export type Cell = 'done' | 'skipped' | 'current' | 'todo';
+import { Artwork } from './Artwork';
+import { CheckIcon, PlayIcon, ShuffleIcon } from './icons';
 
 interface Props {
+  title: string;
   date: string;
-  /** Each puzzle's colour and how it stands, in list order. */
-  pieces: { color: string; cell: Cell }[];
-  /** Something's been played or skipped today, so the button continues rather than starts. */
+  puzzles: readonly Puzzle[];
+  /** How many are done today. */
+  done: number;
+  /** Something's been played or skipped today, so ▶ resumes rather than plays. */
   started: boolean;
   editing: boolean;
-  /** Absent while there's nothing to edit. */
-  onEdit?: () => void;
-  /** Plays the first unplayed puzzle; absent when there's none. */
-  onPlay?: () => void;
-  onSettings(): void;
-  /** Extra buttons beside Edit. */
-  children?: React.ReactNode;
+  /** The puzzle ▶ plays, and playing it; absent when there's none left. */
+  next?: Puzzle;
+  onPlay(): void;
+  shuffle: boolean;
+  onShuffle(): void;
 }
 
-/** The top of the page: today's title and date, a dot per puzzle filled in as it's done, and the button to start. */
-export function PlaylistHeader({ date, pieces, started, editing, onEdit, onPlay, onSettings, children }: Props) {
-  const total = pieces.length;
-  const done = pieces.filter((p) => p.cell === 'done').length;
+/**
+ * The top of the playlist, as a music app shows one: its cover, its title, the date and how far today has got, and
+ * Play beside Shuffle. Shuffle is a switch: on, ▶ and Next take the puzzles in a shuffled order (src/shuffle.ts).
+ */
+export function PlaylistHeader({ title, date, puzzles, done, started, editing, next, onPlay, shuffle, onShuffle }: Props) {
+  const total = puzzles.length;
   return (
-    <header className="hero">
-      <div className="hero-inner">
-        <div className="hero-top">
-          <p className="kicker">Puzzle Playlist</p>
-          <button type="button" className="icon-button gear" onClick={onSettings} aria-label="Settings">
-            <GearIcon size={22} />
-          </button>
-        </div>
-        <h1>Today's Puzzles</h1>
+    <section className="hero" aria-label="Today's playlist">
+      <Artwork puzzles={puzzles} />
+      <div className="hero-text">
+        <h1>{title}</h1>
+        <p className="curator">Puzzle Playlist</p>
         <p className="meta">
           {longDate(date)}
-          {total > 0 && ` · ${done === total ? 'all done' : `${done} of ${total} done`}`}
+          {total > 0 && ` · ${done === total ? 'All done' : `${done} of ${total} done`}`}
         </p>
-        {total > 0 && (
-          <ol className="dots" aria-hidden="true">
-            {pieces.map((p, i) => (
-              <li key={i} className={`dot ${p.cell}`} style={{ '--piece': p.color } as React.CSSProperties} />
-            ))}
-          </ol>
-        )}
-        <div className="actions">
-          {onEdit && (
-            <button type="button" className={editing ? 'pill' : 'pill outline'} onClick={onEdit}>
-              {editing ? 'Done' : 'Edit'}
-            </button>
-          )}
-          {!editing && children}
-          {total > 0 && !editing && (
-            <button type="button" className="start" onClick={onPlay} disabled={!onPlay} aria-label={onPlay ? 'Play the next puzzle' : 'All done for today'}>
-              {onPlay ? (
+        {total > 0 && !editing && (
+          <div className="hero-actions">
+            <button type="button" className="action" onClick={onPlay} disabled={!next} aria-label={next ? `Play ${next.name}` : 'All done for today'}>
+              {next ? (
                 <>
-                  {started ? 'Continue' : 'Start'} <ArrowIcon size={20} />
+                  <PlayIcon size={18} /> {started ? 'Resume' : 'Play'}
                 </>
               ) : (
-                'All done'
+                <>
+                  <CheckIcon size={18} /> All Done
+                </>
               )}
             </button>
-          )}
-        </div>
+            <button type="button" className="action" aria-pressed={shuffle} onClick={onShuffle}>
+              <ShuffleIcon size={18} /> Shuffle
+            </button>
+          </div>
+        )}
       </div>
-    </header>
+    </section>
   );
 }

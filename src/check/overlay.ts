@@ -14,10 +14,10 @@ const STYLE = `
     padding: 12px 14px 12px 18px; border-radius: 999px; background: #1b1b20; color: #f3f3f6;
     font: 600 15px/1.35 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     box-shadow: 0 8px 28px rgb(0 0 0 / 0.35); }
-  .who { color: #a99bff; font-weight: 800; white-space: nowrap; }
+  .who { color: #63e6e2; font-weight: 700; white-space: nowrap; }
   .text { flex: 1; }
   button { font: inherit; border: none; border-radius: 999px; padding: 8px 14px; cursor: pointer; white-space: nowrap; }
-  .yes { background: #8b74ff; color: #121214; font-weight: 800; }
+  .yes { background: #63e6e2; color: #000000; font-weight: 600; }
   .no { background: transparent; color: #f3f3f6; }
 `;
 

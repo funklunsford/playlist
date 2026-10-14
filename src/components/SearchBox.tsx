@@ -1,8 +1,8 @@
 import { useId, useState } from 'react';
-import { catalogPuzzle, publisherLabel } from '../catalog';
+import { catalogPuzzle, publisherLabel, type Puzzle } from '../catalog';
 import { pieceColor } from '../pieces';
 import { search } from '../search';
-import { CheckIcon, CloseIcon, LinkIcon, PlusIcon, SearchIcon } from './icons';
+import { CheckIcon, ClearIcon, LinkIcon, PlusCircleIcon, SearchIcon } from './icons';
 import { Tile } from './Tile';
 
 const SHOWN = 6;
@@ -20,7 +20,7 @@ interface Props {
   prominent?: boolean;
 }
 
-/** Finding puzzles by name, as in Spotify's "find something for your playlist". */
+/** Finding puzzles by name, as a music app finds songs to add to a playlist. */
 export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
   const [query, setQuery] = useState('');
   const [linking, setLinking] = useState(false);
@@ -31,6 +31,7 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
 
   const results = query.trim() ? search(query).slice(0, SHOWN) : [];
   const has = (id: string) => added.includes(id);
+  const starters = prominent && !query ? STARTERS.filter((id) => !has(id)).flatMap((id) => catalogPuzzle(id) ?? []) : [];
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,16 +58,40 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
     } else setLinkError(true);
   };
 
+  /** A puzzle to add, with + (or a tick once it's in). */
+  const row = (p: Puzzle, i: number) => (
+    <li key={p.id} className="result">
+      <Tile puzzle={p} color={pieceColor(i)} size={44} />
+      <span className="title">
+        <span className="name">{p.name}</span>
+        <span className="by">
+          {publisherLabel(p)}
+          {p.note && ` · ${p.note}`}
+        </span>
+      </span>
+      {has(p.id) ? (
+        <span className="added" aria-label={`${p.name} is in your playlist`}>
+          <CheckIcon size={20} />
+        </span>
+      ) : (
+        <button type="button" className="add" onClick={() => onAdd(p.id)} aria-label={`Add ${p.name}`}>
+          <PlusCircleIcon size={28} />
+        </button>
+      )}
+    </li>
+  );
+
   return (
     <section className={prominent ? 'finder prominent' : 'finder'} aria-label="Add puzzles">
-      {prominent ? <h2>Make today's list</h2> : <h2 className="finder-title">Add a puzzle</h2>}
+      <h2 className="section-title">Add Puzzles</h2>
+      {prominent && <p className="finder-sub">Search for the puzzles you play each day, or start with these.</p>}
       <form className="search" role="search" onSubmit={submit}>
-        <SearchIcon />
+        <SearchIcon size={18} />
         <input
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="wordle, clues by sam, nyt mini…"
+          placeholder="Wordle, Clues by Sam, NYT Mini…"
           aria-label="Search for a puzzle"
           aria-controls={listId}
           autoComplete="off"
@@ -76,34 +101,14 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
           enterKeyHint="go"
         />
         {query && (
-          <button type="button" className="icon-button" onClick={() => setQuery('')} aria-label="Clear">
-            <CloseIcon size={18} />
+          <button type="button" className="clear" onClick={() => setQuery('')} aria-label="Clear">
+            <ClearIcon size={17} />
           </button>
         )}
       </form>
 
       <ul className="results" id={listId}>
-        {results.map((p, i) => (
-          <li key={p.id} className="result">
-            <Tile puzzle={p} color={pieceColor(i)} size={40} />
-            <span className="title">
-              <span className="name">{p.name}</span>
-              <span className="by">
-                {publisherLabel(p)}
-                {p.note && ` · ${p.note}`}
-              </span>
-            </span>
-            {has(p.id) ? (
-              <span className="added" aria-label={`${p.name} is in your playlist`}>
-                <CheckIcon size={20} />
-              </span>
-            ) : (
-              <button type="button" className="add" onClick={() => onAdd(p.id)} aria-label={`Add ${p.name}`}>
-                <PlusIcon size={18} />
-              </button>
-            )}
-          </li>
-        ))}
+        {results.map(row)}
       </ul>
 
       {query.trim() && !results.length && !linking && (
@@ -115,41 +120,38 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
         </p>
       )}
 
-      {prominent && !query && (
-        <div className="starters" aria-label="Suggestions">
-          {STARTERS.filter((id) => !has(id))
-            .flatMap((id) => catalogPuzzle(id) ?? [])
-            .map((p, i) => (
-              <button type="button" key={p.id} className="chip" style={{ '--piece': pieceColor(i) } as React.CSSProperties} onClick={() => onAdd(p.id)}>
-                <PlusIcon size={16} /> {p.name}
-              </button>
-            ))}
-        </div>
+      {starters.length > 0 && (
+        <>
+          <h3 className="list-header">Suggestions</h3>
+          <ul className="results">{starters.map(row)}</ul>
+        </>
       )}
 
       {linking ? (
         <form className="link-form" onSubmit={submitLink}>
-          <input value={linkName} onChange={(e) => setLinkName(e.target.value)} placeholder="Name" aria-label="Puzzle name" />
-          <input
-            value={linkUrl}
-            onChange={(e) => {
-              setLinkUrl(e.target.value);
-              setLinkError(false);
-            }}
-            placeholder="Address, like example.com/daily"
-            aria-label="Puzzle address"
-            inputMode="url"
-            autoCapitalize="none"
-            autoCorrect="off"
-            spellCheck={false}
-            aria-invalid={linkError}
-          />
+          <div className="fields">
+            <input value={linkName} onChange={(e) => setLinkName(e.target.value)} placeholder="Name" aria-label="Puzzle name" />
+            <input
+              value={linkUrl}
+              onChange={(e) => {
+                setLinkUrl(e.target.value);
+                setLinkError(false);
+              }}
+              placeholder="Address, like example.com/daily"
+              aria-label="Puzzle address"
+              inputMode="url"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              aria-invalid={linkError}
+            />
+          </div>
           {linkError && <p className="error">That isn't a web address.</p>}
           <div className="link-actions">
-            <button type="button" className="text-button" onClick={() => setLinking(false)}>
+            <button type="button" className="button plain" onClick={() => setLinking(false)}>
               Cancel
             </button>
-            <button type="submit" className="pill">
+            <button type="submit" className="button filled">
               Add
             </button>
           </div>
@@ -157,7 +159,7 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
       ) : (
         !(query.trim() && !results.length) && (
           <button type="button" className="text-button by-link" onClick={openLink}>
-            <LinkIcon size={16} /> Add by link
+            <LinkIcon size={18} /> Add by Link
           </button>
         )
       )}

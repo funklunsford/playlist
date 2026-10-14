@@ -1,6 +1,6 @@
 import type { Puzzle } from '../catalog';
 import type { Bar, Day } from '../player';
-import { ArrowIcon, CheckIcon, StarIcon } from './icons';
+import { CheckCircleIcon, ForwardIcon, PlayIcon, ShuffleIcon, StarIcon } from './icons';
 import { Tile } from './Tile';
 
 interface Props {
@@ -10,25 +10,36 @@ interface Props {
   colorOf(id: string): string;
   /** Today's marks, for a grade to show. */
   marks: Day;
+  /** Whether Shuffle is on, which the bar notes beside what's next. */
+  shuffle: boolean;
   onPlay(id: string): void;
   /** Un-ticks (Not yet) or ticks (Done) the puzzle you've come back from. */
   onMark(id: string, done: boolean): void;
 }
 
-/** The bar along the bottom: the puzzle you've come back from, ticked with its grade, and the button for the next. */
-export function PlayerBar({ bar, puzzle, colorOf, marks, onPlay, onMark }: Props) {
+/**
+ * The mini player, floating along the bottom: the puzzle you've come back from, ticked with its grade, and the button
+ * for the next; or, on a fresh visit, the puzzle that's up next.
+ */
+export function PlayerBar({ bar, puzzle, colorOf, marks, shuffle, onPlay, onMark }: Props) {
   if (bar.kind === 'empty') return null;
+  const shuffled = shuffle && <ShuffleIcon size={13} />;
 
   let body: React.ReactNode;
   if (bar.kind === 'all-done') {
     const from = bar.from ? puzzle(bar.from) : undefined;
     body = (
       <>
-        <StarIcon size={32} />
-        <p className="np-all-done">All done for today</p>
+        <span className="np-star">
+          <StarIcon size={28} />
+        </span>
+        <span className="np">
+          <span className="np-name">All done for today</span>
+          <span className="np-sub">See you tomorrow</span>
+        </span>
         {from && (
-          <button type="button" className="text-button not-yet" onClick={() => onMark(from.id, false)} aria-label={`Not yet: ${from.name}`}>
-            Not yet
+          <button type="button" className="text-button" onClick={() => onMark(from.id, false)} aria-label={`Not yet: ${from.name}`}>
+            Not Yet
           </button>
         )}
       </>
@@ -40,17 +51,23 @@ export function PlayerBar({ bar, puzzle, colorOf, marks, onPlay, onMark }: Props
     const grade = bar.ticked ? marks[from.id]?.score : undefined;
     body = (
       <>
-        <Tile puzzle={from} color={colorOf(from.id)} size={40} />
+        <Tile puzzle={from} color={colorOf(from.id)} size={44} />
         <span className="np">
           <span className="np-line">
-            {bar.ticked && <CheckIcon size={18} />}
+            {bar.ticked && <CheckCircleIcon size={16} />}
             <span className="np-name">{from.name}</span>
           </span>
+          {/* The grade leads the line below, so a long one never crowds out the name. */}
           <span className="np-sub">
-            {grade && <span className="grade">{grade}</span>}
+            {grade && (
+              <>
+                <span className="grade">{grade}</span>
+                {' · '}
+              </>
+            )}
             {next ? (
               <>
-                Next up: <b>{next.name}</b>
+                {shuffled}Up next: <b>{next.name}</b>
               </>
             ) : (
               "That's the last one"
@@ -58,17 +75,17 @@ export function PlayerBar({ bar, puzzle, colorOf, marks, onPlay, onMark }: Props
           </span>
         </span>
         {bar.ticked ? (
-          <button type="button" className="text-button not-yet" onClick={() => onMark(from.id, false)}>
-            Not yet
+          <button type="button" className="text-button" onClick={() => onMark(from.id, false)}>
+            Not Yet
           </button>
         ) : (
-          <button type="button" className="pill outline small" onClick={() => onMark(from.id, true)}>
+          <button type="button" className="button gray" onClick={() => onMark(from.id, true)}>
             Done
           </button>
         )}
         {next && (
-          <button type="button" className="next" onClick={() => onPlay(next.id)} aria-label={`Play ${next.name}`}>
-            Next <ArrowIcon size={20} />
+          <button type="button" className="button filled" onClick={() => onPlay(next.id)} aria-label={`Play ${next.name}`}>
+            <ForwardIcon size={16} /> Next
           </button>
         )}
       </>
@@ -78,23 +95,24 @@ export function PlayerBar({ bar, puzzle, colorOf, marks, onPlay, onMark }: Props
     if (!next) return null;
     body = (
       <>
-        <Tile puzzle={next} color={colorOf(next.id)} size={40} />
+        <Tile puzzle={next} color={colorOf(next.id)} size={44} />
         <span className="np">
-          <span className="np-label">{bar.started ? 'Next up' : 'First up'}</span>
-          <span className="np-line">
-            <span className="np-name">{next.name}</span>
+          <span className="np-sub">
+            {shuffled}
+            {bar.started ? 'Up next' : 'First up'}
           </span>
+          <span className="np-name">{next.name}</span>
         </span>
-        <button type="button" className="next" onClick={() => onPlay(next.id)} aria-label={`Play ${next.name}`}>
-          {bar.started ? 'Continue' : 'Start'} <ArrowIcon size={20} />
+        <button type="button" className="button filled" onClick={() => onPlay(next.id)} aria-label={`Play ${next.name}`}>
+          <PlayIcon size={16} /> {bar.started ? 'Resume' : 'Play'}
         </button>
       </>
     );
   }
 
   return (
-    <footer className="player" aria-label="Next puzzle">
-      <div className="player-inner">{body}</div>
+    <footer className="player" aria-label="Up next">
+      <div className={`player-inner ${bar.kind}`}>{body}</div>
     </footer>
   );
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { doneKey, parseDoneKey, readSignals } from './firstParty';
-import { dayKey, LAUNCH_KEY, loadDay, loadLaunch, memoryStorage, prune, saveDay, saveLaunch } from './store';
+import { dayKey, LAUNCH_KEY, loadDay, loadLaunch, loadShuffle, memoryStorage, prune, saveDay, saveLaunch, saveShuffle, SHUFFLE_KEY } from './store';
 
 describe("today's marks", () => {
   it('come back as saved, per date', () => {
@@ -33,6 +33,21 @@ describe('the saved launch', () => {
     const kv = memoryStorage();
     kv.setItem(LAUNCH_KEY, JSON.stringify({ id: 3 }));
     expect(loadLaunch(kv)).toBeNull();
+  });
+});
+
+describe('Shuffle', () => {
+  it('is off until it is turned on, and comes back as saved', () => {
+    const kv = memoryStorage();
+    expect(loadShuffle(kv)).toEqual({ on: false, seed: 0 });
+    saveShuffle(kv, { on: true, seed: 12345 });
+    expect(loadShuffle(kv)).toEqual({ on: true, seed: 12345 });
+  });
+
+  it('is off when unreadable', () => {
+    const kv = memoryStorage();
+    kv.setItem(SHUFFLE_KEY, JSON.stringify({ on: 'yes' }));
+    expect(loadShuffle(kv).on).toBe(false);
   });
 });
 

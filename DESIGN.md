@@ -18,7 +18,7 @@ This doc settled the design before anything was built. "Puzzle Playlist" is a wo
 | Two players | Each device keeps its own playlist and progress, with no server or sign-in. A playlist is sent as a link |
 | How puzzles open | **In the same tab.** ▶ takes the tab to the puzzle, and Back returns to the playlist. **One tap per puzzle**, never a jump without one (see below). Nothing is framed |
 | What counts as done | **First-party games report it themselves. For other sites, coming back to the playlist counts as done**, and "Not yet" undoes it |
-| The look | Simple and flat: a teal page, each puzzle a rounded card in its own colour, coral for the button to press (see "Simpler, same colours"). No previews of the games |
+| The look | Apple's Human Interface Guidelines, laid out like an Apple Music playlist: a cover made from the puzzles, Play beside a Shuffle switch, plain rows, and a floating mini player, in the system's font and colours (see "The Apple way, with Shuffle"). No previews of the games |
 
 ## What the browser allows (tested 2026-10-13)
 **Framing doesn't work.** Each site's headers were checked with curl, then each site was framed from `funklunsford.github.io` in a Chromium browser.
@@ -80,7 +80,7 @@ It's laid out like a Spotify playlist.
    - **First-party games:** ✓ only if the game's done signal is there (see below). Coming back before finishing leaves it unticked, with Done on offer.
    - **Other sites:** ✓ just for coming back. "Not yet" un-ticks it.
    - **The launch is then marked handled.** A later Back, Forward or cache restore doesn't tick it again or undo a "Not yet".
-4. **The bottom bar offers ▶ Next** for the next unfinished puzzle. The playlist never moves on without a tap.
+4. **The bottom bar offers ▶ Next** for the next unfinished puzzle: in the list's order, or a shuffled one with Shuffle on (see "The Apple way, with Shuffle"). The playlist never moves on without a tap.
 5. **Opening the site fresh** (from a bookmark, or the next morning) shows ▶ Continue. A launch from earlier today is still ticked, and launches from other days are dropped.
 
 ### Adding puzzles
@@ -384,3 +384,44 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **Type:** Fredoka for the title only, and Nunito for everything else.
 - **The icon:** four rounded squares in the puzzle colours, on teal.
 
+## The Apple way, with Shuffle (2026-10-14, branch `apple`)
+- **The owner's call:** remodel the look on Apple's Human Interface Guidelines, still as a playlist, with a Shuffle switch, Edit and the rest. It replaces "Simpler, same colours".
+  - The page moves off teal to the system's white, or black in dark mode. The nine puzzle colours stay, as the puzzles' artwork.
+- **Laid out as Apple Music lays out a playlist:**
+  - **The bar along the top:** Settings at the left, Share and Edit at the right (Done while editing).
+    - It's clear at the top of the page and turns to frosted glass as the list scrolls under it. The title fades into it as the big one passes beneath.
+    - That's tied to scrolling in CSS (scroll-driven animations), with no script, so the page stays eligible for the back/forward cache. A browser without them shows the bar frosted throughout, with no small title.
+  - **The cover:** a 2 × 2 mosaic of the first four puzzles' artwork, as Apple Music makes a cover from a playlist's albums. With fewer than four, it's the first one's alone. An empty playlist has a grey cover with a grid symbol.
+  - **Under the cover:** "Today's Puzzles", then "Puzzle Playlist" in the key colour where Apple Music names the curator, then the date and "2 of 6 done" in small capitals.
+  - **Play and Shuffle,** side by side.
+    - Play becomes Resume once something's been played or skipped today, and All Done at the end.
+    - It plays the same puzzle as the mini player, and the row marked next.
+  - **The list:** plain rows, with hairlines from the text onward.
+    - Each row has the puzzle's artwork (its initial on a rounded square of its colour, with a slight sheen), its name and publisher, and ⋯.
+    - Done: a green tick, with the grade before it. Next: ▶ over its artwork, and its name in the key colour. Skipped: greyed.
+    - Below the list: "6 puzzles".
+  - **The ⋯ menu** is a frosted context menu: Mark as Done, Skip Today, Not Yet or Don't Skip, each with its symbol. Near the bottom of the window, it opens upward.
+  - **The mini player** floats just above the bottom edge, frosted.
+    - Ready: the puzzle that's up next, with ▶ Play (or Resume).
+    - After coming back: ✓ the puzzle, with its grade and "Up next: …" on the line below, then Not Yet (or Done, for first-party games) and ⏭ Next.
+    - The grade stays off the name's line, so a long one ("3 mistakes", a time) never crowds out the name. On a phone, the artwork steps aside to make room.
+    - At the end: a yellow star and "All done for today".
+- **Shuffle is a switch,** filled in the key colour when it's on.
+  - With it on, Play, Next and the mini player take today's puzzles in a shuffled order. The list keeps its own order, as in a music app. The mini player shows the shuffle symbol beside "Up next".
+  - **The order** sorts the puzzles by a hash of the seed, the date and each puzzle's id (`src/shuffle.ts`).
+    - So it comes out the same every time the page loads or comes back, which every play does.
+    - A new day gives a new order, and so does turning Shuffle off and on again (a new seed).
+    - Adding or removing a puzzle leaves the others' order as it was.
+  - **Storage:** `playlist:shuffle = { on, seed }`, on each device. A playlist link doesn't carry it.
+- **Edit** works as a list edits on an iPhone.
+  - A red − at the left shows Delete at the right, and Delete removes the puzzle.
+  - The handle at the right drags a row to a new place. With the keyboard, the handle moves its row with the up and down arrows. The separate up and down buttons are gone.
+- **Sheets** are iOS sheets: up from the bottom on a phone, a card in the middle on a wider screen, with a title bar (Cancel, Done).
+  - Settings is grouped cells on grey, as in the Settings app, with numbered steps.
+  - A shared playlist shows its cover and its puzzles, with Add and Replace Mine.
+- **Search** is an iOS search field. Results are rows with + to add, and an empty playlist lists its suggestions the same way.
+- **Type:** the system font (San Francisco on Apple devices, Segoe UI or Roboto elsewhere), at iOS's sizes and tracking, with SF Pro Rounded for the initials. Fredoka and Nunito are gone.
+- **Colours:** the system's labels, fills, separators, materials, green, red and yellow, in light and dark.
+  - The key colour is mint: Apple's own in dark mode (#63e6e2), and darkened in light mode (#00766f) so text in it reads at 4.5:1 or better, even on the grey buttons.
+- **Accessibility:** touch targets are 44 × 44 points or more. Reduce Motion stills the sheets, menus and messages. Reduce Transparency makes the frosted glass solid.
+- **The icon:** the cover's four colours, with a white ▶ in the middle. The bookmarklet's bar on puzzle pages takes the key colour too.
