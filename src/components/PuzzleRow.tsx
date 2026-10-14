@@ -54,7 +54,7 @@ export function PuzzleRow({ n, puzzle, mark, current, onPlay, menuOpen, onMenu, 
           <span className="name">{puzzle.name}</span>
           <span className="by">
             {status === 'skipped' ? 'Skipped today' : publisherLabel(puzzle)}
-            {puzzle.note && status !== 'skipped' && ` · ${puzzle.note}`}
+            {status === 'done' && mark?.score ? ` · ${mark.score}` : puzzle.note && status !== 'skipped' && ` · ${puzzle.note}`}
           </span>
         </span>
       </button>

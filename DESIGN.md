@@ -259,3 +259,43 @@ A small ranking function written for this, with tests. The catalog is small, so 
   - The playlist reads the same storage as Strokes and Mountweazel.
   - Tapping Strokes, writing its done key by hand on the Strokes page as a stand-in for a solve, then going Back ticked Strokes, with ▶ Next on the next puzzle.
   - A real solve in Strokes wasn't played through, because a test browser can't easily draw its strokes.
+
+## The bookmarklet: one click to check a puzzle (2026-10-13, branch `bookmarklet`)
+A web page can't see inside another site, but a bookmarklet can: it's a bookmark whose address is JavaScript, and clicking it runs that code inside the page you're on. It doesn't play the game. On a finished puzzle it confirms the puzzle is done, keeps the score, and goes back to the playlist; it replaces Back rather than adding a click.
+
+- **Getting it:** a card below the search box. On a computer, drag its "✓ Puzzle done" button to the bookmarks bar. For iPhone, the card copies the code to paste into a Safari bookmark, which is clumsier to reach.
+- **Loading (`src/bookmarklet.ts`):** the bookmark only loads `check.js` from the playlist's site, with `?<time>` so it's always the latest version. Checks can then be fixed without reinstalling the bookmark.
+  - It holds no "%", which a browser would decode first.
+  - NYT's security policy allows scripts from any https site. Clues by Sam and Octordle have none.
+  - If `check.js` can't load, the bookmark asks whether to count the puzzle anyway.
+- **Checking (`src/check/`, built by `vite.check.config.ts` into `dist/check.js`):**
+  - **Finished?** Each game's rule reads what the page shows (`rules.ts`). The markers come from the games' code as it was on 2026-10-13:
+
+    | Game | Finished when | Score |
+    |---|---|---|
+    | Wordle | a row of `data-state="correct"` tiles (`data-testid="tile"`, in `aria-label="Row N"` rows), or six rows used | from the rows, e.g. "3/6" |
+    | Connections | `conn-congrats__share` (its results) or four `solved-category-card`s; `mistake-text` means still playing | from the share text: "Perfect", "2 mistakes" |
+    | Strands | `strands-found-counter` reads "N of N theme words found" | hints, from the 💡s in the share text |
+    | The Mini | `.xwd__congrats-modal` (or `-container`, `-moment`) | the `.timer-count` time, since its share text has none |
+    | Pips | its share text | level and time |
+    | Clues by Sam | `.modal.complete`, or its "🏆 Share results" button | level and "Solved in …" |
+    | Strokes, Mountweazel | their done key on this origin | — |
+    | Other catalog puzzles | their share text names the game | a 3/6-style score or a time, if the text has one |
+
+  - **Share capture:** for the score, the check presses the game's own Share (each rule names the buttons to get there) and catches the text (`capture.ts`).
+    - It briefly wraps `navigator.clipboard.writeText`, `navigator.share` and `document.execCommand("copy")`, the three ways these games share.
+    - The copy still reaches the clipboard. The share sheet stays shut.
+    - The text counts only if it matches the game's result pattern.
+  - **Scores** are parsed from the share text (`score.ts`), with formats from the games' code.
+  - **What the player sees:** a bar on the puzzle's page, in a shadow root. It says "Checking…", "isn't finished yet", or asks "Can't tell whether … is finished" with "Count it as done" and "Not yet". A site the catalog doesn't have gets the question too.
+- **Back to the playlist (`src/done.ts`):** the check goes to `…/playlist/#done=<id>&url=…&score=…&text=…&how=checked|asked|unchecked`.
+  - The playlist matches the puzzle by id, else by page (`src/match.ts`), else (for an unknown game) by the puzzle ▶ opened.
+  - It ticks the puzzle with its score and shows the bar's ✓ and ▶ Next.
+  - It marks the launch handled, so the puzzle isn't also ticked for coming back.
+  - It takes `#done=` out of the address.
+  - Rows and the bar show the score ("Indie · 2/6").
+- **Tried:**
+  - The real bookmark loader, on a page the catalog doesn't know, served locally: it asked, and "Count it as done" went back to the playlist. The playlist matched the page by address, ticked it, handled the launch and cleaned the address.
+  - A checked result with a score shows on its row.
+  - The rules are tested against pages built from the games' markers, and capture against a stand-in game, in 51 tests (`happy-dom`).
+- **Not yet tried:** a finished NYT game. The test browser won't open nytimes.com, so those rules come from the games' code, not from use. A game whose markers change gets the question instead of a wrong answer, and its rule is fixed in `rules.ts`.

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { catalogPuzzle } from './catalog';
 import { localDate } from './day';
+import { readDone, resolveDone, type Done } from './done';
 import { parseDoneKey, readSignals } from './firstParty';
 import { applySignals, arrive, barFor, mark, nextUp, type Arrival, type Back, type Day, type Status } from './player';
 import { fromShared, playlistLink, readLink, withShared, type Shared } from './link';
 import { add, addLink, move, puzzlesOf, remove, type Playlist } from './playlist';
 import { browserStorage, ITEMS_KEY, loadDay, loadLaunch, loadPlaylist, prune, saveDay, saveLaunch, savePlaylist } from './store';
+import { CheckCard } from './components/CheckCard';
 import { EditList } from './components/EditList';
 import { ShareIcon } from './components/icons';
 import { ImportSheet } from './components/ImportSheet';
@@ -62,17 +64,48 @@ function reread(ids: readonly string[], was: Today): Today {
   return { date, day, back: date === was.date ? was.back : null };
 }
 
+/**
+ * Back from the bookmarklet's check (#done=…): ticks the puzzle it checked, with its score. The check answers for
+ * the puzzle ▶ last opened, so that launch is marked handled rather than ticked again for coming back.
+ * `missing` when the puzzle isn't one of the playlist's.
+ */
+function checked(list: Playlist, done: Done): { today: Today; missing: boolean } {
+  const date = localDate();
+  const launch = loadLaunch(kv);
+  const current = launch && launch.date === date && !launch.handled ? launch : null;
+  if (current) saveLaunch(kv, { ...current, handled: true });
+  const was = reread(list.ids, { date, day: {}, back: null });
+  const id = resolveDone(done, puzzlesOf(list), current?.id);
+  if (!id) return { today: was, missing: true };
+  const day: Day = { ...was.day, [id]: { status: 'done', at: Date.now(), ...(done.score && { score: done.score }), ...(done.text && { share: done.text }) } };
+  saveDay(kv, date, day);
+  return { today: { date, day, back: { id, ticked: true } }, missing: false };
+}
+
+const NOT_IN_PLAYLIST = "That puzzle isn't in your playlist";
+
+/** How the page opens: back from a check, or by Back, or afresh. */
+function open(list: Playlist): { today: Today; toast: string | null } {
+  const done = readDone(location.hash);
+  if (!done) return { today: settle(list.ids, arrivalNow()), toast: null };
+  const r = checked(list, done);
+  return { today: r.today, toast: r.missing ? NOT_IN_PLAYLIST : null };
+}
+
 // The page's first arrival, worked out once: in development, React renders a component's first time twice.
-let opening: Today | undefined;
+let opening: ReturnType<typeof open> | undefined;
+
+/** Takes a handled #done=… or #add=… out of the address, so a reload doesn't repeat it. */
+const clearHash = () => history.replaceState(history.state, '', location.pathname + location.search);
 
 export function App() {
   const [list, setList] = useState(() => loadPlaylist(kv));
-  const [today, setToday] = useState(() => (opening ??= settle(list.ids, arrivalNow())));
+  const [today, setToday] = useState(() => (opening ??= open(list)).today);
   const [editing, setEditing] = useState(false);
   const [menu, setMenu] = useState<string | null>(null);
   // A playlist link this page was opened with (#add=…), waiting for Add or Replace mine.
   const [incoming, setIncoming] = useState<Shared | null>(() => readLink(location.hash));
-  const [toast, setToast] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(() => opening?.toast ?? null);
   const puzzles = puzzlesOf(list);
   const ids = puzzles.map((p) => p.id);
 
@@ -106,9 +139,22 @@ export function App() {
     };
   }, []);
 
-  // A playlist link pasted into the address bar while the page is open.
+  // A check's result is in the address only until it's been read.
   useEffect(() => {
-    const onHash = () => setIncoming(readLink(location.hash));
+    if (readDone(location.hash)) clearHash();
+  }, []);
+
+  // A playlist link pasted into the address bar while the page is open, or a check's result arriving.
+  useEffect(() => {
+    const onHash = () => {
+      const done = readDone(location.hash);
+      if (done) {
+        const r = checked(loadPlaylist(kv), done);
+        setToday(r.today);
+        if (r.missing) setToast(NOT_IN_PLAYLIST);
+        clearHash();
+      } else setIncoming(readLink(location.hash));
+    };
     addEventListener('hashchange', onHash);
     return () => removeEventListener('hashchange', onHash);
   }, []);
@@ -137,7 +183,7 @@ export function App() {
   const closeIncoming = (next?: Playlist) => {
     if (next) update(next);
     setIncoming(null);
-    history.replaceState(history.state, '', location.pathname + location.search);
+    clearHash();
   };
 
   /** Sends the playlist as a link: the share sheet where there is one (iPhone), else the clipboard. */
@@ -222,6 +268,7 @@ export function App() {
               ))}
             </ol>
             {finder(false)}
+            <CheckCard onToast={setToast} />
           </>
         )}
       </main>
@@ -229,6 +276,7 @@ export function App() {
         <PlayerBar
           bar={bar}
           puzzle={(id) => puzzles.find((p) => p.id === id)}
+          marks={today.day}
           done={done}
           total={puzzles.length}
           onPlay={play}

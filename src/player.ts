@@ -12,6 +12,9 @@ export type Status = 'done' | 'skipped' | 'todo';
 export interface Mark {
   status: Status;
   at: number;
+  /** A short result from the bookmarklet's check ("3/6"), and the game's share text. */
+  score?: string;
+  share?: string;
 }
 
 /** Today's marks, by puzzle id. */
