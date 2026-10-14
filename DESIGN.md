@@ -457,8 +457,8 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - renaming the playlist
   - no "Puzzle Playlist" line under its name
 - **Settings** is grouped the way the Settings app groups things. It's kept in `playlist:settings` (`src/settings.ts`).
-  - **Appearance:** Automatic, Light or Dark, as a segmented control.
-    - Automatic follows the device, as before. Light and Dark hold whatever the device says.
+  - **Appearance:** Automatic, Light or Dark, as a segmented control. **Light is the default** (the owner's call), so a device that hasn't chosen is light whatever its own setting.
+    - Automatic follows the device, as the page did before. Light and Dark hold whatever the device says.
     - The colours follow `data-theme` on `<html>`. A small script in `index.html` sets it from the saved setting before the page is drawn.
     - `src/theme.ts` keeps it in step. On Automatic it follows the device as it switches, and checks again whenever the page is shown. The browser's own colour around the page (`theme-color`) follows too.
   - **Mark Done When I Come Back** (on by default): coming back from a puzzle ticks it, with Not Yet to undo.
