@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { publisherLabel, type Puzzle } from '../catalog';
+import { pieceColor } from '../pieces';
 import { CloseIcon, DownIcon, GripIcon, UpIcon } from './icons';
 import { Tile } from './Tile';
 
@@ -59,7 +60,7 @@ export function EditList({ puzzles, onMove, onRemove }: Props) {
             >
               <GripIcon />
             </button>
-            <Tile puzzle={p} n={i + 1} />
+            <Tile puzzle={p} color={pieceColor(i)} />
             <span className="title">
               <span className="name">{p.name}</span>
               <span className="by">{publisherLabel(p)}</span>

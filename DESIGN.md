@@ -18,7 +18,7 @@ This doc settled the design before anything was built. "Puzzle Playlist" is a wo
 | Two players | Each device keeps its own playlist and progress, with no server or sign-in. A playlist is sent as a link |
 | How puzzles open | **In the same tab.** ▶ takes the tab to the puzzle, and Back returns to the playlist. **One tap per puzzle**, never a jump without one (see below). Nothing is framed |
 | What counts as done | **First-party games report it themselves. For other sites, coming back to the playlist counts as done**, and "Not yet" undoes it |
-| The look | A daily worksheet: graph paper, crossword squares and a teacher's red pen (it began Spotify-style; see "A worksheet, not a music app"). No previews of the games |
+| The look | A jigsaw of construction paper: each puzzle a coloured felt piece, the header's board filling in as they're done (see "A jigsaw of felt"). No previews of the games |
 
 ## What the browser allows (tested 2026-10-13)
 **Framing doesn't work.** Each site's headers were checked with curl, then each site was framed from `funklunsford.github.io` in a Chromium browser.
@@ -342,3 +342,28 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **Type, bundled with the site** (no outside requests): Fraunces for headings and names, Courier Prime for labels, Caveat for handwriting.
 - **The icon:** a crossword square numbered 1, with a red tick.
 - **Grades stay short:** Clues by Sam is graded by its time alone, and a long grade is cut short before a name is.
+
+## A jigsaw of felt (2026-10-13, branch `jigsaw`)
+- **The owner's call:** more fun, with a photo of a 3 × 3 jigsaw of coloured felt pieces on teal as the reference. It replaces the worksheet look. How it works is unchanged.
+- **The board:** teal felt, or deep teal in dark mode. A fine grain is an SVG noise filter laid over the colours (`--grain`).
+- **The list is a jigsaw.** Each puzzle is a piece of its own colour (`src/pieces.ts`): yellow, magenta, blue, green, coral, mint, peach, pink and sky, in turn, sampled from the photo.
+  - Dark ink reads on every piece, at 5.4:1 or better.
+  - Each piece's knob, with its neck, reaches across the seam into the next. The pieces are stacked so the knob shows over the piece below.
+  - The outer corners of the whole column are rounded, and it casts a soft shadow, like the photo.
+- **On the pieces:**
+  - Each has a white felt badge with its initial.
+  - A done one wears a white sticker with a green tick and its grade.
+  - The next one is outlined with white dashes and says "Up next".
+  - A skipped one fades into the board and is struck through.
+- **The header's board** is today's jigsaw: a piece per puzzle, up to three across, set into slots.
+  - **Knobs** alternate like a real jigsaw: a checkerboard of pieces with a knob towards each neighbour, the rest with holes. An empty slot still shows its neighbours' knobs, and a placed piece shows the holes the missing ones will fill.
+  - **States:** the next slot is outlined, a skipped one hatched.
+  - **Motion:** the piece you've just finished drops in, with a bounce. When all are done, the picture is whole: it wiggles, and a gold star is stuck on. The caption says "3 of 6", then "Complete!".
+- **Buttons** are chunky paper you press down: an edge underneath that flattens on a press.
+  - Start / Continue / Next is a big coral piece. Edit and Share are white felt. All done becomes a yellow badge.
+- **The bottom card** is felt with a knob on top, like the next piece waiting.
+- **Everything else is felt:** the date is a sticker, search is a felt pill, suggestions are pieces to pick up, sheets are felt, keys are felt keycaps, and a message is a yellow piece that pops in.
+- **Type, round like the knobs** and bundled with the site: Fredoka for headings, names and buttons, and Nunito for text.
+- **The icon** is a coral jigsaw piece on teal.
+- **Reduced motion:** with "reduce motion" on, nothing animates.
+
