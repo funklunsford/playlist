@@ -117,10 +117,10 @@ describe('The Mini', () => {
 
 describe('Clues by Sam', () => {
   const cbs = rule('clues-by-sam');
-  it('is done when its results show, scored by level and time', () => {
+  it('is done when its results show, graded by its time', () => {
     const doc = page('<div class="modal complete"><h3>October 13, 2026 (Easy)</h3><div class="result"><h3>Solved in 4:32</h3></div></div>');
     expect(cbs.state!(doc)).toBe('done');
-    expect(cbs.score!(doc)).toBe('Easy · 4:32');
+    expect(cbs.score!(doc)).toBe('4:32');
   });
   it('is done when its 🏆 Share results button shows', () => {
     expect(cbs.state!(page('<button class="wide-button with-icon"><span>🏆</span>Share results</button>'))).toBe('done');

@@ -59,7 +59,7 @@ export function EditList({ puzzles, onMove, onRemove }: Props) {
             >
               <GripIcon />
             </button>
-            <Tile puzzle={p} />
+            <Tile puzzle={p} n={i + 1} />
             <span className="title">
               <span className="name">{p.name}</span>
               <span className="by">{publisherLabel(p)}</span>

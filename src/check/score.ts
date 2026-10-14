@@ -41,8 +41,8 @@ export function scoreOf(text: string): string | undefined {
   // "Pips #123 Easy 🟢\n1:23", with 🍪 when speedy.
   if ((m = t.match(/Pips\s*#\d+\s+([A-Za-z]+)[^\n]*\n\s*(\d+:\d{2}(?::\d{2})?)/))) return `${m[1]} ${m[2]}`;
 
-  // "I solved the daily #CluesBySam, October 13, 2026 (Easy), in 4:32".
-  if ((m = t.match(/#CluesBySam[^\n(]*(?:\(([^)]+)\))?[^\n]*?\bin\s+([^\n!]+)/i))) return [m[1], m[2].trim()].filter(Boolean).join(' · ');
+  // "I solved the daily #CluesBySam, October 13, 2026 (Easy), in 4:32": graded by the time, kept short.
+  if ((m = t.match(/#CluesBySam[^\n]*?\bin\s+([^\n!]+)/i))) return m[1].trim();
 
   // "Framed #1677\n🎥 🟥 🟩 ⬛ ⬛ ⬛ ⬛": the green is the guess that got it.
   if (/Framed\s*#\d+/.test(t)) {

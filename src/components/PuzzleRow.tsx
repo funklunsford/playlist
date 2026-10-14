@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { publisherLabel, type Puzzle } from '../catalog';
 import type { Mark, Status } from '../player';
-import { CheckIcon, MoreIcon, PlayIcon } from './icons';
+import { MoreIcon, TickIcon } from './icons';
 import { Tile } from './Tile';
 
 interface Props {
   n: number;
   puzzle: Puzzle;
   mark?: Mark;
-  /** The one ▶ plays next. */
+  /** The one Start or Next plays. */
   current: boolean;
   onPlay(): void;
   menuOpen: boolean;
@@ -24,7 +24,10 @@ const choices = (status: Status | undefined): [Status, string][] =>
       ? [['todo', "Don't skip"], ['done', 'Mark done']]
       : [['done', 'Mark done'], ['skipped', 'Skip today']];
 
-/** A puzzle in the playlist, like a track: tap it to play it. Its ⋯ menu marks it by hand. */
+/**
+ * A puzzle on today's list, like a question on a worksheet: tap it to play it. A done one gets a red tick and
+ * its grade, the next one is highlighted, and a skipped one is struck through. Its ⋯ menu marks it by hand.
+ */
 export function PuzzleRow({ n, puzzle, mark, current, onPlay, menuOpen, onMenu, onMark }: Props) {
   const status = mark?.status;
   const menuRef = useRef<HTMLDivElement>(null);
@@ -46,16 +49,23 @@ export function PuzzleRow({ n, puzzle, mark, current, onPlay, menuOpen, onMenu, 
   return (
     <li className={`row playable ${state}`}>
       <button type="button" className="row-main" onClick={onPlay} aria-label={`Play ${puzzle.name}${status === 'done' ? ' again' : ''}`}>
-        <span className="n" aria-hidden="true">
-          {status === 'done' ? <CheckIcon size={18} /> : current ? <PlayIcon size={14} /> : status === 'skipped' ? '–' : n}
-        </span>
-        <Tile puzzle={puzzle} />
+        <Tile puzzle={puzzle} n={n} />
         <span className="title">
-          <span className="name">{puzzle.name}</span>
+          <span className="name">
+            <span className="ink">{puzzle.name}</span>
+          </span>
           <span className="by">
             {status === 'skipped' ? 'Skipped today' : publisherLabel(puzzle)}
-            {status === 'done' && mark?.score ? ` · ${mark.score}` : puzzle.note && status !== 'skipped' && ` · ${puzzle.note}`}
+            {puzzle.note && status !== 'skipped' && status !== 'done' && ` · ${puzzle.note}`}
           </span>
+        </span>
+        <span className="mark" aria-hidden="true">
+          {status === 'done' && (
+            <>
+              <TickIcon size={26} />
+              {mark?.score && <span className="grade">{mark.score}</span>}
+            </>
+          )}
         </span>
       </button>
       <div className="row-menu" ref={menuRef}>

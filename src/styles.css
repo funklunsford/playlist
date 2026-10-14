@@ -1,32 +1,58 @@
-/* Light by default; dark when the device is (there's no setting for it). */
+/*
+ * The look: a daily puzzle worksheet. By day it's graph paper and ink, with a teacher's red pen for ticks and
+ * grades, a yellow highlighter for what's next, school-bus yellow for the button to press, and a gold star at the
+ * end. In the device's dark mode it's a chalkboard. Puzzles are crossword squares, numbered in the corner.
+ */
 :root {
-  --bg: #f7f6fb;
-  --surface: #ffffff;
-  --raise: #edebf6;
-  --ink: #17171c;
-  --muted: #5f5e6b;
-  --line: #e2e0ec;
-  --accent: #5b3df5;
-  --on-accent: #ffffff;
-  --ok: #1f8a4c;
-  --danger: #c4314b;
-  --shadow: 0 6px 24px rgb(20 16 40 / 0.14);
+  --paper: #fbf7ec;
+  --card: #fffdf6;
+  --raise: #f2ebd8;
+  --grid: rgb(64 110 178 / 0.11);
+  --ink: #1f2430;
+  --muted: #5c6070;
+  --line: #ddd4bf;
+  --red: #c4302b;
+  --margin: rgb(214 69 65 / 0.42);
+  --yellow: #f7c948;
+  --on-yellow: #1f2430;
+  --sticker-edge: #1f2430;
+  --highlight: rgb(255 221 70 / 0.62);
+  --gold: #f2b822;
+  --gold-edge: #a87708;
+  --key: #f1e2b8;
+  --note: #ffe58a;
+  --shadow: 3px 3px 0 var(--ink);
+  --shadow-small: 2px 2px 0 var(--ink);
+  --float: 0 12px 32px rgb(31 36 48 / 0.18);
+  --serif: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --type: 'Courier Prime', 'Courier New', monospace;
+  --hand: 'Caveat', 'Bradley Hand', 'Segoe Print', cursive;
   color-scheme: light;
 }
 
+/* The chalkboard. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #121214;
-    --surface: #1b1b20;
-    --raise: #26262d;
-    --ink: #f3f3f6;
-    --muted: #a4a3ae;
-    --line: #2b2b33;
-    --accent: #8b74ff;
-    --on-accent: #121214;
-    --ok: #3ccf7e;
-    --danger: #ff6b81;
-    --shadow: 0 6px 24px rgb(0 0 0 / 0.5);
+    --paper: #1c2a23;
+    --card: #22322a;
+    --raise: #2a3c33;
+    --grid: rgb(236 240 230 / 0.05);
+    --ink: #eef0e6;
+    --muted: #b3bbaf;
+    --line: rgb(238 240 230 / 0.16);
+    --red: #ff9b8e;
+    --margin: rgb(255 155 142 / 0.3);
+    --yellow: #f1d16a;
+    --on-yellow: #1c2a23;
+    --sticker-edge: #0d1511;
+    --highlight: rgb(241 209 106 / 0.3);
+    --gold: #f3c84b;
+    --gold-edge: #9c7516;
+    --key: #3b4c42;
+    --note: #f1d16a;
+    --shadow: 3px 3px 0 rgb(0 0 0 / 0.45);
+    --shadow-small: 2px 2px 0 rgb(0 0 0 / 0.45);
+    --float: 0 12px 32px rgb(0 0 0 / 0.5);
     color-scheme: dark;
   }
 }
@@ -40,10 +66,14 @@ body {
   margin: 0;
 }
 
+/* Graph paper: a faint grid in the paper's own blue. */
 body {
-  background: var(--bg);
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
   color: var(--ink);
-  font: 16px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font: 17px/1.45 var(--serif);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
@@ -60,12 +90,12 @@ button {
 
 button:disabled {
   cursor: default;
-  opacity: 0.3;
+  opacity: 0.35;
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: 2px dashed var(--red);
+  outline-offset: 3px;
 }
 
 .app {
@@ -81,80 +111,243 @@ button:disabled {
   padding-right: max(16px, env(safe-area-inset-right));
 }
 
-/* ---- The header: a wash of the accent fading into the page, like a playlist's cover. ---- */
+/* ---- The worksheet's heading. ---- */
 
 .hero {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 42%, var(--bg)) 0%, var(--bg) 100%);
-  padding-top: max(28px, env(safe-area-inset-top));
+  padding-top: max(18px, env(safe-area-inset-top));
+}
+
+.hero-inner {
+  padding-bottom: 18px;
+  border-bottom: 4px double var(--ink);
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: -8px;
 }
 
 .kicker {
-  margin: 0 0 2px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  margin: 0;
+  font: 700 12px/1.2 var(--type);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ink) 70%, transparent);
+  color: var(--muted);
+}
+
+.gear {
+  color: var(--ink);
+}
+
+.hero-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .hero h1 {
-  margin: 0;
-  font-size: clamp(44px, 12vw, 72px);
-  line-height: 1.02;
-  letter-spacing: -0.035em;
+  margin: 4px 0 0;
+  font-family: var(--serif);
+  font-size: clamp(34px, 9.4vw, 56px);
   font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
 }
 
-.meta {
-  margin: 8px 0 0;
+.date-line {
+  margin: 10px 0 0;
+  font: 400 14px/1 var(--type);
   color: var(--muted);
-  font-weight: 500;
+}
+
+/* The date, written in on the line. */
+.date-line .hand {
+  display: inline-block;
+  margin-left: 2px;
+  padding: 0 6px 2px;
+  border-bottom: 1.5px solid var(--muted);
+  font: 700 25px/1 var(--hand);
+  color: var(--ink);
+}
+
+/* The score box, filled in red. */
+.score {
+  position: relative;
+  flex-shrink: 0;
+  display: grid;
+  justify-items: center;
+  min-width: 78px;
+  margin-top: 8px;
+  padding: 6px 12px 4px;
+  border: 2px solid var(--ink);
+  background: var(--card);
+  box-shadow: var(--shadow-small);
+}
+
+.score-label {
+  font: 700 11px/1.2 var(--type);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.score-value {
+  font: 700 36px/1 var(--hand);
+  color: var(--red);
+  white-space: nowrap;
+}
+
+/* A gold star, stuck on the corner. */
+.score .star {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  transform: rotate(14deg);
+  filter: drop-shadow(1px 2px 0 rgb(0 0 0 / 0.25));
+}
+
+/* One answer cell per puzzle: ticked, struck out, or highlighted for the next. */
+.cells {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 18px 0 0;
+  padding: 0 0 0 1.5px;
+  list-style: none;
+}
+
+.cell {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin: 0 0 -1.5px -1.5px;
+  border: 1.5px solid var(--ink);
+  background: var(--card);
+  color: var(--red);
+}
+
+.cell.current {
+  background: var(--highlight);
+}
+
+.cell.skipped {
+  background:
+    linear-gradient(to top right, transparent calc(50% - 1px), var(--muted) calc(50% - 1px), var(--muted) calc(50% + 1px), transparent calc(50% + 1px)),
+    var(--card);
 }
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
-  min-height: 56px;
-  padding: 16px 0 12px;
+  gap: 10px;
+  margin-top: 18px;
 }
 
+/* ---- Buttons: stamps, stickers, and a red pen. ---- */
+
+/* A stamped label: Edit, Share, Done, Replace mine. */
 .pill {
-  border: none;
-  border-radius: 999px;
-  padding: 9px 18px;
-  font-weight: 700;
-  background: var(--accent);
-  color: var(--on-accent);
-}
-
-.pill.outline {
-  background: transparent;
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ink) 35%, transparent);
-}
-
-.text-button {
-  border: none;
-  background: none;
-  padding: 0;
-  color: var(--accent);
-  font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  padding: 7px 13px;
+  border: 2px solid var(--ink);
+  border-radius: 3px;
+  background: var(--ink);
+  color: var(--paper);
+  font: 700 13px/1.2 var(--type);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-small);
+}
+
+.pill.outline {
+  background: var(--card);
+  color: var(--ink);
+}
+
+.pill.small {
+  flex-shrink: 0;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.pill:not(:disabled):active,
+.start:not(:disabled):active,
+.next:active,
+.chip:active,
+.add:active,
+.bookmarklet:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+/* The button to press: a school-bus-yellow sticker. */
+.start,
+.next {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  height: 50px;
+  padding: 0 16px 0 20px;
+  border: 2px solid var(--sticker-edge);
+  border-radius: 4px;
+  background: var(--yellow);
+  color: var(--on-yellow);
+  font: 800 19px/1 var(--serif);
+  box-shadow: var(--shadow);
+}
+
+.start {
+  margin-left: auto;
+}
+
+.start:disabled {
+  opacity: 1;
+  background: var(--card);
+  color: var(--muted);
+  border-color: var(--line);
+  box-shadow: none;
+  padding: 0 20px;
+}
+
+/* A link in red pen. */
+.text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--red);
+  font: 700 14px/1.3 var(--type);
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.not-yet {
+  flex-shrink: 0;
+  padding: 6px 2px;
+  font: 700 22px/1 var(--hand);
+  text-decoration: none;
 }
 
 .icon-button {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
   width: 40px;
   height: 40px;
   border: none;
-  border-radius: 999px;
+  border-radius: 4px;
   background: none;
-  display: inline-grid;
-  place-items: center;
   color: var(--muted);
-  flex-shrink: 0;
 }
 
 .icon-button:not(:disabled):hover {
@@ -162,39 +355,64 @@ button:disabled {
   color: var(--ink);
 }
 
-/* ---- Rows: a puzzle each, like tracks. ---- */
+/* ---- The list: a question per line. ---- */
 
 .rows {
-  list-style: none;
-  margin: 0;
+  margin: 4px 0 0;
   padding: 0;
+  list-style: none;
 }
 
 .row {
-  display: grid;
-  grid-template-columns: 22px auto minmax(0, 1fr) auto;
+  display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 64px;
-  padding: 10px 8px;
-  border-radius: 10px;
 }
 
-.n {
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-  font-size: 15px;
+.row.playable {
+  gap: 2px;
+  border-bottom: 1.5px solid var(--line);
 }
 
+.row-main {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 70px;
+  padding: 11px 6px;
+  border: none;
+  border-radius: 3px;
+  background: none;
+  text-align: left;
+}
+
+.row-main:hover {
+  background: color-mix(in srgb, var(--highlight) 30%, transparent);
+}
+
+/* A crossword square: the initial, its number in the corner, a wash of the puzzle's colour. */
 .tile {
+  position: relative;
   display: inline-grid;
-  place-items: center;
-  border-radius: 7px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
   flex-shrink: 0;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--tint, #8b8b8b) 26%, var(--card));
+  color: var(--ink);
+  font-family: var(--serif);
+  font-weight: 800;
+  line-height: 1;
   user-select: none;
+}
+
+.tile-n {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font: 700 10px/1 var(--type);
 }
 
 .title {
@@ -211,12 +429,82 @@ button:disabled {
 }
 
 .name {
-  font-weight: 600;
+  font: 600 19px/1.25 var(--serif);
 }
 
 .by {
-  font-size: 14px;
+  font: 400 13px/1.35 var(--type);
   color: var(--muted);
+}
+
+/* The next one, highlighted. */
+.row.current .name .ink {
+  margin: 0 -3px;
+  padding: 0 3px;
+  background: linear-gradient(transparent 14%, var(--highlight) 14%, var(--highlight) 90%, transparent 90%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* A skipped one, struck through. */
+.row.skipped .name .ink {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--muted);
+}
+
+.row.skipped .tile {
+  opacity: 0.5;
+}
+
+/* A tick and a grade, in red pen. */
+.mark {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--red);
+}
+
+.grade {
+  max-width: 7.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font: 700 25px/1 var(--hand);
+  color: var(--red);
+  white-space: nowrap;
+}
+
+.row-menu {
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% - 4px);
+  right: 4px;
+  z-index: 5;
+  min-width: 170px;
+  padding: 4px;
+  border: 2px solid var(--ink);
+  border-radius: 3px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 2px;
+  background: none;
+  font: 600 16px/1.2 var(--serif);
+  text-align: left;
+}
+
+.menu button:hover {
+  background: var(--raise);
 }
 
 /* ---- Editing: rows sit at fixed heights so a drag can tell where it is. ---- */
@@ -230,28 +518,32 @@ button:disabled {
   left: 0;
   right: 0;
   height: 64px;
+  display: grid;
   grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
   gap: 10px;
   padding: 0 4px;
-  background: var(--bg);
+  border-bottom: 1.5px solid var(--line);
+  background: var(--paper);
   transition: transform 0.18s ease;
 }
 
 .edit-row.dragging {
   z-index: 2;
   transition: none;
-  background: var(--surface);
+  border: 2px solid var(--ink);
+  background: var(--card);
   box-shadow: var(--shadow);
 }
 
 .grip {
+  display: grid;
+  place-items: center;
   width: 34px;
   height: 48px;
   border: none;
   background: none;
   color: var(--muted);
-  display: grid;
-  place-items: center;
   touch-action: none;
   cursor: grab;
 }
@@ -270,33 +562,31 @@ button:disabled {
 }
 
 .icon-button.remove:not(:disabled):hover {
-  color: var(--danger);
+  color: var(--red);
 }
 
-/* ---- Finding puzzles. ---- */
+/* ---- Adding puzzles: write a name on the line. ---- */
 
 .finder {
-  margin: 28px 0 48px;
+  margin: 30px 0 48px;
 }
 
 .finder h2 {
-  margin: 0 0 12px;
-  font-size: 20px;
-  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+  font: 800 24px/1.15 var(--serif);
 }
 
 .finder.prominent h2 {
-  font-size: 26px;
+  font-size: 30px;
 }
 
 .search {
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 48px;
-  padding: 0 6px 0 14px;
-  border-radius: 10px;
-  background: var(--raise);
+  height: 52px;
+  padding: 0 2px;
+  border-bottom: 2px solid var(--ink);
   color: var(--muted);
 }
 
@@ -308,8 +598,12 @@ button:disabled {
   background: none;
   outline: none;
   color: var(--ink);
-  /* 16px or more, so iPhone Safari doesn't zoom in on focus. */
-  font-size: 17px;
+  /* Written in pen; well over 16px, so iPhone Safari doesn't zoom in on focus. */
+  font: 700 27px/1 var(--hand);
+}
+
+.search input::placeholder {
+  color: color-mix(in srgb, var(--muted) 65%, transparent);
 }
 
 .search input::-webkit-search-cancel-button {
@@ -317,9 +611,9 @@ button:disabled {
 }
 
 .results {
-  list-style: none;
   margin: 8px 0 0;
   padding: 0;
+  list-style: none;
 }
 
 .result {
@@ -327,92 +621,89 @@ button:disabled {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
-  padding: 8px 4px 8px 8px;
-  border-radius: 10px;
+  padding: 9px 4px;
+  border-bottom: 1.5px dashed var(--line);
 }
 
-.result:hover {
-  background: var(--raise);
-}
-
+/* A box to tick. */
 .add,
 .added {
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
   display: grid;
   place-items: center;
+  width: 34px;
+  height: 34px;
 }
 
 .add {
-  border: none;
-  background: none;
+  border: 2px solid var(--ink);
+  border-radius: 3px;
+  background: var(--card);
   color: var(--ink);
-  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ink) 40%, transparent);
-}
-
-.add:hover {
-  box-shadow: inset 0 0 0 1.5px var(--ink);
+  box-shadow: var(--shadow-small);
 }
 
 .added {
-  color: var(--ok);
+  color: var(--red);
 }
 
 .nothing {
+  font: 400 14px/1.4 var(--type);
   color: var(--muted);
 }
 
 .starters {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 16px;
+  gap: 10px;
+  margin-top: 18px;
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: none;
-  border-radius: 999px;
-  padding: 8px 14px 8px 10px;
-  background: var(--raise);
-  font-weight: 600;
-  font-size: 15px;
+  padding: 7px 12px 7px 9px;
+  border: 2px solid var(--ink);
+  border-radius: 3px;
+  background: var(--card);
+  color: var(--ink);
+  font: 600 16px/1.2 var(--serif);
+  box-shadow: var(--shadow-small);
 }
 
 .chip:hover {
-  background: color-mix(in srgb, var(--accent) 18%, var(--raise));
+  background: color-mix(in srgb, var(--highlight) 45%, var(--card));
 }
 
 .by-link {
-  margin-top: 14px;
+  margin-top: 16px;
 }
 
 .link-form {
   display: grid;
-  gap: 8px;
-  margin-top: 16px;
+  gap: 10px;
+  margin-top: 18px;
 }
 
 .link-form input {
   height: 46px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1.5px solid var(--line);
-  background: var(--surface);
-  font-size: 17px;
+  padding: 0 4px;
+  border: none;
+  border-bottom: 2px solid var(--ink);
+  border-radius: 0;
+  background: none;
+  font: 700 23px/1 var(--hand);
+  outline: none;
 }
 
 .link-form input[aria-invalid='true'] {
-  border-color: var(--danger);
+  border-bottom-color: var(--red);
 }
 
 .error {
   margin: 0;
-  color: var(--danger);
-  font-size: 14px;
+  color: var(--red);
+  font: 700 20px/1.1 var(--hand);
 }
 
 .link-actions {
@@ -422,122 +713,10 @@ button:disabled {
   gap: 16px;
 }
 
-/* ---- Playing: the big ▶, rows that play, and their menus. ---- */
-
-.big-play {
-  margin-left: auto;
-  width: 56px;
-  height: 56px;
-  border: none;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--on-accent);
-  display: grid;
-  place-items: center;
-  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 40%, transparent);
-  transition: transform 0.12s ease;
-}
-
-/* The triangle sits a little right of centre, so it looks centred. */
-.big-play svg {
-  margin-left: 3px;
-}
-
-.big-play:not(:disabled):active {
-  transform: scale(0.95);
-}
-
-.big-play:disabled {
-  opacity: 1;
-  background: var(--raise);
-  color: var(--ok);
-  box-shadow: none;
-}
-
-.big-play:disabled svg {
-  margin-left: 0;
-}
-
-.row.playable {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 0;
-}
-
-.row-main {
-  flex: 1;
-  min-width: 0;
-  display: grid;
-  grid-template-columns: 22px auto minmax(0, 1fr);
-  align-items: center;
-  gap: 12px;
-  min-height: 64px;
-  padding: 10px 8px;
-  border: none;
-  border-radius: 10px;
-  background: none;
-  text-align: left;
-}
-
-.row-main:hover {
-  background: var(--raise);
-}
-
-.row-main .n {
-  display: grid;
-  justify-items: end;
-}
-
-.row.current .n,
-.row.current .name {
-  color: var(--accent);
-}
-
-.row.done .n {
-  color: var(--ok);
-}
-
-.row.skipped .name,
-.row.skipped .tile {
-  opacity: 0.55;
-}
-
-.row-menu {
-  position: relative;
-}
-
-.menu {
-  position: absolute;
-  right: 4px;
-  top: calc(100% - 4px);
-  z-index: 5;
-  min-width: 168px;
-  padding: 6px;
-  border-radius: 12px;
-  background: var(--surface);
-  box-shadow: var(--shadow), 0 0 0 1px var(--line);
-}
-
-.menu button {
-  display: block;
-  width: 100%;
-  padding: 11px 12px;
-  border: none;
-  border-radius: 8px;
-  background: none;
-  text-align: left;
-  font-weight: 600;
-}
-
-.menu button:hover {
-  background: var(--raise);
-}
-
-/* ---- The player bar along the bottom. ---- */
+/* ---- The index card along the bottom. ---- */
 
 .page.with-player {
-  padding-bottom: calc(96px + env(safe-area-inset-bottom));
+  padding-bottom: calc(112px + env(safe-area-inset-bottom));
 }
 
 .player {
@@ -547,32 +726,24 @@ button:disabled {
   bottom: 0;
   z-index: 10;
   padding-bottom: env(safe-area-inset-bottom);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-  border-top: 1px solid var(--line);
-}
-
-.progress {
-  height: 3px;
-  background: var(--line);
-}
-
-.progress span {
-  display: block;
-  height: 100%;
-  background: var(--accent);
-  transition: width 0.3s ease;
+  border-top: 2px solid var(--ink);
+  background-color: var(--card);
+  /* An index card's red line along its top. */
+  background-image: linear-gradient(var(--margin), var(--margin));
+  background-size: 100% 2px;
+  background-position: 0 9px;
+  background-repeat: no-repeat;
+  box-shadow: 0 -6px 18px rgb(0 0 0 / 0.08);
 }
 
 .player-inner {
-  max-width: 680px;
-  min-height: 72px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
+  max-width: 680px;
+  min-height: 78px;
+  margin: 0 auto;
+  padding: 18px max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
 }
 
 .np {
@@ -582,82 +753,80 @@ button:disabled {
   flex-direction: column;
 }
 
-.np-line,
-.np-sub {
+.np-label {
+  font: 700 11px/1.3 var(--type);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.np-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--red);
+}
+
+.np-name {
+  min-width: 0;
+  color: var(--ink);
+  font: 700 18px/1.25 var(--serif);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.np-line {
-  font-weight: 700;
-}
-
-.np-line svg {
-  color: var(--ok);
-  vertical-align: -3px;
+/* The grade, on the line below the name, so a phone keeps room for the name. */
+.np-sub .grade {
+  margin-right: 8px;
+  font-size: 20px;
+  vertical-align: -2px;
 }
 
 .np-sub {
-  font-size: 14px;
+  font: 400 13px/1.4 var(--type);
   color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.not-yet {
-  flex-shrink: 0;
-  padding: 8px 2px;
-}
-
-.pill.small {
-  flex-shrink: 0;
-  padding: 7px 14px;
-  font-size: 15px;
-}
-
-/* ▶ Next: the biggest thing to tap on the screen. */
-.next {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 50px;
-  padding: 0 20px 0 16px;
-  border: none;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--on-accent);
-  font-size: 17px;
-  font-weight: 800;
-  transition: transform 0.12s ease;
-}
-
-.next:active {
-  transform: scale(0.96);
-}
-
-/* A narrow phone keeps the bar's room for names: its tile goes. */
-@media (max-width: 420px) {
-  .player-inner > .tile {
-    display: none;
-  }
+.np-sub b {
+  color: var(--ink);
 }
 
 .np-all-done {
   flex: 1;
   margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  color: var(--ok);
+  font: 700 30px/1 var(--hand);
+  color: var(--ink);
 }
 
-/* ---- Sharing: the header's Share, a link's sheet, and the toast. ---- */
-
-.pill.outline svg {
-  vertical-align: -2px;
-  margin-right: 4px;
+.player .star {
+  flex-shrink: 0;
+  transform: rotate(-12deg);
+  filter: drop-shadow(1px 2px 0 rgb(0 0 0 / 0.25));
 }
+
+/* A narrow phone keeps the card's room for names: its tile goes, and the button slims. */
+@media (max-width: 420px) {
+  .player-inner {
+    gap: 10px;
+  }
+
+  .player-inner > .tile {
+    display: none;
+  }
+
+  .next {
+    height: 46px;
+    padding: 0 12px 0 15px;
+    font-size: 17px;
+  }
+}
+
+/* ---- Sheets (a playlist link, Settings): a page of notebook paper, with its red margin. ---- */
 
 .sheet-backdrop {
   position: fixed;
@@ -666,18 +835,25 @@ button:disabled {
   display: grid;
   align-items: end;
   justify-items: center;
-  background: rgb(0 0 0 / 0.45);
+  background: rgb(18 22 28 / 0.45);
 }
 
 .sheet {
   width: 100%;
-  max-width: 480px;
+  max-width: 500px;
   max-height: 85dvh;
   overflow: auto;
-  padding: 22px max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
-  border-radius: 18px 18px 0 0;
-  background: var(--surface);
-  box-shadow: var(--shadow);
+  padding: 20px max(22px, env(safe-area-inset-right)) max(22px, env(safe-area-inset-bottom)) 50px;
+  border: 2px solid var(--ink);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  background-color: var(--card);
+  /* The margin line, down the left. */
+  background-image: linear-gradient(var(--margin), var(--margin));
+  background-size: 2px 100%;
+  background-position: 34px 0;
+  background-repeat: no-repeat;
+  box-shadow: var(--float);
 }
 
 @media (min-width: 560px) {
@@ -686,25 +862,34 @@ button:disabled {
   }
 
   .sheet {
-    border-radius: 18px;
+    border-bottom: 2px solid var(--ink);
+    border-radius: 6px;
+    box-shadow: var(--shadow), var(--float);
   }
 }
 
 .sheet h2 {
   margin: 0;
-  font-size: 22px;
-  letter-spacing: -0.01em;
+  font: 800 26px/1.15 var(--serif);
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -6px -8px 8px 0;
 }
 
 .sheet-sub {
   margin: 4px 0 14px;
+  font: 400 14px/1.4 var(--type);
   color: var(--muted);
 }
 
 .sheet-list {
-  list-style: none;
   margin: 0;
   padding: 0;
+  list-style: none;
 }
 
 .sheet-list li {
@@ -712,6 +897,7 @@ button:disabled {
   align-items: center;
   gap: 12px;
   padding: 7px 0;
+  border-bottom: 1.5px dashed var(--line);
 }
 
 .sheet-actions {
@@ -722,64 +908,29 @@ button:disabled {
   margin-top: 18px;
 }
 
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: calc(96px + env(safe-area-inset-bottom));
-  z-index: 30;
-  transform: translateX(-50%);
-  margin: 0;
-  padding: 10px 18px;
-  border-radius: 999px;
-  background: var(--ink);
-  color: var(--bg);
-  font-weight: 600;
-  box-shadow: var(--shadow);
-}
-
-/* ---- Settings, behind the header's gear, and the bookmarklet's setup in it. ---- */
-
-.np-score {
-  color: var(--muted);
-  font-weight: 600;
-}
-
-.hero-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: -8px -8px 0 0;
-}
-
-.hero-top .kicker {
-  margin: 0;
-}
-
-.gear {
-  color: var(--ink);
-}
-
-.sheet-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: -6px -8px 8px 0;
-}
+/* ---- Settings, and the bookmarklet's setup in it. ---- */
 
 .setting h3 {
-  margin: 4px 0 6px;
-  font-size: 18px;
+  margin: 6px 0 6px;
+  font: 700 21px/1.2 var(--serif);
 }
 
 .setting h4 {
-  margin: 18px 0 6px;
-  font-size: 15px;
+  margin: 20px 0 6px;
+  font: 700 12px/1.2 var(--type);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .setting-sub,
 .setting-alt {
   margin: 0;
   color: var(--muted);
+}
+
+.setting-alt {
+  margin-top: 10px;
 }
 
 .steps {
@@ -792,43 +943,65 @@ button:disabled {
   margin-top: 8px;
 }
 
-.setting-alt {
-  margin-top: 10px;
+.setting .text-button {
+  display: inline;
+  font: inherit;
+  font-weight: 700;
 }
 
+/* Keys, as letter tiles. */
 kbd {
   display: inline-block;
-  min-width: 1.5em;
+  min-width: 1.6em;
   margin: 0 1px;
   padding: 0 5px;
-  border-radius: 5px;
-  background: var(--raise);
-  box-shadow: inset 0 -1px 0 var(--line), 0 0 0 1px var(--line);
+  border: 1.5px solid var(--ink);
+  border-bottom-width: 3px;
+  border-radius: 3px;
+  background: var(--key);
   color: var(--ink);
-  font: 600 13px/1.6 inherit;
+  font: 700 13px/1.5 var(--type);
   text-align: center;
 }
 
 .setting code {
-  white-space: nowrap;
   padding: 1px 5px;
-  border-radius: 5px;
-  background: var(--raise);
+  border: 1px dashed var(--muted);
+  border-radius: 3px;
   color: var(--ink);
-  font-size: 14px;
+  font: 700 14px/1.4 var(--type);
+  white-space: nowrap;
 }
 
-/* Looks like a button, so it's clear what to drag. */
+/* The bookmark to drag: a sticker, so it's clear what to pick up. */
 .bookmarklet {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 16px 9px 12px;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--on-accent);
-  font-weight: 800;
+  padding: 7px 14px 7px 10px;
+  border: 2px solid var(--sticker-edge);
+  border-radius: 4px;
+  background: var(--yellow);
+  color: var(--on-yellow);
+  font: 800 16px/1.2 var(--serif);
   text-decoration: none;
+  box-shadow: var(--shadow-small);
   cursor: grab;
 }
 
+/* ---- A sticky note. ---- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(100px + env(safe-area-inset-bottom));
+  z-index: 30;
+  margin: 0;
+  padding: 10px 18px;
+  border-radius: 2px;
+  background: var(--note);
+  color: #1f2430;
+  font: 700 23px/1 var(--hand);
+  transform: translateX(-50%) rotate(-2deg);
+  box-shadow: 2px 3px 0 rgb(0 0 0 / 0.22);
+}

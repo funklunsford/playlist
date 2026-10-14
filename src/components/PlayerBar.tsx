@@ -1,22 +1,23 @@
 import type { Puzzle } from '../catalog';
 import type { Bar, Day } from '../player';
-import { CheckIcon, PlayIcon } from './icons';
+import { ArrowIcon, StarIcon, TickIcon } from './icons';
 import { Tile } from './Tile';
 
 interface Props {
   bar: Bar;
   puzzle(id: string): Puzzle | undefined;
-  /** Today's marks, for a score to show. */
+  /** Today's marks, for a grade to show. */
   marks: Day;
-  done: number;
-  total: number;
   onPlay(id: string): void;
   /** Un-ticks (Not yet) or ticks (Done) the puzzle you've come back from. */
   onMark(id: string, done: boolean): void;
 }
 
-/** The bar along the bottom, like Spotify's player: what you've come back from, and ▶ for what's next. */
-export function PlayerBar({ bar, puzzle, marks, done, total, onPlay, onMark }: Props) {
+/**
+ * The index card along the bottom: the puzzle you've just come back from, ticked and graded in red, and the
+ * button for the next one. When everything's done, a gold star.
+ */
+export function PlayerBar({ bar, puzzle, marks, onPlay, onMark }: Props) {
   if (bar.kind === 'empty') return null;
 
   let body: React.ReactNode;
@@ -24,9 +25,8 @@ export function PlayerBar({ bar, puzzle, marks, done, total, onPlay, onMark }: P
     const from = bar.from ? puzzle(bar.from) : undefined;
     body = (
       <>
-        <p className="np-all-done">
-          <CheckIcon /> All done for today
-        </p>
+        <StarIcon size={42} />
+        <p className="np-all-done">All done for today!</p>
         {from && (
           <button type="button" className="text-button not-yet" onClick={() => onMark(from.id, false)} aria-label={`Not yet: ${from.name}`}>
             Not yet
@@ -38,15 +38,25 @@ export function PlayerBar({ bar, puzzle, marks, done, total, onPlay, onMark }: P
     const from = puzzle(bar.from);
     const next = bar.next ? puzzle(bar.next) : undefined;
     if (!from) return null;
+    const grade = bar.ticked ? marks[from.id]?.score : undefined;
     body = (
       <>
         <Tile puzzle={from} size={40} />
         <span className="np">
           <span className="np-line">
-            {bar.ticked && <CheckIcon size={16} />} {from.name}
-            {bar.ticked && marks[from.id]?.score && <span className="np-score"> · {marks[from.id].score}</span>}
+            {bar.ticked && <TickIcon size={20} />}
+            <span className="np-name">{from.name}</span>
           </span>
-          <span className="np-sub">{next ? `Up next: ${next.name}` : "That's the last one"}</span>
+          <span className="np-sub">
+            {grade && <span className="grade">{grade}</span>}
+            {next ? (
+              <>
+                Next up: <b>{next.name}</b>
+              </>
+            ) : (
+              "That's the last one"
+            )}
+          </span>
         </span>
         {bar.ticked ? (
           <button type="button" className="text-button not-yet" onClick={() => onMark(from.id, false)}>
@@ -59,7 +69,7 @@ export function PlayerBar({ bar, puzzle, marks, done, total, onPlay, onMark }: P
         )}
         {next && (
           <button type="button" className="next" onClick={() => onPlay(next.id)} aria-label={`Play ${next.name}`}>
-            <PlayIcon size={18} /> Next
+            Next <ArrowIcon size={20} />
           </button>
         )}
       </>
@@ -71,21 +81,20 @@ export function PlayerBar({ bar, puzzle, marks, done, total, onPlay, onMark }: P
       <>
         <Tile puzzle={next} size={40} />
         <span className="np">
-          <span className="np-sub">{bar.started ? 'Up next' : 'Start with'}</span>
-          <span className="np-line">{next.name}</span>
+          <span className="np-label">{bar.started ? 'Next up' : 'First up'}</span>
+          <span className="np-line">
+            <span className="np-name">{next.name}</span>
+          </span>
         </span>
         <button type="button" className="next" onClick={() => onPlay(next.id)} aria-label={`Play ${next.name}`}>
-          <PlayIcon size={18} /> {bar.started ? 'Continue' : 'Play'}
+          {bar.started ? 'Continue' : 'Start'} <ArrowIcon size={20} />
         </button>
       </>
     );
   }
 
   return (
-    <footer className="player" aria-label="Player">
-      <div className="progress" role="progressbar" aria-label="Done today" aria-valuemin={0} aria-valuemax={total} aria-valuenow={done}>
-        <span style={{ width: `${total ? (100 * done) / total : 0}%` }} />
-      </div>
+    <footer className="player" aria-label="Next puzzle">
       <div className="player-inner">{body}</div>
     </footer>
   );

@@ -1,7 +1,7 @@
 import { useId, useState } from 'react';
 import { catalogPuzzle, publisherLabel } from '../catalog';
 import { search } from '../search';
-import { CheckIcon, CloseIcon, LinkIcon, PlusIcon, SearchIcon } from './icons';
+import { CloseIcon, LinkIcon, PencilIcon, PlusIcon, TickIcon } from './icons';
 import { Tile } from './Tile';
 
 const SHOWN = 6;
@@ -58,9 +58,9 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
 
   return (
     <section className={prominent ? 'finder prominent' : 'finder'} aria-label="Add puzzles">
-      {prominent ? <h2>Add your puzzles</h2> : <h2 className="finder-title">Find puzzles for your playlist</h2>}
+      {prominent ? <h2>Make today's list</h2> : <h2 className="finder-title">Add a puzzle</h2>}
       <form className="search" role="search" onSubmit={submit}>
-        <SearchIcon />
+        <PencilIcon />
         <input
           type="search"
           value={query}
@@ -94,7 +94,7 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
             </span>
             {has(p.id) ? (
               <span className="added" aria-label={`${p.name} is in your playlist`}>
-                <CheckIcon size={18} />
+                <TickIcon size={22} />
               </span>
             ) : (
               <button type="button" className="add" onClick={() => onAdd(p.id)} aria-label={`Add ${p.name}`}>

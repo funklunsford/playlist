@@ -3,7 +3,7 @@ import { catalogPuzzle } from './catalog';
 import { localDate } from './day';
 import { readDone, resolveDone, type Done } from './done';
 import { parseDoneKey, readSignals } from './firstParty';
-import { applySignals, arrive, barFor, mark, nextUp, type Arrival, type Back, type Day, type Status } from './player';
+import { applySignals, arrive, barFor, mark, nextUp, unplayed, type Arrival, type Back, type Day, type Status } from './player';
 import { fromShared, playlistLink, readLink, withShared, type Shared } from './link';
 import { add, addLink, move, puzzlesOf, remove, type Playlist } from './playlist';
 import { browserStorage, ITEMS_KEY, loadDay, loadLaunch, loadPlaylist, prune, saveDay, saveLaunch, savePlaylist } from './store';
@@ -11,7 +11,7 @@ import { EditList } from './components/EditList';
 import { ShareIcon } from './components/icons';
 import { ImportSheet } from './components/ImportSheet';
 import { PlayerBar } from './components/PlayerBar';
-import { PlaylistHeader } from './components/PlaylistHeader';
+import { PlaylistHeader, type Cell } from './components/PlaylistHeader';
 import { PuzzleRow } from './components/PuzzleRow';
 import { SettingsSheet } from './components/SettingsSheet';
 import { SearchBox } from './components/SearchBox';
@@ -216,6 +216,10 @@ export function App() {
   const current = bar.kind === 'back' || bar.kind === 'ready' ? bar.next : null;
   const first = nextUp(ids, today.day);
   const done = ids.filter((id) => today.day[id]?.status === 'done').length;
+  const cells: Cell[] = ids.map((id) => {
+    const status = today.day[id]?.status;
+    return status === 'done' || status === 'skipped' ? status : id === current ? 'current' : 'todo';
+  });
 
   const finder = (prominent: boolean) => (
     <SearchBox
@@ -234,8 +238,9 @@ export function App() {
     <div className="app">
       <PlaylistHeader
         date={today.date}
-        total={puzzles.length}
+        cells={cells}
         done={done}
+        started={ids.some((id) => !unplayed(today.day, id))}
         editing={editing}
         onEdit={puzzles.length ? () => setEditing(!editing) : undefined}
         onPlay={first ? () => play(first) : undefined}
@@ -278,8 +283,6 @@ export function App() {
           bar={bar}
           puzzle={(id) => puzzles.find((p) => p.id === id)}
           marks={today.day}
-          done={done}
-          total={puzzles.length}
           onPlay={play}
           onMark={(id, isDone) => setMark(id, isDone ? 'done' : 'todo')}
         />
