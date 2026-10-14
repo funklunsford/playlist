@@ -503,3 +503,7 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - Wordercise's favicon is 16px across, and Rhyme or Reason's is the React logo its site was built with. Rhymey Timey has none. All three keep their initials.
 - **`dev/icons.html`,** on the dev server, shows every catalog puzzle's artwork as the playlist draws it. It shows each on white and on black, at a row's size and at a cover quarter's size, for checking a new icon.
 - **`npm run check-catalog`:** 75 puzzles, none failing or redirecting. Bracket City still turns scripts away.
+
+## LinkedIn's games taken out (2026-10-14, branch `no-linkedin`)
+- **The owner's call:** Queens, Tango, Zip, Pinpoint and Crossclimb are gone from the catalog, along with the LinkedIn publisher and LinkedIn's icon. The catalog is now 70 puzzles.
+- **A saved playlist that had any of them** just stops showing them. The playlist leaves out ids the catalog no longer has, and the same goes for a playlist link that names them.
