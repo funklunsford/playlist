@@ -47,6 +47,7 @@ export const ICONS: Readonly<Record<string, Icon>> = {
   globle: { file: 'globle.png' },
   worldle: { file: 'worldle.png' },
   travle: { file: 'travle.png' },
+  flagle: { file: 'flagle.png' },
   costcodle: { file: 'costcodle.png' },
   nerdle: { file: 'nerdle.png', px: 48 },
   semantle: { file: 'semantle.png', plate: '#209cee', px: 48 },
@@ -58,7 +59,9 @@ export const ICONS: Readonly<Record<string, Icon>> = {
   tradle: { file: 'tradle.png', inset: 0.8, px: 64 },
   mathler: { file: 'mathler.png' },
   chronophoto: { file: 'chronophoto.png' },
+  anthropeum: { file: 'anthropeum.png' },
   'box-office-game': { file: 'box-office-game.png' },
+  krillion: { file: 'krillion.png' },
   // The Atlantic's, as its site keeps Bracket City's own from scripts.
   'bracket-city': { file: 'bracket-city.png' },
   'wapo-keyword': { file: 'wapo-keyword.jpg' },

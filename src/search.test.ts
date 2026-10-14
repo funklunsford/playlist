@@ -26,6 +26,11 @@ describe('search', () => {
     ['the mini', 'The Mini'],
     ['conecti', 'Connections'],
     ['Wordle', 'Wordle'],
+    ['krill', 'Krillion'],
+    ['anthropium', 'Anthropeum'],
+    ['flagle', 'Flagle'],
+    ['flag', 'Flagle'],
+    ['art history', 'Anthropeum'],
   ])('finds %j as %s', (query, name) => {
     expect(top(query)).toBe(name);
   });
