@@ -7,12 +7,26 @@ import { applySignals, arrive, barFor, mark, nextUp, unplayed, type Arrival, typ
 import { fromShared, playlistLink, readLink, withShared, type Shared } from './link';
 import { pieceColor } from './pieces';
 import { add, addLink, move, puzzlesOf, remove, type Playlist } from './playlist';
-import { browserStorage, ITEMS_KEY, loadDay, loadLaunch, loadPlaylist, prune, saveDay, saveLaunch, savePlaylist } from './store';
+import { newSeed, playOrder } from './shuffle';
+import {
+  browserStorage,
+  ITEMS_KEY,
+  loadDay,
+  loadLaunch,
+  loadPlaylist,
+  loadShuffle,
+  prune,
+  saveDay,
+  saveLaunch,
+  savePlaylist,
+  saveShuffle,
+  SHUFFLE_KEY,
+} from './store';
 import { EditList } from './components/EditList';
-import { ShareIcon } from './components/icons';
 import { ImportSheet } from './components/ImportSheet';
+import { NavBar } from './components/NavBar';
 import { PlayerBar } from './components/PlayerBar';
-import { PlaylistHeader, type Cell } from './components/PlaylistHeader';
+import { PlaylistHeader } from './components/PlaylistHeader';
 import { PuzzleRow } from './components/PuzzleRow';
 import { SettingsSheet } from './components/SettingsSheet';
 import { SearchBox } from './components/SearchBox';
@@ -85,6 +99,8 @@ function checked(list: Playlist, done: Done): { today: Today; missing: boolean }
 
 const NOT_IN_PLAYLIST = "That puzzle isn't in your playlist";
 
+const TITLE = "Today's Puzzles";
+
 /** How the page opens: back from a check, or by Back, or afresh. */
 function open(list: Playlist): { today: Today; toast: string | null } {
   const done = readDone(location.hash);
@@ -108,6 +124,7 @@ export function App() {
   const [incoming, setIncoming] = useState<Shared | null>(() => readLink(location.hash));
   const [toast, setToast] = useState<string | null>(() => opening?.toast ?? null);
   const [settings, setSettings] = useState(false);
+  const [shuffle, setShuffle] = useState(() => loadShuffle(kv));
   const puzzles = puzzlesOf(list);
   const ids = puzzles.map((p) => p.id);
 
@@ -122,13 +139,15 @@ export function App() {
       if (!e.persisted) return;
       const l = loadPlaylist(kv);
       setList(l);
+      setShuffle(loadShuffle(kv));
       setToday(settle(l.ids, 'back'));
     };
     // Shown again after another tab or app: maybe a new day, or one of your games finished meanwhile.
     const onVisible = () => document.visibilityState === 'visible' && setToday((t) => reread(loadPlaylist(kv).ids, t));
-    // Another tab changed the playlist, today's marks, or one of your games said it was done.
+    // Another tab changed the playlist, Shuffle, today's marks, or one of your games said it was done.
     const onStorage = (e: StorageEvent) => {
       if (e.key === ITEMS_KEY) setList(loadPlaylist(kv));
+      else if (e.key === SHUFFLE_KEY) setShuffle(loadShuffle(kv));
       else if (e.key === null || e.key.startsWith('playlist:day:') || parseDoneKey(e.key)) setToday((t) => reread(loadPlaylist(kv).ids, t));
     };
     addEventListener('pageshow', onShow);
@@ -213,14 +232,21 @@ export function App() {
     setToday({ ...today, day });
   };
 
-  const bar = barFor(ids, today.day, today.back);
+  /** Shuffle on, with a new order each time; or off, back to the list's. */
+  const toggleShuffle = () => {
+    const next = shuffle.on ? { ...shuffle, on: false } : { on: true, seed: newSeed() };
+    setShuffle(next);
+    saveShuffle(kv, next);
+  };
+
+  // What plays next follows Shuffle; the list itself stays in your order.
+  const order = playOrder(ids, shuffle, today.date);
+  const bar = barFor(order, today.day, today.back);
   const current = bar.kind === 'back' || bar.kind === 'ready' ? bar.next : null;
-  const first = nextUp(ids, today.day);
-  const cells: Cell[] = ids.map((id) => {
-    const status = today.day[id]?.status;
-    return status === 'done' || status === 'skipped' ? status : id === current ? 'current' : 'todo';
-  });
-  /** Each puzzle's piece colour, by its place on the list. */
+  // ▶ at the top plays the same one as the bar along the bottom, or else (back from the last one, not ticked) the
+  // first left.
+  const upNext = current ?? nextUp(order, today.day);
+  /** Each puzzle's colour, by its place on the list. */
   const colorOf = (id: string) => pieceColor(ids.indexOf(id));
 
   const finder = (prominent: boolean) => (
@@ -238,22 +264,26 @@ export function App() {
 
   return (
     <div className="app">
-      <PlaylistHeader
-        date={today.date}
-        pieces={cells.map((cell, i) => ({ cell, color: pieceColor(i) }))}
-        started={ids.some((id) => !unplayed(today.day, id))}
+      <NavBar
+        title={TITLE}
         editing={editing}
         onEdit={puzzles.length ? () => setEditing(!editing) : undefined}
-        onPlay={first ? () => play(first) : undefined}
+        onShare={puzzles.length ? share : undefined}
         onSettings={() => setSettings(true)}
-      >
-        {puzzles.length > 0 && (
-          <button type="button" className="pill outline" onClick={share}>
-            <ShareIcon size={16} /> Share
-          </button>
-        )}
-      </PlaylistHeader>
+      />
       <main className={puzzles.length && !editing ? 'page with-player' : 'page'}>
+        <PlaylistHeader
+          title={TITLE}
+          date={today.date}
+          puzzles={puzzles}
+          done={ids.filter((id) => today.day[id]?.status === 'done').length}
+          started={ids.some((id) => !unplayed(today.day, id))}
+          editing={editing}
+          next={upNext ? puzzles.find((p) => p.id === upNext) : undefined}
+          onPlay={() => upNext && play(upNext)}
+          shuffle={shuffle.on}
+          onShuffle={toggleShuffle}
+        />
         {!puzzles.length ? (
           finder(true)
         ) : editing ? (
@@ -275,6 +305,7 @@ export function App() {
                 />
               ))}
             </ol>
+            <p className="list-foot">{puzzles.length === 1 ? '1 puzzle' : `${puzzles.length} puzzles`}</p>
             {finder(false)}
           </>
         )}
@@ -285,6 +316,7 @@ export function App() {
           puzzle={(id) => puzzles.find((p) => p.id === id)}
           colorOf={colorOf}
           marks={today.day}
+          shuffle={shuffle.on}
           onPlay={play}
           onMark={(id, isDone) => setMark(id, isDone ? 'done' : 'todo')}
         />

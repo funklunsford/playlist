@@ -25,14 +25,21 @@ export function BookmarkletSetup({ onToast }: { onToast(text: string): void }) {
 
   return (
     <section className="setting" aria-labelledby="bookmarklet-title">
-      <h3 id="bookmarklet-title">Check a puzzle with one click</h3>
-      <p className="setting-sub">
-        An optional bookmark. On a finished puzzle, click it: it checks the puzzle's done, keeps your score, and brings you back here. Going Back works
-        without it.
-      </p>
+      <div className="group setting-intro">
+        <span className="setting-icon" aria-hidden="true">
+          <CheckIcon size={20} />
+        </span>
+        <div>
+          <h3 id="bookmarklet-title">Check a Puzzle with One Click</h3>
+          <p>
+            An optional bookmark. On a finished puzzle, click it: it checks the puzzle's done, keeps your score, and brings you back here. Going Back works
+            without it.
+          </p>
+        </div>
+      </div>
 
-      <h4>On a computer</h4>
-      <ol className="steps">
+      <h4 className="group-header">On a computer</h4>
+      <ol className="group steps">
         <li>
           Show your bookmarks bar: <kbd>⌘</kbd>
           <kbd>⇧</kbd>
@@ -56,7 +63,7 @@ export function BookmarkletSetup({ onToast }: { onToast(text: string): void }) {
           </a>
         </li>
       </ol>
-      <p className="setting-alt">
+      <p className="group-footer">
         Or, without dragging:{' '}
         <button type="button" className="text-button" onClick={copy}>
           copy the code
@@ -66,16 +73,18 @@ export function BookmarkletSetup({ onToast }: { onToast(text: string): void }) {
         <kbd>B</kbd>), choose ⋮ → Add new bookmark, name it "Puzzle done" and paste the code as its URL.
       </p>
 
-      <h4>A key for it (Mac, optional)</h4>
-      <p className="setting-alt">
-        In System Settings → Keyboard → Keyboard Shortcuts → App Shortcuts, press +, choose Google Chrome, type the menu title <code>Puzzle done</code>, and
-        pick a key such as <kbd>⌃</kbd>
-        <kbd>⌘</kbd>
-        <kbd>D</kbd>. Chrome lists your bookmarks in its Bookmarks menu, so the key presses it there.
-      </p>
+      <h4 className="group-header">A key for it (Mac, optional)</h4>
+      <div className="group">
+        <p className="cell">
+          In System Settings → Keyboard → Keyboard Shortcuts → App Shortcuts, press +, choose Google Chrome, type the menu title <code>Puzzle done</code>, and
+          pick a key such as <kbd>⌃</kbd>
+          <kbd>⌘</kbd>
+          <kbd>D</kbd>. Chrome lists your bookmarks in its Bookmarks menu, so the key presses it there.
+        </p>
+      </div>
 
-      <h4>On iPhone</h4>
-      <ol className="steps">
+      <h4 className="group-header">On iPhone</h4>
+      <ol className="group steps">
         <li>
           <button type="button" className="text-button" onClick={copy}>
             Copy the code

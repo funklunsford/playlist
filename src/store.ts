@@ -5,6 +5,7 @@ import { addDays } from './day';
 import { signalDate } from './firstParty';
 import type { Day, Launch, Mark } from './player';
 import { EMPTY, type LinkPuzzle, type Playlist } from './playlist';
+import { SHUFFLE_OFF, type Shuffle } from './shuffle';
 
 /** The part of localStorage the playlist uses, so tests can hand it a stand-in. */
 export interface KeyValue {
@@ -76,6 +77,16 @@ export function loadPlaylist(kv: KeyValue): Playlist {
 }
 
 export const savePlaylist = (kv: KeyValue, list: Playlist) => writeJson(kv, ITEMS_KEY, list);
+
+export const SHUFFLE_KEY = 'playlist:shuffle';
+
+/** Whether Shuffle is on, and its seed (src/shuffle.ts); off if it's never been set or can't be read. */
+export function loadShuffle(kv: KeyValue): Shuffle {
+  const v = readJson(kv, SHUFFLE_KEY) as Partial<Shuffle> | null;
+  return v && typeof v.on === 'boolean' && typeof v.seed === 'number' ? { on: v.on, seed: v.seed } : SHUFFLE_OFF;
+}
+
+export const saveShuffle = (kv: KeyValue, shuffle: Shuffle) => writeJson(kv, SHUFFLE_KEY, shuffle);
 
 // ---- Today's marks, and the puzzle ▶ last opened. ----
 
