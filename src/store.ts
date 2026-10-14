@@ -90,8 +90,13 @@ export function loadDay(kv: KeyValue, date: string): Day {
   const v = readJson(kv, dayKey(date));
   if (!v || typeof v !== 'object') return {};
   const day: Day = {};
-  for (const [id, m] of Object.entries(v as Record<string, Partial<Mark>>))
-    if (m && STATUSES.has(m.status as string) && typeof m.at === 'number') day[id] = { status: m.status as Mark['status'], at: m.at };
+  for (const [id, m] of Object.entries(v as Record<string, Partial<Mark>>)) {
+    if (!m || !STATUSES.has(m.status as string) || typeof m.at !== 'number') continue;
+    const mark: Mark = { status: m.status as Mark['status'], at: m.at };
+    if (typeof m.score === 'string') mark.score = m.score.slice(0, 24);
+    if (typeof m.share === 'string') mark.share = m.share.slice(0, 600);
+    day[id] = mark;
+  }
   return day;
 }
 

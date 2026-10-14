@@ -736,3 +736,57 @@ button:disabled {
   font-weight: 600;
   box-shadow: var(--shadow);
 }
+
+/* ---- The bookmarklet, and where to get it. ---- */
+
+.np-score {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.check-card {
+  margin: 0 0 48px;
+  padding: 18px;
+  border-radius: 14px;
+  background: var(--raise);
+}
+
+.check-card h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.check-card p {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+/* Looks like a button, so it's clear what to drag. */
+.bookmarklet {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px 9px 12px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 800;
+  text-decoration: none;
+  cursor: grab;
+}
+
+.check-card details {
+  margin-top: 14px;
+  color: var(--muted);
+}
+
+.check-card summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.check-card ol {
+  margin: 10px 0 12px;
+  padding-left: 22px;
+}

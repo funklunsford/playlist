@@ -1,11 +1,13 @@
 import type { Puzzle } from '../catalog';
-import type { Bar } from '../player';
+import type { Bar, Day } from '../player';
 import { CheckIcon, PlayIcon } from './icons';
 import { Tile } from './Tile';
 
 interface Props {
   bar: Bar;
   puzzle(id: string): Puzzle | undefined;
+  /** Today's marks, for a score to show. */
+  marks: Day;
   done: number;
   total: number;
   onPlay(id: string): void;
@@ -14,7 +16,7 @@ interface Props {
 }
 
 /** The bar along the bottom, like Spotify's player: what you've come back from, and ▶ for what's next. */
-export function PlayerBar({ bar, puzzle, done, total, onPlay, onMark }: Props) {
+export function PlayerBar({ bar, puzzle, marks, done, total, onPlay, onMark }: Props) {
   if (bar.kind === 'empty') return null;
 
   let body: React.ReactNode;
@@ -42,6 +44,7 @@ export function PlayerBar({ bar, puzzle, done, total, onPlay, onMark }: Props) {
         <span className="np">
           <span className="np-line">
             {bar.ticked && <CheckIcon size={16} />} {from.name}
+            {bar.ticked && marks[from.id]?.score && <span className="np-score"> · {marks[from.id].score}</span>}
           </span>
           <span className="np-sub">{next ? `Up next: ${next.name}` : "That's the last one"}</span>
         </span>
