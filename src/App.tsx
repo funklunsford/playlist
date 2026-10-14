@@ -7,13 +7,13 @@ import { applySignals, arrive, barFor, mark, nextUp, type Arrival, type Back, ty
 import { fromShared, playlistLink, readLink, withShared, type Shared } from './link';
 import { add, addLink, move, puzzlesOf, remove, type Playlist } from './playlist';
 import { browserStorage, ITEMS_KEY, loadDay, loadLaunch, loadPlaylist, prune, saveDay, saveLaunch, savePlaylist } from './store';
-import { CheckCard } from './components/CheckCard';
 import { EditList } from './components/EditList';
 import { ShareIcon } from './components/icons';
 import { ImportSheet } from './components/ImportSheet';
 import { PlayerBar } from './components/PlayerBar';
 import { PlaylistHeader } from './components/PlaylistHeader';
 import { PuzzleRow } from './components/PuzzleRow';
+import { SettingsSheet } from './components/SettingsSheet';
 import { SearchBox } from './components/SearchBox';
 
 // One storage for the page, with days older than 90 tidied away as it opens.
@@ -106,6 +106,7 @@ export function App() {
   // A playlist link this page was opened with (#add=…), waiting for Add or Replace mine.
   const [incoming, setIncoming] = useState<Shared | null>(() => readLink(location.hash));
   const [toast, setToast] = useState<string | null>(() => opening?.toast ?? null);
+  const [settings, setSettings] = useState(false);
   const puzzles = puzzlesOf(list);
   const ids = puzzles.map((p) => p.id);
 
@@ -238,6 +239,7 @@ export function App() {
         editing={editing}
         onEdit={puzzles.length ? () => setEditing(!editing) : undefined}
         onPlay={first ? () => play(first) : undefined}
+        onSettings={() => setSettings(true)}
       >
         {puzzles.length > 0 && (
           <button type="button" className="pill outline" onClick={share}>
@@ -268,7 +270,6 @@ export function App() {
               ))}
             </ol>
             {finder(false)}
-            <CheckCard onToast={setToast} />
           </>
         )}
       </main>
@@ -292,6 +293,7 @@ export function App() {
           onCancel={() => closeIncoming()}
         />
       )}
+      {settings && <SettingsSheet onClose={() => setSettings(false)} onToast={setToast} />}
       {toast && (
         <p className="toast" role="status">
           {toast}

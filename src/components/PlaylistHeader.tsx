@@ -1,5 +1,5 @@
 import { longDate } from '../day';
-import { CheckIcon, PlayIcon } from './icons';
+import { CheckIcon, GearIcon, PlayIcon } from './icons';
 
 interface Props {
   date: string;
@@ -10,16 +10,22 @@ interface Props {
   onEdit?: () => void;
   /** Plays the first unplayed puzzle; absent when there's none. */
   onPlay?: () => void;
+  onSettings(): void;
   /** Extra buttons beside Edit. */
   children?: React.ReactNode;
 }
 
 /** The top of the page: today's date and progress over a wash of colour, like a playlist's cover, and its big ▶. */
-export function PlaylistHeader({ date, total, done, editing, onEdit, onPlay, children }: Props) {
+export function PlaylistHeader({ date, total, done, editing, onEdit, onPlay, onSettings, children }: Props) {
   return (
     <header className="hero">
       <div className="hero-inner">
-        <p className="kicker">Puzzle Playlist</p>
+        <div className="hero-top">
+          <p className="kicker">Puzzle Playlist</p>
+          <button type="button" className="icon-button gear" onClick={onSettings} aria-label="Settings">
+            <GearIcon size={22} />
+          </button>
+        </div>
         <h1>Today</h1>
         <p className="meta">
           {longDate(date)}

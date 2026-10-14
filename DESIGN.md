@@ -263,7 +263,7 @@ A small ranking function written for this, with tests. The catalog is small, so 
 ## The bookmarklet: one click to check a puzzle (2026-10-13, branch `bookmarklet`)
 A web page can't see inside another site, but a bookmarklet can: it's a bookmark whose address is JavaScript, and clicking it runs that code inside the page you're on. It doesn't play the game. On a finished puzzle it confirms the puzzle is done, keeps the score, and goes back to the playlist; it replaces Back rather than adding a click.
 
-- **Getting it:** a card below the search box. On a computer, drag its "✓ Puzzle done" button to the bookmarks bar. For iPhone, the card copies the code to paste into a Safari bookmark, which is clumsier to reach.
+- **Getting it:** in Settings, behind the header's gear (see the next section). On a computer, drag the "✓ Puzzle done" button to the bookmarks bar. For iPhone, Settings copies the code to paste into a Safari bookmark.
 - **Loading (`src/bookmarklet.ts`):** the bookmark only loads `check.js` from the playlist's site, with `?<time>` so it's always the latest version. Checks can then be fixed without reinstalling the bookmark.
   - It holds no "%", which a browser would decode first.
   - NYT's security policy allows scripts from any https site. Clues by Sam and Octordle have none.
@@ -308,3 +308,13 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - **Ten fresh, unfinished games** (Octordle, Quordle, Squaredle, Murdle, Globle, Costcodle, Nerdle, Semantle, Waffle, Clues by Sam): each asked "Can't tell whether … is finished". None ticked, each stayed on its page, and no tab opened.
   - **The playlist page itself:** "This is the playlist. Click it on a puzzle instead."
 - **Not yet tried:** a finished NYT game. The test browser won't open nytimes.com, so those rules come from the games' code, not from use. A game whose markers change gets the question instead of a wrong answer, and its rule is fixed in `rules.ts`.
+
+## Settings (2026-10-13, branch `settings`)
+- **The gear,** top right of the header, opens Settings: a sheet like the playlist link's (bottom sheet on phones, centred on wider screens). It closes with ×, Escape, or a click outside.
+- **Why:** the bookmarklet is optional, and the no-setup flow (Back, then ▶ Next) works without it. So its setup lives in Settings, off the playlist. It used to be a card below the search box.
+- **Setting up the bookmarklet:**
+  - **Computer:** show the bookmarks bar (⌘⇧B, or Ctrl+Shift+B), then drag "✓ Puzzle done" onto it.
+  - **Without dragging:** copy the code, then in Chrome's Bookmark Manager (⌥⌘B) choose ⋮ → Add new bookmark and paste the code as its URL.
+  - **A key, on a Mac:** in System Settings → Keyboard → Keyboard Shortcuts → App Shortcuts, add Google Chrome with the menu title "Puzzle done". Chrome lists bookmarks in its Bookmarks menu, so the key presses it there. The dragged bookmark's title is exactly "Puzzle done", which this relies on.
+  - **iPhone:** copy the code, put it in a Safari bookmark named "Puzzle done", then on a finished puzzle type "Puzzle done" in the address bar and tap it.
+- **No page can do this setup itself:** browsers give websites no way to add a bookmark or a keyboard shortcut.
