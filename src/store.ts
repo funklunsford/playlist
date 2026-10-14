@@ -76,8 +76,8 @@ function has(kv: KeyValue, key: string): boolean {
 }
 
 /**
- * The saved playlist. With none saved yet, it's a new one, with your own games; one emptied on purpose stays empty,
- * as does one that can't be read.
+ * The saved playlist. With none saved yet, it's a new one (NEW_PLAYLIST); one emptied on purpose stays empty, as does
+ * one that can't be read.
  */
 export function loadPlaylist(kv: KeyValue): Playlist {
   if (!has(kv, ITEMS_KEY)) return NEW_PLAYLIST;

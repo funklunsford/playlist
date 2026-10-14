@@ -454,7 +454,7 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **The owner's list:**
   - the bookmarklet as its own switch, desktop only, with its instructions cut down
   - ordinary settings, such as light and dark
-  - Strokes and Mountweazel in every new playlist
+  - Strokes and Mountweazel in every new playlist (Connections and Wordle were added later)
   - renaming the playlist
   - no "Puzzle Playlist" line under its name
 - **Settings** is grouped the way the Settings app groups things. It's kept in `playlist:settings` (`src/settings.ts`).
@@ -473,4 +473,5 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - It's the page's title, the top bar's title once scrolled, and the share sheet's title. A playlist link doesn't carry it.
 - **The line under the name** is gone. That was "Puzzle Playlist", where Apple Music names a playlist's curator. Now it's the name, then the date and progress.
 - **A new playlist starts with Strokes and Mountweazel:** the first time a device opens the page, with nothing saved. A playlist emptied on purpose stays empty.
+  - Later the same day, the owner added Connections and Wordle after them. Four games give a new playlist the tiled cover (branch `default-four`).
   - Mountweazel doesn't report when it's done yet, so coming back from it doesn't tick it. The bar offers Done instead.

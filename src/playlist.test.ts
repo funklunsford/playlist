@@ -69,9 +69,9 @@ describe('the saved playlist', () => {
     expect(loadPlaylist(kv)).toEqual(list);
   });
 
-  it('starts with your own two games when there is none yet', () => {
+  it('starts with your own two games, then Connections and Wordle, when there is none yet', () => {
     expect(loadPlaylist(memoryStorage())).toEqual(NEW_PLAYLIST);
-    expect(puzzlesOf(NEW_PLAYLIST).map((p) => p.name)).toEqual(['Strokes', 'Mountweazel']);
+    expect(puzzlesOf(NEW_PLAYLIST).map((p) => p.name)).toEqual(['Strokes', 'Mountweazel', 'Connections', 'Wordle']);
   });
 
   it('stays empty once emptied, and is empty when unreadable', () => {
