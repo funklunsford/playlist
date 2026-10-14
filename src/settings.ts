@@ -6,7 +6,7 @@ import { readJson, writeJson, type KeyValue } from './store';
 export type Theme = 'auto' | 'light' | 'dark';
 
 export interface Settings {
-  /** Light or dark, or as the device is ('auto'). */
+  /** Light (the default) or dark, or as the device is ('auto'). */
   theme: Theme;
   /** Coming back from another site's puzzle ticks it, with Not yet to undo. Your own games always say for themselves. */
   doneOnReturn: boolean;
@@ -17,7 +17,7 @@ export interface Settings {
 // index.html reads the theme from here too, before the page is drawn.
 export const SETTINGS_KEY = 'playlist:settings';
 
-export const DEFAULT_SETTINGS: Settings = { theme: 'auto', doneOnReturn: true, bookmarklet: false };
+export const DEFAULT_SETTINGS: Settings = { theme: 'light', doneOnReturn: true, bookmarklet: false };
 
 const THEMES: readonly string[] = ['auto', 'light', 'dark'];
 

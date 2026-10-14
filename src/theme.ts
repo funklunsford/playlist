@@ -1,18 +1,19 @@
 // Light or dark: the page's colours follow `data-theme` on <html> (src/styles.css). index.html sets it before the
-// first paint, from the saved setting; this keeps it in step when the setting changes, and, on Automatic, when the
-// device switches between light and dark.
+// first paint, from the saved setting (light unless chosen otherwise); this keeps it in step when the setting
+// changes, and, on Automatic, when the device switches between light and dark.
 
 import type { Theme } from './settings';
 
 const deviceDark = matchMedia('(prefers-color-scheme: dark)');
-let current: Theme = 'auto';
+let current: Theme = 'light';
 
 /** Shows the page light, dark, or as the device is. */
 export function applyTheme(theme: Theme) {
   current = theme;
   const dark = theme === 'dark' || (theme === 'auto' && deviceDark.matches);
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-  // The browser's own colour around the page.
+  // The browser's own colours: its controls, and around the page.
+  document.querySelector('meta[name="color-scheme"]')?.setAttribute('content', dark ? 'dark' : 'light');
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#000000' : '#ffffff');
 }
 

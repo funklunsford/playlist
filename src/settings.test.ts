@@ -3,8 +3,8 @@ import { DEFAULT_SETTINGS, loadSettings, saveSettings, SETTINGS_KEY } from './se
 import { memoryStorage } from './store';
 
 describe('the settings', () => {
-  it('start as the device is, ticking puzzles on coming back, with the bookmarklet tucked away', () => {
-    expect(loadSettings(memoryStorage())).toEqual({ theme: 'auto', doneOnReturn: true, bookmarklet: false });
+  it('start light, ticking puzzles on coming back, with the bookmarklet tucked away', () => {
+    expect(loadSettings(memoryStorage())).toEqual({ theme: 'light', doneOnReturn: true, bookmarklet: false });
   });
 
   it('come back as saved', () => {

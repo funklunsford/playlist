@@ -3,18 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
-    <!-- The browser's own colour around the page: white, or black in dark mode (set just below). -->
+    <!-- Light or dark, and the browser's own colour around the page: white, or black in dark mode (set just below). -->
+    <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#ffffff" />
-    <!-- Light or dark before the first paint: the saved setting (src/settings.ts), else as the device is. -->
+    <!-- Light or dark before the first paint: the saved setting (src/settings.ts), else light. -->
     <script>
       (function () {
-        var theme = 'auto';
+        var theme = 'light';
         try {
-          theme = JSON.parse(localStorage.getItem('playlist:settings')).theme || 'auto';
+          theme = JSON.parse(localStorage.getItem('playlist:settings')).theme || 'light';
         } catch (e) {}
-        var dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        var dark = theme === 'dark' || (theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        document.querySelector('meta[name="color-scheme"]').setAttribute('content', dark ? 'dark' : 'light');
         document.querySelector('meta[name="theme-color"]').setAttribute('content', dark ? '#000000' : '#ffffff');
       })();
     </script>
