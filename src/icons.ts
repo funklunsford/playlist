@@ -21,9 +21,6 @@ export interface Icon {
 /** One icon, with where it comes from, as a tile draws it. */
 export type IconSource = Omit<Icon, 'file'> & { src: string };
 
-// Every LinkedIn game has LinkedIn's own icon.
-const LINKEDIN: Icon = { file: 'linkedin.svg', plate: '#0a66c2' };
-
 export const ICONS: Readonly<Record<string, Icon>> = {
   'nyt-wordle': { file: 'nyt-wordle.png' },
   'nyt-connections': { file: 'nyt-connections.png' },
@@ -94,11 +91,6 @@ export const ICONS: Readonly<Record<string, Icon>> = {
   'cross-spin': { file: 'cross-spin.png' },
   'word-zip': { file: 'word-zip.png', px: 32 },
   'second-scramble': { file: 'second-scramble.png', plate: '#6752eb' },
-  'linkedin-queens': LINKEDIN,
-  'linkedin-tango': LINKEDIN,
-  'linkedin-zip': LINKEDIN,
-  'linkedin-pinpoint': LINKEDIN,
-  'linkedin-crossclimb': LINKEDIN,
 };
 
 /**

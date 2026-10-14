@@ -2,7 +2,7 @@
 // every `url` is the puzzle's final address: `npm run check-catalog` confirms they all still answer, and
 // flags any that now redirect.
 
-export type PublisherId = 'nyt' | 'linkedin' | 'mw' | 'atlantic' | 'wapo' | 'guardian' | 'indie' | 'yours';
+export type PublisherId = 'nyt' | 'mw' | 'atlantic' | 'wapo' | 'guardian' | 'indie' | 'yours';
 
 export interface Publisher {
   /** How a row names it. */
@@ -13,7 +13,6 @@ export interface Publisher {
 
 export const PUBLISHERS: Record<PublisherId, Publisher> = {
   nyt: { label: 'NYT', aliases: ['nyt', 'nytimes', 'new york times', 'ny times'] },
-  linkedin: { label: 'LinkedIn', aliases: ['linkedin', 'linked in'] },
   mw: { label: 'Merriam-Webster', aliases: ['merriam webster', 'mw'] },
   atlantic: { label: 'The Atlantic', aliases: ['the atlantic'] },
   wapo: { label: 'Washington Post', aliases: ['washington post', 'wapo'] },
@@ -119,12 +118,6 @@ export const CATALOG: readonly Puzzle[] = [
   { id: 'wapo-keyword', name: 'Keyword', publisher: 'wapo', url: 'https://www.washingtonpost.com/games/keyword/', color: '#3b3b3b' },
   { id: 'guardian-crosswords', name: 'Guardian crosswords', publisher: 'guardian', url: 'https://www.theguardian.com/crosswords', aliases: ['cryptic', 'quick crossword'], color: '#052962' },
 
-  // LinkedIn: each needs you signed in.
-  { id: 'linkedin-queens', name: 'Queens', publisher: 'linkedin', url: 'https://www.linkedin.com/games/queens/', color: '#9b6dd6', note: 'Needs a LinkedIn sign-in' },
-  { id: 'linkedin-tango', name: 'Tango', publisher: 'linkedin', url: 'https://www.linkedin.com/games/tango/', color: '#f4a03a', note: 'Needs a LinkedIn sign-in' },
-  { id: 'linkedin-zip', name: 'Zip', publisher: 'linkedin', url: 'https://www.linkedin.com/games/zip/', color: '#e8613c', note: 'Needs a LinkedIn sign-in' },
-  { id: 'linkedin-pinpoint', name: 'Pinpoint', publisher: 'linkedin', url: 'https://www.linkedin.com/games/pinpoint/', color: '#3a8fd9', note: 'Needs a LinkedIn sign-in' },
-  { id: 'linkedin-crossclimb', name: 'Crossclimb', publisher: 'linkedin', url: 'https://www.linkedin.com/games/crossclimb/', color: '#38a385', note: 'Needs a LinkedIn sign-in' },
 
   // On the dev server only: a stand-in for one of your games (dev/fake-game.html), which says it's done.
   ...(import.meta.env.MODE === 'development'

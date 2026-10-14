@@ -48,7 +48,7 @@ describe("the playlist's cover", () => {
       'nyt-strands',
       'nyt-mini',
     ]);
-    expect(ids(coverOf(catalog('linkedin-queens', 'linkedin-tango', 'linkedin-zip', 'framed')))).toHaveLength(4);
+    expect(ids(coverOf(catalog('framed', 'raddle', 'krillion', 'nyt-wordle', 'gisnep')))).toEqual(['framed', 'raddle', 'krillion', 'nyt-wordle']);
   });
 
   it("is the first puzzle's icon alone, with fewer than four", () => {

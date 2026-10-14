@@ -54,8 +54,8 @@ describe('search', () => {
     expect(ids('nyt').slice(0, 3)).toEqual(['nyt-wordle', 'nyt-connections', 'nyt-strands']);
   });
 
-  it('finds every LinkedIn game by "linkedin"', () => {
-    expect(ids('linkedin')).toHaveLength(CATALOG.filter((p) => p.publisher === 'linkedin').length);
+  it('finds nothing by "linkedin", whose games were taken out', () => {
+    expect(ids('linkedin')).toEqual([]);
   });
 
   it('finds your own games by "yours"', () => {
