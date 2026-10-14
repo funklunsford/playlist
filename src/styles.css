@@ -42,6 +42,8 @@
   --scrim: rgb(0 0 0 / 0.35);
   --shadow: 0 8px 28px rgb(0 0 0 / 0.14);
   --art-shadow: 0 10px 28px rgb(0 0 0 / 0.16);
+  /* A hairline around artwork, so a white icon keeps its edge on a white page. */
+  --art-edge: rgb(0 0 0 / 0.1);
   --focus: var(--tint);
   --font: -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --rounded: ui-rounded, 'SF Pro Rounded', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
@@ -80,6 +82,7 @@
     --scrim: rgb(0 0 0 / 0.5);
     --shadow: 0 8px 28px rgb(0 0 0 / 0.5);
     --art-shadow: 0 10px 28px rgb(0 0 0 / 0.45);
+    --art-edge: rgb(255 255 255 / 0.12);
     color-scheme: dark;
   }
 }
@@ -351,8 +354,9 @@ button:disabled {
   text-align: center;
 }
 
-/* The cover: a 2 × 2 mosaic of the first four puzzles, or the first alone. */
+/* The cover: a 2 × 2 mosaic of the first four puzzles' icons, or the first alone (src/icons.ts). */
 .artwork {
+  position: relative;
   display: grid;
   flex-shrink: 0;
   aspect-ratio: 1;
@@ -370,21 +374,15 @@ button:disabled {
   grid-template-columns: 1fr 1fr;
 }
 
-.art-tile {
-  display: grid;
-  place-items: center;
-  background: var(--piece);
-  color: var(--ink);
-  font-family: var(--rounded);
-  font-weight: 700;
+/* Each puzzle fills its quarter of the cover; one without an icon has its initial, large. */
+.tile.fill {
+  width: 100%;
+  height: 100%;
   font-size: 56px;
   font-size: 24cqi;
-  line-height: 1;
-  letter-spacing: 0;
-  user-select: none;
 }
 
-.tiles-1 .art-tile {
+.tiles-1 .tile.fill {
   font-size: 112px;
   font-size: 46cqi;
 }
@@ -402,11 +400,14 @@ button:disabled {
   stroke-width: 1.3;
 }
 
-/* A puzzle's artwork in a row: the same, small. Size, corners and type size are set where it's drawn. */
+/* A puzzle's artwork in a row: its site's icon, or its initial on its colour. Size and corners are set where it's
+   drawn. */
 .tile {
+  position: relative;
   display: inline-grid;
   flex-shrink: 0;
   place-items: center;
+  overflow: hidden;
   background: var(--piece);
   color: var(--ink);
   font-family: var(--rounded);
@@ -416,12 +417,32 @@ button:disabled {
   user-select: none;
 }
 
-/* A gentle sheen across the artwork, lighter at the top. */
+/* A gentle sheen across a tile of colour, lighter at the top. */
 @supports (background: color-mix(in srgb, red, blue)) {
-  .art-tile,
-  .tile {
+  .tile:not(.icon) {
     background: linear-gradient(160deg, color-mix(in srgb, var(--piece), #ffffff 30%), var(--piece) 55%, color-mix(in srgb, var(--piece), #000000 6%));
   }
+}
+
+/* An icon sits on a plate: white, or its own colour where its corners are rounded (src/icons.ts). */
+.tile.icon {
+  background: var(--plate, #ffffff);
+}
+
+.tile.icon img {
+  display: block;
+  object-fit: contain;
+}
+
+/* The hairline, drawn over the artwork. */
+.tile:not(.fill)::after,
+.artwork::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0.5px var(--art-edge);
+  pointer-events: none;
 }
 
 .hero-text {
@@ -587,7 +608,7 @@ button:disabled {
   display: grid;
 }
 
-/* The next one: ▶ over its artwork, in place of the initial, as a music app marks the song that's playing. */
+/* The next one: ▶ over its artwork (in place of an initial), as a music app marks the song that's playing. */
 .row.current .tile {
   color: transparent;
 }
@@ -598,7 +619,7 @@ button:disabled {
   display: grid;
   place-items: center;
   border-radius: 6px;
-  background: rgb(0 0 0 / 0.32);
+  background: rgb(0 0 0 / 0.45);
   color: #ffffff;
 }
 
