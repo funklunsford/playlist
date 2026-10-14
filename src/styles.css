@@ -737,28 +737,85 @@ button:disabled {
   box-shadow: var(--shadow);
 }
 
-/* ---- The bookmarklet, and where to get it. ---- */
+/* ---- Settings, behind the header's gear, and the bookmarklet's setup in it. ---- */
 
 .np-score {
   color: var(--muted);
   font-weight: 600;
 }
 
-.check-card {
-  margin: 0 0 48px;
-  padding: 18px;
-  border-radius: 14px;
-  background: var(--raise);
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -8px -8px 0 0;
 }
 
-.check-card h2 {
-  margin: 0 0 6px;
+.hero-top .kicker {
+  margin: 0;
+}
+
+.gear {
+  color: var(--ink);
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -6px -8px 8px 0;
+}
+
+.setting h3 {
+  margin: 4px 0 6px;
   font-size: 18px;
 }
 
-.check-card p {
-  margin: 0 0 14px;
+.setting h4 {
+  margin: 18px 0 6px;
+  font-size: 15px;
+}
+
+.setting-sub,
+.setting-alt {
+  margin: 0;
   color: var(--muted);
+}
+
+.steps {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--muted);
+}
+
+.steps li + li {
+  margin-top: 8px;
+}
+
+.setting-alt {
+  margin-top: 10px;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  margin: 0 1px;
+  padding: 0 5px;
+  border-radius: 5px;
+  background: var(--raise);
+  box-shadow: inset 0 -1px 0 var(--line), 0 0 0 1px var(--line);
+  color: var(--ink);
+  font: 600 13px/1.6 inherit;
+  text-align: center;
+}
+
+.setting code {
+  white-space: nowrap;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--raise);
+  color: var(--ink);
+  font-size: 14px;
 }
 
 /* Looks like a button, so it's clear what to drag. */
@@ -775,18 +832,3 @@ button:disabled {
   cursor: grab;
 }
 
-.check-card details {
-  margin-top: 14px;
-  color: var(--muted);
-}
-
-.check-card summary {
-  cursor: pointer;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.check-card ol {
-  margin: 10px 0 12px;
-  padding-left: 22px;
-}
