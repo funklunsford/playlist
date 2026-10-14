@@ -85,3 +85,36 @@ export const GearIcon = (p: Props) => (
     <circle cx="12" cy="12" r="3.2" strokeWidth={1.6} />
   </Svg>
 );
+
+/** A teacher's tick, drawn by hand in red pen. */
+export const TickIcon = ({ size = 22 }: Props) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3.5 13.2c1.9 1.3 3.5 3.2 4.9 5.6C11.2 12.5 15 7.7 20.6 4.2" />
+  </svg>
+);
+
+/** A gold star sticker. */
+export const StarIcon = ({ size = 28 }: Props) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" className="star">
+    <path
+      d="M12 2.6l2.75 5.82 6.35.78-4.68 4.37 1.2 6.29L12 16.77l-5.62 3.09 1.2-6.29L2.9 9.2l6.35-.78z"
+      fill="var(--gold)"
+      stroke="var(--gold-edge)"
+      strokeWidth={1.3}
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const ArrowIcon = (p: Props) => (
+  <Svg {...p}>
+    <path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" />
+  </Svg>
+);
+
+export const PencilIcon = (p: Props) => (
+  <Svg {...p}>
+    <path d="M15.2 4.6l4.2 4.2L8.6 19.6 3.6 20.4l.8-5z" />
+    <path d="M13.2 6.6l4.2 4.2" />
+  </Svg>
+);

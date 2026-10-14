@@ -18,7 +18,7 @@ This doc settled the design before anything was built. "Puzzle Playlist" is a wo
 | Two players | Each device keeps its own playlist and progress, with no server or sign-in. A playlist is sent as a link |
 | How puzzles open | **In the same tab.** ▶ takes the tab to the puzzle, and Back returns to the playlist. **One tap per puzzle**, never a jump without one (see below). Nothing is framed |
 | What counts as done | **First-party games report it themselves. For other sites, coming back to the playlist counts as done**, and "Not yet" undoes it |
-| The look | A Spotify-style playlist of names, each with a small colour tile. No previews of the games |
+| The look | A daily worksheet: graph paper, crossword squares and a teacher's red pen (it began Spotify-style; see "A worksheet, not a music app"). No previews of the games |
 
 ## What the browser allows (tested 2026-10-13)
 **Framing doesn't work.** Each site's headers were checked with curl, then each site was framed from `funklunsford.github.io` in a Chromium browser.
@@ -278,7 +278,7 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
     | Strands | `strands-found-counter` reads "N of N theme words found" | hints, from the 💡s in the share text |
     | The Mini | `.xwd__congrats-modal` (or `-container`, `-moment`) | the `.timer-count` time, since its share text has none |
     | Pips | its share text | level and time |
-    | Clues by Sam | `.modal.complete`, or its "🏆 Share results" button | level and "Solved in …" |
+    | Clues by Sam | `.modal.complete`, or its "🏆 Share results" button | its "Solved in …" time |
     | Strokes, Mountweazel | their done key on this origin | — |
     | Other catalog puzzles | their share text names the game | a 3/6-style score or a time, if the text has one |
 
@@ -318,3 +318,27 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - **A key, on a Mac:** in System Settings → Keyboard → Keyboard Shortcuts → App Shortcuts, add Google Chrome with the menu title "Puzzle done". Chrome lists bookmarks in its Bookmarks menu, so the key presses it there. The dragged bookmark's title is exactly "Puzzle done", which this relies on.
   - **iPhone:** copy the code, put it in a Safari bookmark named "Puzzle done", then on a finished puzzle type "Puzzle done" in the address bar and tap it.
 - **No page can do this setup itself:** browsers give websites no way to add a bookmark or a keyboard shortcut.
+
+## A worksheet, not a music app (2026-10-13, branch `worksheet`)
+- **The owner's call:** less blatantly Spotify, more puzzlecore and scholastic. The page is now a daily puzzle worksheet. How it works is unchanged.
+- **Paper:** graph paper by day, cream with a faint blue grid. In dark mode it's a chalkboard: green-black, chalk-white ink, chalk-pink marks and chalk-yellow highlights.
+- **The heading:**
+  - "Puzzle Playlist · Daily worksheet" in typewriter type, then "Today's Puzzles", then "Date:" written in by hand on a line.
+  - A Score box filled in in red pen (done / total), with a gold star stuck on its corner when the day is done.
+  - A row of answer cells, one per puzzle, where the progress bar was. Each is ticked, struck through if skipped, or highlighted if it's next.
+  - A double rule underneath.
+- **Puzzles as crossword squares:** the initial, the list number in the corner, and a wash of the puzzle's colour. The separate number column is gone.
+- **Marks:**
+  - Done: a red-pen tick and grade ("3/6", "Perfect", "1 hint", a time).
+  - Next: a highlighter over the name.
+  - Skipped: a strike-through.
+- **Buttons:**
+  - Edit, Share and Done are stamped labels: typewriter capitals, ink border, offset shadow.
+  - Start / Continue and Next are a school-bus-yellow sticker.
+  - Links are in red pen.
+- **Along the bottom:** an index card with a red line along its top. At the end of the day: "All done for today!" with a gold star.
+- **Adding puzzles:** "Make today's list" when empty, else "Add a puzzle", written on a line in handwriting. Suggestion chips and add boxes are stamped tiles.
+- **Sheets** (a playlist link, Settings) are notebook paper with a red margin. Keys show as letter tiles, and the toast is a sticky note.
+- **Type, bundled with the site** (no outside requests): Fraunces for headings and names, Courier Prime for labels, Caveat for handwriting.
+- **The icon:** a crossword square numbered 1, with a red tick.
+- **Grades stay short:** Clues by Sam is graded by its time alone, and a long grade is cut short before a name is.

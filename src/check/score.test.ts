@@ -15,7 +15,7 @@ describe('scores from share texts', () => {
     ['Strands #591\n“Shell game”\n💡🔵🔵🟡\n🔵💡🔵', '2 hints'],
     ['Pips #123 Easy 🟢\n1:23', 'Easy 1:23'],
     ['Pips #123 Hard 🔴\n12:04 🍪', 'Hard 12:04'],
-    ['I solved the daily #CluesBySam, October 13, 2026 (Easy), in 4:32', 'Easy · 4:32'],
+    ['I solved the daily #CluesBySam, October 13, 2026 (Easy), in 4:32', '4:32'],
     ['I solved the daily #CluesBySam, October 13, 2026!', undefined],
     ['Framed #1677\n🎥 🟥 🟩 ⬛ ⬛ ⬛ ⬛', '2/6'],
     ['Framed #1677\n🎥 🟥 🟥 🟥 🟥 🟥 🟥', 'X/6'],

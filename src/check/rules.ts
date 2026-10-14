@@ -160,12 +160,8 @@ const cluesBySam: Rule = {
     // The results box is open, or its "🏆 Share results" button shows (only after solving).
     return doc.querySelector('.modal.complete') || findStep(doc, 'Share results') ? 'done' : undefined;
   },
-  score(doc) {
-    const box = doc.querySelector('.modal.complete');
-    const level = textOf(box?.querySelector('h3')).match(/\(([^)]+)\)/)?.[1];
-    const time = textOf(box?.querySelector('.result h3')).match(/Solved in (.+)/)?.[1];
-    return [level, time].filter(Boolean).join(' · ') || undefined;
-  },
+  // Graded by the time it took, kept short like the other grades.
+  score: (doc) => textOf(doc.querySelector('.modal.complete .result h3')).match(/Solved in (.+)/)?.[1],
   share: ['Share results', 'Share Text'],
   result: /#CluesBySam/i,
 };
