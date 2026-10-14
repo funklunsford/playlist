@@ -1,6 +1,7 @@
 import { useEffect, useId } from 'react';
 import { publisherLabel } from '../catalog';
 import { fromShared, type Shared } from '../link';
+import { pieceColor } from '../pieces';
 import { puzzlesOf, type Playlist } from '../playlist';
 import { Tile } from './Tile';
 
@@ -35,9 +36,9 @@ export function ImportSheet({ shared, mine, onAdd, onReplace, onCancel }: Props)
         <h2 id={titleId}>{title}</h2>
         <p className="sheet-sub">From a playlist someone sent you.</p>
         <ul className="sheet-list">
-          {puzzles.map((p) => (
+          {puzzles.map((p, i) => (
             <li key={p.id}>
-              <Tile puzzle={p} size={32} />
+              <Tile puzzle={p} color={pieceColor(i)} size={32} />
               <span className="title">
                 <span className="name">{p.name}</span>
                 <span className="by">{have.has(p.url) ? 'Already in yours' : publisherLabel(p)}</span>

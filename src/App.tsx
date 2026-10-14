@@ -5,6 +5,7 @@ import { readDone, resolveDone, type Done } from './done';
 import { parseDoneKey, readSignals } from './firstParty';
 import { applySignals, arrive, barFor, mark, nextUp, unplayed, type Arrival, type Back, type Day, type Status } from './player';
 import { fromShared, playlistLink, readLink, withShared, type Shared } from './link';
+import { pieceColor } from './pieces';
 import { add, addLink, move, puzzlesOf, remove, type Playlist } from './playlist';
 import { browserStorage, ITEMS_KEY, loadDay, loadLaunch, loadPlaylist, prune, saveDay, saveLaunch, savePlaylist } from './store';
 import { EditList } from './components/EditList';
@@ -215,11 +216,14 @@ export function App() {
   const bar = barFor(ids, today.day, today.back);
   const current = bar.kind === 'back' || bar.kind === 'ready' ? bar.next : null;
   const first = nextUp(ids, today.day);
-  const done = ids.filter((id) => today.day[id]?.status === 'done').length;
   const cells: Cell[] = ids.map((id) => {
     const status = today.day[id]?.status;
     return status === 'done' || status === 'skipped' ? status : id === current ? 'current' : 'todo';
   });
+  /** Each puzzle's piece colour, by its place on the list. */
+  const colorOf = (id: string) => pieceColor(ids.indexOf(id));
+  // The puzzle you've just come back from, ticked, drops its piece onto the board.
+  const placed = today.back?.ticked && today.day[today.back.id]?.status === 'done' ? ids.indexOf(today.back.id) : undefined;
 
   const finder = (prominent: boolean) => (
     <SearchBox
@@ -238,8 +242,8 @@ export function App() {
     <div className="app">
       <PlaylistHeader
         date={today.date}
-        cells={cells}
-        done={done}
+        pieces={cells.map((cell, i) => ({ cell, color: pieceColor(i) }))}
+        placed={placed}
         started={ids.some((id) => !unplayed(today.day, id))}
         editing={editing}
         onEdit={puzzles.length ? () => setEditing(!editing) : undefined}
@@ -263,8 +267,10 @@ export function App() {
               {puzzles.map((p, i) => (
                 <PuzzleRow
                   key={p.id}
-                  n={i + 1}
                   puzzle={p}
+                  color={pieceColor(i)}
+                  knob={i < puzzles.length - 1 ? (i % 2 ? '72%' : '26%') : undefined}
+                  z={puzzles.length - i}
                   mark={today.day[p.id]}
                   current={p.id === current}
                   onPlay={() => play(p.id)}
@@ -282,6 +288,7 @@ export function App() {
         <PlayerBar
           bar={bar}
           puzzle={(id) => puzzles.find((p) => p.id === id)}
+          colorOf={colorOf}
           marks={today.day}
           onPlay={play}
           onMark={(id, isDone) => setMark(id, isDone ? 'done' : 'todo')}

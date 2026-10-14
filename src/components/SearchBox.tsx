@@ -1,7 +1,8 @@
 import { useId, useState } from 'react';
 import { catalogPuzzle, publisherLabel } from '../catalog';
+import { pieceColor } from '../pieces';
 import { search } from '../search';
-import { CloseIcon, LinkIcon, PencilIcon, PlusIcon, TickIcon } from './icons';
+import { CloseIcon, LinkIcon, PlusIcon, SearchIcon, TickIcon } from './icons';
 import { Tile } from './Tile';
 
 const SHOWN = 6;
@@ -60,7 +61,7 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
     <section className={prominent ? 'finder prominent' : 'finder'} aria-label="Add puzzles">
       {prominent ? <h2>Make today's list</h2> : <h2 className="finder-title">Add a puzzle</h2>}
       <form className="search" role="search" onSubmit={submit}>
-        <PencilIcon />
+        <SearchIcon />
         <input
           type="search"
           value={query}
@@ -82,9 +83,9 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
       </form>
 
       <ul className="results" id={listId}>
-        {results.map((p) => (
+        {results.map((p, i) => (
           <li key={p.id} className="result">
-            <Tile puzzle={p} size={40} />
+            <Tile puzzle={p} color={pieceColor(i)} size={40} />
             <span className="title">
               <span className="name">{p.name}</span>
               <span className="by">
@@ -118,8 +119,8 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
         <div className="starters" aria-label="Suggestions">
           {STARTERS.filter((id) => !has(id))
             .flatMap((id) => catalogPuzzle(id) ?? [])
-            .map((p) => (
-              <button type="button" key={p.id} className="chip" onClick={() => onAdd(p.id)}>
+            .map((p, i) => (
+              <button type="button" key={p.id} className="chip" style={{ '--piece': pieceColor(i) } as React.CSSProperties} onClick={() => onAdd(p.id)}>
                 <PlusIcon size={16} /> {p.name}
               </button>
             ))}

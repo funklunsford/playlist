@@ -1,14 +1,16 @@
 import { longDate } from '../day';
-import { ArrowIcon, GearIcon, StarIcon, TickIcon } from './icons';
+import { Board } from './Board';
+import { ArrowIcon, GearIcon } from './icons';
 
-/** How a puzzle stands today, for its answer cell. */
+/** How a puzzle stands today, for its piece on the board. */
 export type Cell = 'done' | 'skipped' | 'current' | 'todo';
 
 interface Props {
   date: string;
-  /** Each puzzle's cell, in order. */
-  cells: Cell[];
-  done: number;
+  /** Each puzzle's piece, in list order. */
+  pieces: { color: string; cell: Cell }[];
+  /** The piece just placed, which drops in. */
+  placed?: number;
   /** Something's been played or skipped today, so the button continues rather than starts. */
   started: boolean;
   editing: boolean;
@@ -21,18 +23,14 @@ interface Props {
   children?: React.ReactNode;
 }
 
-/**
- * The top of the page, set out like a worksheet: a title, the date written in, a score box the teacher fills in
- * red (with a gold star when it's all done), a row of answer cells, one per puzzle, and the button to start.
- */
-export function PlaylistHeader({ date, cells, done, started, editing, onEdit, onPlay, onSettings, children }: Props) {
-  const total = cells.length;
-  const allDone = total > 0 && !onPlay;
+/** The top of the page: today's title and date, the day's jigsaw coming together, and the button to start. */
+export function PlaylistHeader({ date, pieces, placed, started, editing, onEdit, onPlay, onSettings, children }: Props) {
+  const total = pieces.length;
   return (
     <header className="hero">
       <div className="hero-inner">
         <div className="hero-top">
-          <p className="kicker">Puzzle Playlist · Daily worksheet</p>
+          <p className="kicker">Puzzle Playlist</p>
           <button type="button" className="icon-button gear" onClick={onSettings} aria-label="Settings">
             <GearIcon size={22} />
           </button>
@@ -40,29 +38,10 @@ export function PlaylistHeader({ date, cells, done, started, editing, onEdit, on
         <div className="hero-head">
           <div>
             <h1>Today's Puzzles</h1>
-            <p className="date-line">
-              Date: <span className="hand">{longDate(date)}</span>
-            </p>
+            <p className="date">{longDate(date)}</p>
           </div>
-          {total > 0 && (
-            <div className="score" role="img" aria-label={`Score: ${done} of ${total} done`}>
-              <span className="score-label">Score</span>
-              <span className="score-value">
-                {done}/{total}
-              </span>
-              {allDone && <StarIcon size={38} />}
-            </div>
-          )}
+          {total > 0 && <Board pieces={pieces} placed={placed} />}
         </div>
-        {total > 0 && (
-          <ol className="cells" aria-hidden="true">
-            {cells.map((c, i) => (
-              <li key={i} className={`cell ${c}`}>
-                {c === 'done' && <TickIcon size={18} />}
-              </li>
-            ))}
-          </ol>
-        )}
         <div className="actions">
           {onEdit && (
             <button type="button" className={editing ? 'pill' : 'pill outline'} onClick={onEdit}>
@@ -77,7 +56,7 @@ export function PlaylistHeader({ date, cells, done, started, editing, onEdit, on
                   {started ? 'Continue' : 'Start'} <ArrowIcon size={20} />
                 </>
               ) : (
-                'All done'
+                'All done!'
               )}
             </button>
           )}

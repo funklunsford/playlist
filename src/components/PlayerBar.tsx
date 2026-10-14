@@ -6,6 +6,8 @@ import { Tile } from './Tile';
 interface Props {
   bar: Bar;
   puzzle(id: string): Puzzle | undefined;
+  /** A puzzle's piece colour. */
+  colorOf(id: string): string;
   /** Today's marks, for a grade to show. */
   marks: Day;
   onPlay(id: string): void;
@@ -14,10 +16,10 @@ interface Props {
 }
 
 /**
- * The index card along the bottom: the puzzle you've just come back from, ticked and graded in red, and the
- * button for the next one. When everything's done, a gold star.
+ * The felt card along the bottom, with a knob on top like the next piece waiting: the puzzle you've come back
+ * from, ticked with its grade, and the button for the next one. When the jigsaw's done, a gold star.
  */
-export function PlayerBar({ bar, puzzle, marks, onPlay, onMark }: Props) {
+export function PlayerBar({ bar, puzzle, colorOf, marks, onPlay, onMark }: Props) {
   if (bar.kind === 'empty') return null;
 
   let body: React.ReactNode;
@@ -41,10 +43,10 @@ export function PlayerBar({ bar, puzzle, marks, onPlay, onMark }: Props) {
     const grade = bar.ticked ? marks[from.id]?.score : undefined;
     body = (
       <>
-        <Tile puzzle={from} size={40} />
+        <Tile puzzle={from} color={colorOf(from.id)} size={42} />
         <span className="np">
           <span className="np-line">
-            {bar.ticked && <TickIcon size={20} />}
+            {bar.ticked && <TickIcon size={18} />}
             <span className="np-name">{from.name}</span>
           </span>
           <span className="np-sub">
@@ -79,7 +81,7 @@ export function PlayerBar({ bar, puzzle, marks, onPlay, onMark }: Props) {
     if (!next) return null;
     body = (
       <>
-        <Tile puzzle={next} size={40} />
+        <Tile puzzle={next} color={colorOf(next.id)} size={42} />
         <span className="np">
           <span className="np-label">{bar.started ? 'Next up' : 'First up'}</span>
           <span className="np-line">
@@ -95,6 +97,7 @@ export function PlayerBar({ bar, puzzle, marks, onPlay, onMark }: Props) {
 
   return (
     <footer className="player" aria-label="Next puzzle">
+      <span className="player-knob" aria-hidden="true" />
       <div className="player-inner">{body}</div>
     </footer>
   );
