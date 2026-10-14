@@ -469,6 +469,7 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
     - On, it shows the one step: drag ✓ Puzzle done to the bookmarks bar (⌘⇧B shows it).
     - The Mac key shortcut, copying the code by hand, and the iPhone steps are gone.
 - **Renaming:** in Edit, the name is a field to type in. It's kept in `playlist:name`, up to 40 characters.
+  - Later the same day, a pencil was added beside the name (branch `rename-pencil`). It renames the playlist in place, without Edit: the name becomes the field, selected. Enter or a tap away keeps the new name, and Escape puts back the old one.
   - Emptied, it goes back to "Today's Puzzles".
   - It's the page's title, the top bar's title once scrolled, and the share sheet's title. A playlist link doesn't carry it.
 - **The line under the name** is gone. That was "Puzzle Playlist", where Apple Music names a playlist's curator. Now it's the name, then the date and progress.

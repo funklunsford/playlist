@@ -318,6 +318,7 @@ export function App() {
         <PlaylistHeader
           name={editing ? name : shownName}
           onRename={rename}
+          onRenamed={() => setName(loadName(kv))}
           date={today.date}
           puzzles={puzzles}
           done={ids.filter((id) => today.day[id]?.status === 'done').length}
