@@ -95,7 +95,7 @@ export function iconsFor(p: Puzzle): IconSource[] {
 
 /**
  * The puzzles a playlist's cover is made from, as a music app makes one from albums: the first four with different
- * icons, in a 2 × 2 mosaic; or, with fewer than four, the first one alone.
+ * icons. A puzzle whose icon is already on it is passed over, as a second song from the same album is.
  */
 export function coverOf(puzzles: readonly Puzzle[]): Puzzle[] {
   const seen = new Set<string>();
@@ -105,7 +105,17 @@ export function coverOf(puzzles: readonly Puzzle[]): Puzzle[] {
     if (seen.has(look)) continue;
     seen.add(look);
     cover.push(p);
-    if (cover.length === 4) return cover;
+    if (cover.length === 4) break;
   }
-  return cover.slice(0, 1);
+  return cover;
+}
+
+/**
+ * The cover's tiles, in reading order: a 2 × 2 mosaic of the first four different icons. Two or three are mixed into
+ * it too, the first repeated on the diagonal (A B / B A, or A B / C A). One alone fills the cover.
+ */
+export function coverTiles(puzzles: readonly Puzzle[]): Puzzle[] {
+  const [a, b, c, d] = coverOf(puzzles);
+  if (!b) return a ? [a] : [];
+  return [a, b, c ?? b, d ?? a];
 }
