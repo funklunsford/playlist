@@ -435,6 +435,7 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - Most are full squares, shown edge to edge.
   - Marks on a clear background (Contexto, Octordle, Pips, Murdle, Tradle) sit smaller, on a white plate.
   - An icon with rounded corners of its own sits on its own colour: Strokes, LinkedIn and Semantle.
+  - Strokes' icon is copied from `public/favicon.svg` in the word-puzzle repo. Its four-tiles version replaced the S on 2026-10-14; when it changes again, copy it again.
   - A small favicon (Murdle's is 32px) is never drawn larger than itself.
 - **A few special cases:**
   - The Mini and The Crossword use the icons their pages show in a browser tab, not the Times' generic "T".
