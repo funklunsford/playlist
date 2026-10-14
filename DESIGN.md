@@ -442,9 +442,9 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - Bracket City has The Atlantic's icon: its page turns scripts away, so its own couldn't be fetched.
   - Poeltl's site has no icon, so it keeps its initial on its colour. So does any puzzle whose icon won't load.
 - **Puzzles added by link** try their site's home-screen icon, then its favicon, straight from that site and with no referrer, then their initial.
-- **The cover** is made as Spotify and Apple Music make a playlist's: the first four puzzles with different icons, in a 2 × 2 mosaic. A puzzle whose icon is already on the cover (a second LinkedIn game) is passed over, as a second song from the same album is.
-  - Two or three different icons are mixed into the mosaic too, with the first repeated on the diagonal: A B / B A, or A B / C A. (Spotify would show the first alone; the owner wanted the first few mixed.) One icon fills the cover alone.
-  - The mosaic's tracks have no minimum and the icons are placed in them rather than sizing them, so an icon's own size can't push the others out of view. Safari was showing the first icon filling most of the cover.
+- **The cover** is made as Spotify and Apple Music make a playlist's. With four or more puzzles, it's the first four, in a 2 × 2 mosaic. With fewer, it's the first one's icon alone.
+  - For a while the same day, the mosaic skipped repeated icons and mixed in two or three. The owner asked for it back by count (branch `cover-count`). Repeated icons now repeat, as four LinkedIn games would.
+  - The mosaic's tracks have no minimum, and the icons are placed in them rather than sizing them. So an icon's own size can't push the others out of view, as it could in Safari.
 - **A hairline** edges every icon, as Apple Music edges artwork, so a white icon keeps its shape on a white page. The ▶ marking the next puzzle has a darker wash under it, so it shows on white icons.
 - **Adding an icon for a new catalog puzzle:** save its site's apple-touch-icon (or its favicon, as a PNG) in `public/icons/`, no more than 256px across, and list it in `src/icons.ts`. A test fails if a catalog puzzle has neither an icon nor a place on the no-icon list.
 - The nine colours in `src/pieces.ts` now colour only the tiles with initials.

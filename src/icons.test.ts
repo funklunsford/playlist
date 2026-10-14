@@ -1,7 +1,7 @@
 import { existsSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { CATALOG, catalogPuzzle, type Puzzle } from './catalog';
-import { coverOf, coverTiles, ICONS, iconsFor, NO_ICON } from './icons';
+import { coverOf, ICONS, iconsFor, NO_ICON } from './icons';
 import { addLink, EMPTY, puzzlesOf } from './playlist';
 
 const file = (name: string) => new URL(`../public/icons/${name}`, import.meta.url);
@@ -41,40 +41,20 @@ describe('the icons', () => {
 });
 
 describe("the playlist's cover", () => {
-  it('is the first four puzzles, each with its own icon', () => {
+  it('is the first four puzzles, with four or more', () => {
     expect(ids(coverOf(catalog('nyt-wordle', 'nyt-connections', 'nyt-strands', 'nyt-mini', 'clues-by-sam')))).toEqual([
       'nyt-wordle',
       'nyt-connections',
       'nyt-strands',
       'nyt-mini',
     ]);
+    expect(ids(coverOf(catalog('linkedin-queens', 'linkedin-tango', 'linkedin-zip', 'framed')))).toHaveLength(4);
   });
 
-  it('skips a puzzle whose icon is already on it, as a music app skips a second song from the same album', () => {
-    const list = catalog('linkedin-queens', 'linkedin-tango', 'nyt-wordle', 'linkedin-zip', 'framed', 'poeltl');
-    expect(ids(coverOf(list))).toEqual(['linkedin-queens', 'nyt-wordle', 'framed', 'poeltl']);
-  });
-
-  it('mixes two or three different icons into the mosaic too, the first repeated on the diagonal', () => {
-    expect(ids(coverTiles(catalog('nyt-wordle', 'nyt-connections')))).toEqual(['nyt-wordle', 'nyt-connections', 'nyt-connections', 'nyt-wordle']);
-    expect(ids(coverTiles(catalog('nyt-wordle', 'nyt-connections', 'nyt-strands')))).toEqual(['nyt-wordle', 'nyt-connections', 'nyt-strands', 'nyt-wordle']);
-    expect(ids(coverTiles(catalog('linkedin-queens', 'linkedin-tango', 'nyt-wordle')))).toEqual(['linkedin-queens', 'nyt-wordle', 'nyt-wordle', 'linkedin-queens']);
-  });
-
-  it('is four different icons when there are four, and one alone when there is one', () => {
-    expect(ids(coverTiles(catalog('nyt-wordle', 'nyt-connections', 'nyt-strands', 'nyt-mini', 'framed')))).toEqual([
-      'nyt-wordle',
-      'nyt-connections',
-      'nyt-strands',
-      'nyt-mini',
-    ]);
-    expect(ids(coverTiles(catalog('linkedin-queens', 'linkedin-tango')))).toEqual(['linkedin-queens']);
-    expect(ids(coverTiles(catalog('framed')))).toEqual(['framed']);
-    expect(coverTiles([])).toEqual([]);
-  });
-
-  it('counts each puzzle without an icon as different, by its initial on its own tile', () => {
-    const sites = ['https://a.example/', 'https://b.example/', 'https://c.example/'].map(linked);
-    expect(coverOf([...sites, catalogPuzzle('poeltl')!])).toHaveLength(4);
+  it("is the first puzzle's icon alone, with fewer than four", () => {
+    expect(ids(coverOf(catalog('nyt-wordle', 'nyt-connections', 'nyt-strands')))).toEqual(['nyt-wordle']);
+    expect(ids(coverOf(catalog('nyt-wordle', 'nyt-connections')))).toEqual(['nyt-wordle']);
+    expect(ids(coverOf(catalog('framed')))).toEqual(['framed']);
+    expect(coverOf([])).toEqual([]);
   });
 });
