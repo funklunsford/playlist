@@ -2,7 +2,7 @@ import { useId, useState } from 'react';
 import { catalogPuzzle, publisherLabel } from '../catalog';
 import { pieceColor } from '../pieces';
 import { search } from '../search';
-import { CloseIcon, LinkIcon, PlusIcon, SearchIcon, TickIcon } from './icons';
+import { CheckIcon, CloseIcon, LinkIcon, PlusIcon, SearchIcon } from './icons';
 import { Tile } from './Tile';
 
 const SHOWN = 6;
@@ -95,7 +95,7 @@ export function SearchBox({ added, onAdd, onAddLink, prominent }: Props) {
             </span>
             {has(p.id) ? (
               <span className="added" aria-label={`${p.name} is in your playlist`}>
-                <TickIcon size={22} />
+                <CheckIcon size={20} />
               </span>
             ) : (
               <button type="button" className="add" onClick={() => onAdd(p.id)} aria-label={`Add ${p.name}`}>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { bookmarklet } from '../bookmarklet';
-import { TickIcon } from './icons';
+import { CheckIcon } from './icons';
 
 /**
  * Setting up the bookmarklet (src/bookmarklet.ts): drag it to the bookmarks bar, or add it by hand, on a computer
@@ -51,7 +51,7 @@ export function BookmarkletSetup({ onToast }: { onToast(text: string): void }) {
               onToast('Drag it to your bookmarks bar');
             }}
           >
-            <TickIcon size={18} />
+            <CheckIcon size={16} />
             Puzzle done
           </a>
         </li>

@@ -222,8 +222,6 @@ export function App() {
   });
   /** Each puzzle's piece colour, by its place on the list. */
   const colorOf = (id: string) => pieceColor(ids.indexOf(id));
-  // The puzzle you've just come back from, ticked, drops its piece onto the board.
-  const placed = today.back?.ticked && today.day[today.back.id]?.status === 'done' ? ids.indexOf(today.back.id) : undefined;
 
   const finder = (prominent: boolean) => (
     <SearchBox
@@ -243,7 +241,6 @@ export function App() {
       <PlaylistHeader
         date={today.date}
         pieces={cells.map((cell, i) => ({ cell, color: pieceColor(i) }))}
-        placed={placed}
         started={ids.some((id) => !unplayed(today.day, id))}
         editing={editing}
         onEdit={puzzles.length ? () => setEditing(!editing) : undefined}
@@ -269,8 +266,6 @@ export function App() {
                   key={p.id}
                   puzzle={p}
                   color={pieceColor(i)}
-                  knob={i < puzzles.length - 1 ? (i % 2 ? '72%' : '26%') : undefined}
-                  z={puzzles.length - i}
                   mark={today.day[p.id]}
                   current={p.id === current}
                   onPlay={() => play(p.id)}

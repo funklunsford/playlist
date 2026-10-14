@@ -18,7 +18,7 @@ This doc settled the design before anything was built. "Puzzle Playlist" is a wo
 | Two players | Each device keeps its own playlist and progress, with no server or sign-in. A playlist is sent as a link |
 | How puzzles open | **In the same tab.** ▶ takes the tab to the puzzle, and Back returns to the playlist. **One tap per puzzle**, never a jump without one (see below). Nothing is framed |
 | What counts as done | **First-party games report it themselves. For other sites, coming back to the playlist counts as done**, and "Not yet" undoes it |
-| The look | A jigsaw of construction paper: each puzzle a coloured felt piece, the header's board filling in as they're done (see "A jigsaw of felt"). No previews of the games |
+| The look | Simple and flat: a teal page, each puzzle a rounded card in its own colour, coral for the button to press (see "Simpler, same colours"). No previews of the games |
 
 ## What the browser allows (tested 2026-10-13)
 **Framing doesn't work.** Each site's headers were checked with curl, then each site was framed from `funklunsford.github.io` in a Chromium browser.
@@ -366,4 +366,21 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **Type, round like the knobs** and bundled with the site: Fredoka for headings, names and buttons, and Nunito for text.
 - **The icon** is a coral jigsaw piece on teal.
 - **Reduced motion:** with "reduce motion" on, nothing animates.
+
+## Simpler, same colours (2026-10-13, branch `simple`)
+- **The owner's call:** the jigsaw was too much. Keep its colours and make it simpler.
+- **Kept:** the teal page (deep teal in dark mode), the nine puzzle colours in turn (`src/pieces.ts`), coral for the button to press, yellow for "All done", and white for everything else.
+- **Gone:**
+  - the felt grain
+  - the knobs between cards
+  - the header's jigsaw board, with its drop-in and wiggle
+  - rotated stickers, the chunky press-down edges on buttons, and the knob on the bottom bar
+- **Now:**
+  - Each puzzle is a flat rounded card in its colour, with a white badge for its initial.
+  - A done one has a small white "✓ 3/6" label. The next is ringed in white with a dark "Up next" label. A skipped one fades.
+  - Progress is a row of dots in the header, one per puzzle in its colour, filled when done, ringed for the next and dimmed if skipped. Next to the date: "2 of 6 done".
+  - Buttons are flat: coral to press, white otherwise.
+  - The bottom bar, search, results, menus and sheets are plain white, rounded.
+- **Type:** Fredoka for the title only, and Nunito for everything else.
+- **The icon:** four rounded squares in the puzzle colours, on teal.
 

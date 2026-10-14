@@ -1,18 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { publisherLabel, type Puzzle } from '../catalog';
 import type { Mark, Status } from '../player';
-import { MoreIcon, TickIcon } from './icons';
+import { CheckIcon, MoreIcon } from './icons';
 import { Tile } from './Tile';
 
 interface Props {
   puzzle: Puzzle;
   mark?: Mark;
-  /** Its piece's colour (src/pieces.ts). */
+  /** Its colour on the list (src/pieces.ts). */
   color: string;
-  /** Where its knob reaches into the next piece, across the piece; none for the last. */
-  knob?: string;
-  /** Above the piece after it, so its knob shows over that piece. */
-  z: number;
   /** The one Start or Next plays. */
   current: boolean;
   onPlay(): void;
@@ -30,11 +26,10 @@ const choices = (status: Status | undefined): [Status, string][] =>
       : [['done', 'Mark done'], ['skipped', 'Skip today']];
 
 /**
- * A puzzle on today's list: a jigsaw piece of its own colour, its knob reaching into the next. Tap it to play.
- * A done one gets a ticked sticker with its grade; the next one is outlined, ready to place; a skipped one fades.
- * Its ⋯ menu marks it by hand.
+ * A puzzle on today's list: a card of its own colour. Tap it to play. A done one shows a tick and its grade, the
+ * next one is ringed, and a skipped one fades. Its ⋯ menu marks it by hand.
  */
-export function PuzzleRow({ puzzle, mark, color, knob, z, current, onPlay, menuOpen, onMenu, onMark }: Props) {
+export function PuzzleRow({ puzzle, mark, color, current, onPlay, menuOpen, onMenu, onMark }: Props) {
   const status = mark?.status;
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -53,7 +48,7 @@ export function PuzzleRow({ puzzle, mark, color, knob, z, current, onPlay, menuO
 
   const state = status === 'done' ? 'done' : status === 'skipped' ? 'skipped' : current ? 'current' : '';
   return (
-    <li className={`row playable piece ${state}`} style={{ '--piece': color, zIndex: menuOpen ? 100 : z } as React.CSSProperties}>
+    <li className={`row playable card ${state}`} style={{ '--piece': color, zIndex: menuOpen ? 2 : undefined } as React.CSSProperties}>
       <button type="button" className="row-main" onClick={onPlay} aria-label={`Play ${puzzle.name}${status === 'done' ? ' again' : ''}`}>
         <Tile puzzle={puzzle} />
         <span className="title">
@@ -65,8 +60,8 @@ export function PuzzleRow({ puzzle, mark, color, knob, z, current, onPlay, menuO
         </span>
         <span className="mark" aria-hidden="true">
           {status === 'done' && (
-            <span className="sticker">
-              <TickIcon size={18} />
+            <span className="done-mark">
+              <CheckIcon size={16} />
               {mark?.score ?? 'Done'}
             </span>
           )}
@@ -95,7 +90,6 @@ export function PuzzleRow({ puzzle, mark, color, knob, z, current, onPlay, menuO
           </div>
         )}
       </div>
-      {knob && <span className="knob" style={{ left: knob }} aria-hidden="true" />}
     </li>
   );
 }
