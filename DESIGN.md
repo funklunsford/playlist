@@ -475,3 +475,31 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **A new playlist starts with Strokes and Mountweazel:** the first time a device opens the page, with nothing saved. A playlist emptied on purpose stays empty.
   - Later the same day, the owner added Connections and Wordle after them. Four games give a new playlist the tiled cover (branch `default-four`).
   - Mountweazel doesn't report when it's done yet, so coming back from it doesn't tick it. The bar offers Done instead.
+
+## Thirty-three more puzzles (2026-10-14, branch `new-puzzles`)
+- **Krillion, Anthropeum and Flagle,** at the owner's request:
+  - Krillion is rare-answer trivia.
+  - Anthropeum is art from the Met, placed on a map and a timeline.
+  - Flagle is flags.
+- **Thirty more, from r/wordgames.** The owner asked for the 30 most popular puzzles that aren't NYT games.
+  - **The source:** r/wordpuzzles turned out to be one person's posts from 2021. So the reference is the r/wordgames thread "What daily word games are you playing that are NOT part of a platform" (November 2025).
+  - **How it was read:** through Reddit's RSS feed. Its pages and API turn scripts away, and the browser pane can't open Reddit.
+  - **The order is the thread's:** Reddit ranks its comments by votes. Games named more than once (Waffle, Guess My Word, Raddle, Wordercise, Phrasicle) sit near the top.
+  - **Left out:**
+    - games already in the catalog: Waffle, Clues by Sam, Bracket City, Squaredle and Puzzmo
+    - app-only games: Vizzy, Bloobi, Telepathy, SKRiFT, Wordscapes and Rovo
+    - games played inside Reddit
+    - sites that are down: Bookends and 12 Tries
+    - games that aren't a daily puzzle: Serpentine, Apterous, Fiv-let and Word Revolver
+    - games with no site to be found: Quantile, WordNumber, and a site of Syllacrostic's own
+  - **Added, in that order:**
+    - Freestyle, Stackdown, One Word Search, Wordercise, Raddle, Tiled Words, Bridge of Truth and Gisnep
+    - Cell Tower, NumberBang, Squareword, Rhyme or Reason, Guess My Word, GramGrid and Gokuro
+    - Word Salad, Wordshake, Phrasicle, Weaver and Shiftogram
+    - Tylogram (new on Tuesdays and Fridays), Minute Cryptic, Letterage, Letafall, Worble and Wordgy
+    - Rhymey Timey (new every other day), Cross Spin, Word Zip and Second Scramble
+  - Stackdown's address is the Waffle studio's own page on Puzzlist. stackdowngame.com is someone else's copy.
+- **Their icons** were fetched as before. Rounded ones sit on their own edge colour.
+  - Wordercise's favicon is 16px across, and Rhyme or Reason's is the React logo its site was built with. Rhymey Timey has none. All three keep their initials.
+- **`dev/icons.html`,** on the dev server, shows every catalog puzzle's artwork as the playlist draws it. It shows each on white and on black, at a row's size and at a cover quarter's size, for checking a new icon.
+- **`npm run check-catalog`:** 75 puzzles, none failing or redirecting. Bracket City still turns scripts away.
