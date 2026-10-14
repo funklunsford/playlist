@@ -26,6 +26,22 @@ describe('search', () => {
     ['the mini', 'The Mini'],
     ['conecti', 'Connections'],
     ['Wordle', 'Wordle'],
+    ['krill', 'Krillion'],
+    ['anthropium', 'Anthropeum'],
+    ['flagle', 'Flagle'],
+    ['flag', 'Flagle'],
+    ['art history', 'Anthropeum'],
+    ['raddle', 'Raddle'],
+    ['cryptic', 'Minute Cryptic'],
+    ['guess my word', 'Guess My Word'],
+    ['stackdown', 'Stackdown'],
+    ['phrasicle', 'Phrasicle'],
+    ['gisnep', 'Gisnep'],
+    ['quotefall', 'Gisnep'],
+    ['rhymey', 'Rhymey Timey'],
+    ['tylogram', 'Tylogram'],
+    ['bridge of truth', 'Bridge of Truth'],
+    ['second scramble', 'Second Scramble'],
   ])('finds %j as %s', (query, name) => {
     expect(top(query)).toBe(name);
   });

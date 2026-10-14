@@ -47,6 +47,7 @@ export const ICONS: Readonly<Record<string, Icon>> = {
   globle: { file: 'globle.png' },
   worldle: { file: 'worldle.png' },
   travle: { file: 'travle.png' },
+  flagle: { file: 'flagle.png' },
   costcodle: { file: 'costcodle.png' },
   nerdle: { file: 'nerdle.png', px: 48 },
   semantle: { file: 'semantle.png', plate: '#209cee', px: 48 },
@@ -58,11 +59,41 @@ export const ICONS: Readonly<Record<string, Icon>> = {
   tradle: { file: 'tradle.png', inset: 0.8, px: 64 },
   mathler: { file: 'mathler.png' },
   chronophoto: { file: 'chronophoto.png' },
+  anthropeum: { file: 'anthropeum.png' },
   'box-office-game': { file: 'box-office-game.png' },
+  krillion: { file: 'krillion.png' },
   // The Atlantic's, as its site keeps Bracket City's own from scripts.
   'bracket-city': { file: 'bracket-city.png' },
   'wapo-keyword': { file: 'wapo-keyword.jpg' },
   'guardian-crosswords': { file: 'guardian-crosswords.svg' },
+  // The r/wordgames thread's games (src/catalog.ts). Rounded icons sit on their own edge colour.
+  freestyle: { file: 'freestyle.png', plate: '#60bccc', px: 112 },
+  stackdown: { file: 'stackdown.png', plate: '#117555' },
+  'one-word-search': { file: 'one-word-search.png', plate: '#3794b5' },
+  raddle: { file: 'raddle.png', plate: '#1e88e5' },
+  'tiled-words': { file: 'tiled-words.png' },
+  'bridge-of-truth': { file: 'bridge-of-truth.png' },
+  gisnep: { file: 'gisnep.png' },
+  'cell-tower': { file: 'cell-tower.png' },
+  numberbang: { file: 'numberbang.png', plate: '#faf5e8' },
+  squareword: { file: 'squareword.png' },
+  'guess-my-word': { file: 'guess-my-word.svg', inset: 0.8 },
+  gramgrid: { file: 'gramgrid.png', plate: '#e0f2fe' },
+  gokuro: { file: 'gokuro.png' },
+  'word-salad': { file: 'word-salad.png', plate: '#f0f0ef' },
+  wordshake: { file: 'wordshake.png', plate: '#4c929d', px: 80 },
+  phrasicle: { file: 'phrasicle.png' },
+  weaver: { file: 'weaver.png' },
+  shiftogram: { file: 'shiftogram.png' },
+  tylogram: { file: 'tylogram.png' },
+  'minute-cryptic': { file: 'minute-cryptic.png' },
+  letterage: { file: 'letterage.png' },
+  letafall: { file: 'letafall.png', px: 32 },
+  worble: { file: 'worble.png' },
+  wordgy: { file: 'wordgy.png' },
+  'cross-spin': { file: 'cross-spin.png' },
+  'word-zip': { file: 'word-zip.png', px: 32 },
+  'second-scramble': { file: 'second-scramble.png', plate: '#6752eb' },
   'linkedin-queens': LINKEDIN,
   'linkedin-tango': LINKEDIN,
   'linkedin-zip': LINKEDIN,
@@ -70,8 +101,11 @@ export const ICONS: Readonly<Record<string, Icon>> = {
   'linkedin-crossclimb': LINKEDIN,
 };
 
-/** Catalog puzzles whose sites give no icon: they keep their initial on a tile of their colour. */
-export const NO_ICON: readonly string[] = ['poeltl'];
+/**
+ * Catalog puzzles whose sites give no icon of their own, in catalog order: they keep their initial on a tile of
+ * their colour. Wordercise's is 16px across, and Rhyme or Reason's is the React logo its site was built with.
+ */
+export const NO_ICON: readonly string[] = ['poeltl', 'wordercise', 'rhyme-or-reason', 'rhymey-timey'];
 
 /**
  * The icons to try for a puzzle, best first; a tile falls back to the next if one won't load, and to the puzzle's
