@@ -1,16 +1,13 @@
 import { longDate } from '../day';
-import { Board } from './Board';
 import { ArrowIcon, GearIcon } from './icons';
 
-/** How a puzzle stands today, for its piece on the board. */
+/** How a puzzle stands today, for its progress dot. */
 export type Cell = 'done' | 'skipped' | 'current' | 'todo';
 
 interface Props {
   date: string;
-  /** Each puzzle's piece, in list order. */
+  /** Each puzzle's colour and how it stands, in list order. */
   pieces: { color: string; cell: Cell }[];
-  /** The piece just placed, which drops in. */
-  placed?: number;
   /** Something's been played or skipped today, so the button continues rather than starts. */
   started: boolean;
   editing: boolean;
@@ -23,9 +20,10 @@ interface Props {
   children?: React.ReactNode;
 }
 
-/** The top of the page: today's title and date, the day's jigsaw coming together, and the button to start. */
-export function PlaylistHeader({ date, pieces, placed, started, editing, onEdit, onPlay, onSettings, children }: Props) {
+/** The top of the page: today's title and date, a dot per puzzle filled in as it's done, and the button to start. */
+export function PlaylistHeader({ date, pieces, started, editing, onEdit, onPlay, onSettings, children }: Props) {
   const total = pieces.length;
+  const done = pieces.filter((p) => p.cell === 'done').length;
   return (
     <header className="hero">
       <div className="hero-inner">
@@ -35,13 +33,18 @@ export function PlaylistHeader({ date, pieces, placed, started, editing, onEdit,
             <GearIcon size={22} />
           </button>
         </div>
-        <div className="hero-head">
-          <div>
-            <h1>Today's Puzzles</h1>
-            <p className="date">{longDate(date)}</p>
-          </div>
-          {total > 0 && <Board pieces={pieces} placed={placed} />}
-        </div>
+        <h1>Today's Puzzles</h1>
+        <p className="meta">
+          {longDate(date)}
+          {total > 0 && ` · ${done === total ? 'all done' : `${done} of ${total} done`}`}
+        </p>
+        {total > 0 && (
+          <ol className="dots" aria-hidden="true">
+            {pieces.map((p, i) => (
+              <li key={i} className={`dot ${p.cell}`} style={{ '--piece': p.color } as React.CSSProperties} />
+            ))}
+          </ol>
+        )}
         <div className="actions">
           {onEdit && (
             <button type="button" className={editing ? 'pill' : 'pill outline'} onClick={onEdit}>
@@ -56,7 +59,7 @@ export function PlaylistHeader({ date, pieces, placed, started, editing, onEdit,
                   {started ? 'Continue' : 'Start'} <ArrowIcon size={20} />
                 </>
               ) : (
-                'All done!'
+                'All done'
               )}
             </button>
           )}

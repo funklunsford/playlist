@@ -1,37 +1,30 @@
 /*
- * The look: a jigsaw of construction paper on a teal board. Each puzzle on today's list is a felt-textured piece
- * of its own colour, its knob reaching into the next; the header's little board fills in piece by piece as the
- * day's puzzles are done. Buttons are chunky paper you press down; type is round, like the knobs. In the
- * device's dark mode the board is deep teal and the paper bright as ever.
+ * The look: simple and flat. The page is teal; each puzzle on the list is a rounded card of its own colour (see
+ * src/pieces.ts), with dark ink on every one; everything else is white. Coral is the button to press. In the
+ * device's dark mode the page is deep teal, and the white turns dark.
  */
 :root {
   --bg: #62c3b9;
-  --seam: #3c9a90;
-  --slot: #4fb1a7;
   --on-bg: #10302d;
   --on-bg-soft: #1f4d48;
-  --paper: #fffaf2;
-  --on-paper: #17232d;
-  --paper-soft: #4d5b66;
-  --paper-edge: #e0d4bf;
-  /* A sticker or badge is white felt whatever the mode, and every piece takes dark ink. */
-  --sticker: #fffaf2;
-  --on-sticker: #17232d;
-  --sticker-edge: #d9ccb5;
+  --surface: #ffffff;
+  --on-surface: #17232d;
+  --surface-soft: #55626c;
+  --line: #e2e8e7;
+  --key: #f3f6f6;
+  /* Dark ink reads on every puzzle's colour. */
   --ink: #17232d;
   --coral: #f47452;
-  --coral-edge: #c4532f;
+  --coral-hover: #ec6745;
   --yellow: #f4c742;
-  --yellow-edge: #c79a1c;
-  --green: #1f9d63;
+  --green: #1f8a57;
   --link: #b8462a;
   --gold: #f4c742;
   --gold-edge: #b8860b;
+  --dot-ring: rgb(16 48 45 / 0.3);
   --focus: #17232d;
-  --lift: 0 10px 22px rgb(16 48 45 / 0.22);
-  /* Felt: a fine speckle over any colour. */
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0 0 0 -0.13'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
-  --round: 'Fredoka Variable', 'Arial Rounded MT Bold', ui-rounded, system-ui, sans-serif;
+  --shadow: 0 1px 2px rgb(16 48 45 / 0.08), 0 8px 20px rgb(16 48 45 / 0.12);
+  --title: 'Fredoka Variable', ui-rounded, system-ui, sans-serif;
   --text: 'Nunito Variable', ui-rounded, system-ui, sans-serif;
   color-scheme: light;
 }
@@ -39,19 +32,18 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #123b38;
-    --seam: #08221f;
-    --slot: #0c2f2c;
     --on-bg: #eaf6f3;
     --on-bg-soft: #a7c7c1;
-    --paper: #1f4844;
-    --on-paper: #eef6f4;
-    --paper-soft: #a9c3be;
-    --paper-edge: #0f2d2a;
-    --sticker-edge: #b9ab93;
+    --surface: #1d4642;
+    --on-surface: #eef6f4;
+    --surface-soft: #a9c3be;
+    --line: #2d5854;
+    --key: #2a5551;
+    --green: #5fd39a;
     --link: #ffb39d;
-    --green: #1f9d63;
+    --dot-ring: rgb(255 255 255 / 0.32);
     --focus: #ffffff;
-    --lift: 0 10px 22px rgb(0 0 0 / 0.45);
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 20px rgb(0 0 0 / 0.3);
     color-scheme: dark;
   }
 }
@@ -66,9 +58,9 @@ body {
 }
 
 body {
-  background: var(--grain), var(--bg);
+  background: var(--bg);
   color: var(--on-bg);
-  font: 600 17px/1.45 var(--text);
+  font: 600 16px/1.45 var(--text);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
@@ -90,7 +82,7 @@ button:disabled {
 
 :focus-visible {
   outline: 3px solid var(--focus);
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 .app {
@@ -109,7 +101,7 @@ button:disabled {
 /* ---- The heading. ---- */
 
 .hero {
-  padding-top: max(18px, env(safe-area-inset-top));
+  padding-top: max(16px, env(safe-area-inset-top));
 }
 
 .hero-top {
@@ -121,8 +113,8 @@ button:disabled {
 
 .kicker {
   margin: 0;
-  font: 600 13px/1.2 var(--round);
-  letter-spacing: 0.14em;
+  font: 800 12px/1.2 var(--text);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--on-bg-soft);
 }
@@ -131,166 +123,47 @@ button:disabled {
   color: var(--on-bg);
 }
 
-.hero-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-top: 4px;
-}
-
 .hero h1 {
-  margin: 0;
-  font: 700 clamp(36px, 10vw, 58px) / 1 var(--round);
-  letter-spacing: -0.01em;
+  margin: 6px 0 0;
+  font: 700 clamp(32px, 9vw, 48px) / 1.05 var(--title);
   color: var(--on-bg);
 }
 
-/* The date, a sticker. */
-.date {
-  display: inline-block;
-  margin: 14px 0 0;
-  padding: 5px 13px;
-  border-radius: 999px;
-  background: var(--grain), var(--sticker);
-  color: var(--on-sticker);
-  font: 800 14px/1.2 var(--text);
-  box-shadow: 0 3px 0 var(--sticker-edge);
-  transform: rotate(-2deg);
-}
-
-/* ---- Today's jigsaw: a piece per puzzle, placed as each is done. ---- */
-
-.board-wrap {
-  flex-shrink: 0;
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-  margin: 6px 4px 0 0;
-}
-
-.board {
-  --bit: 26px;
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(var(--cols), var(--bit));
-  gap: 2px;
-  padding: 2px;
-  border-radius: 6px;
-  background: var(--seam);
-  box-shadow: var(--lift);
-}
-
-@media (min-width: 560px) {
-  .board {
-    --bit: 30px;
-  }
-}
-
-/* An empty place: a slot in the board. */
-.bit {
-  position: relative;
-  width: var(--bit);
-  height: var(--bit);
-  border-radius: 2px;
-  background: var(--slot);
-}
-
-.bit.done {
-  background: var(--grain), var(--piece);
-}
-
-/* The next one's place, outlined. */
-.bit.current {
-  outline: 2px dashed rgb(255 255 255 / 0.9);
-  outline-offset: -5px;
-}
-
-.bit.skipped {
-  background: repeating-linear-gradient(45deg, var(--slot) 0 4px, var(--seam) 4px 6px);
-}
-
-/* A knob, in the colour of its own piece (or slot), reaching into its neighbour. */
-.nub {
-  position: absolute;
-  z-index: 1;
-  width: 46%;
-  height: 46%;
-  border-radius: 50%;
-  background: inherit;
-}
-
-.nub.top {
-  top: -32%;
-  left: 27%;
-}
-
-.nub.bottom {
-  bottom: -32%;
-  left: 27%;
-}
-
-.nub.left {
-  left: -32%;
-  top: 27%;
-}
-
-.nub.right {
-  right: -32%;
-  top: 27%;
-}
-
-/* The piece you've just finished drops into place. */
-.bit.just-placed {
-  z-index: 2;
-  animation: drop-in 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.35) both;
-}
-
-@keyframes drop-in {
-  from {
-    opacity: 0;
-    transform: translateY(-16px) scale(1.5) rotate(-16deg);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* The whole picture: a wiggle, and a gold star. */
-.board-wrap.complete .board {
-  animation: wiggle 0.7s ease-in-out 0.3s both;
-}
-
-@keyframes wiggle {
-  0%,
-  100% {
-    transform: rotate(0);
-  }
-  25% {
-    transform: rotate(-5deg);
-  }
-  50% {
-    transform: rotate(4deg);
-  }
-  75% {
-    transform: rotate(-2deg);
-  }
-}
-
-.board .star {
-  position: absolute;
-  z-index: 3;
-  top: -18px;
-  right: -18px;
-  transform: rotate(14deg);
-  filter: drop-shadow(1px 2px 0 rgb(0 0 0 / 0.25));
-}
-
-.board-caption {
-  margin: 0;
-  font: 700 13px/1.2 var(--round);
+.meta {
+  margin: 8px 0 0;
+  font: 700 15px/1.3 var(--text);
   color: var(--on-bg-soft);
+}
+
+/* A dot per puzzle, in its colour, filled in once it's done. */
+.dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px var(--dot-ring);
+}
+
+.dot.done {
+  background: var(--piece);
+  box-shadow: none;
+}
+
+.dot.current {
+  box-shadow: inset 0 0 0 2px var(--on-bg);
+}
+
+.dot.skipped {
+  background: var(--dot-ring);
+  box-shadow: none;
 }
 
 .actions {
@@ -298,86 +171,71 @@ button:disabled {
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
-/* ---- Buttons: chunky paper, pressed down. ---- */
+/* ---- Buttons. ---- */
 
 .pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 16px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 14px;
-  background: var(--grain), var(--coral);
+  border-radius: 12px;
+  background: var(--coral);
   color: var(--ink);
-  font: 600 15px/1.2 var(--round);
-  box-shadow: 0 4px 0 var(--coral-edge);
-  transition:
-    transform 0.08s,
-    box-shadow 0.08s;
+  font: 800 15px/1.2 var(--text);
 }
 
 .pill.outline {
-  background: var(--grain), var(--sticker);
-  color: var(--on-sticker);
-  box-shadow: 0 4px 0 var(--sticker-edge);
+  background: var(--surface);
+  color: var(--on-surface);
 }
 
 .pill.small {
   flex-shrink: 0;
-  padding: 7px 12px;
+  padding: 6px 12px;
   font-size: 14px;
 }
 
-.pill:not(:disabled):active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 var(--coral-edge);
-}
-
-.pill.outline:not(:disabled):active {
-  box-shadow: 0 1px 0 var(--sticker-edge);
-}
-
-/* The button to press: a big coral piece. */
+/* The button to press. */
 .start,
 .next {
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
   gap: 8px;
-  height: 52px;
-  padding: 0 18px 0 22px;
+  height: 48px;
+  padding: 0 18px 0 20px;
   border: none;
-  border-radius: 16px;
-  background: var(--grain), var(--coral);
+  border-radius: 14px;
+  background: var(--coral);
   color: var(--ink);
-  font: 700 20px/1 var(--round);
-  box-shadow:
-    0 5px 0 var(--coral-edge),
-    0 10px 18px rgb(0 0 0 / 0.15);
-  transition:
-    transform 0.08s,
-    box-shadow 0.08s;
+  font: 800 17px/1 var(--text);
 }
 
 .start {
   margin-left: auto;
 }
 
-/* All done: a yellow badge. */
-.start:disabled {
-  opacity: 1;
-  padding: 0 22px;
-  background: var(--grain), var(--yellow);
-  box-shadow: 0 5px 0 var(--yellow-edge);
+.start:not(:disabled):hover,
+.next:hover {
+  background: var(--coral-hover);
 }
 
+/* All done. */
+.start:disabled {
+  opacity: 1;
+  background: var(--yellow);
+}
+
+.pill:not(:disabled):active,
 .start:not(:disabled):active,
-.next:active {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0 var(--coral-edge);
+.next:active,
+.add:active,
+.chip:active {
+  transform: scale(0.97);
 }
 
 .text-button {
@@ -388,7 +246,7 @@ button:disabled {
   border: none;
   background: none;
   color: inherit;
-  font: 700 15px/1.3 var(--round);
+  font: 800 15px/1.3 var(--text);
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
@@ -398,7 +256,6 @@ button:disabled {
   flex-shrink: 0;
   padding: 6px 2px;
   color: var(--link);
-  font-size: 16px;
 }
 
 .icon-button {
@@ -408,25 +265,23 @@ button:disabled {
   width: 40px;
   height: 40px;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   background: none;
   color: inherit;
 }
 
 .icon-button:not(:disabled):hover {
-  background: rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.3);
 }
 
-/* ---- The list: interlocking pieces. ---- */
+/* ---- The list: a card per puzzle, in its colour. ---- */
 
 .rows {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 12px 0 0;
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 0;
   padding: 0;
   list-style: none;
-  filter: drop-shadow(0 8px 10px rgb(16 48 45 / 0.2));
 }
 
 .row {
@@ -434,44 +289,11 @@ button:disabled {
   align-items: center;
 }
 
-.piece {
+.card {
   position: relative;
-  gap: 2px;
-  border-radius: 6px;
-  background: var(--grain), var(--piece);
+  border-radius: 16px;
+  background: var(--piece);
   color: var(--ink);
-}
-
-.piece:first-child {
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-}
-
-.piece:last-child {
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-}
-
-/* The knob, and its neck, reaching across the seam into the next piece. */
-.knob {
-  position: absolute;
-  bottom: -20px;
-  width: 30px;
-  height: 30px;
-  margin-left: -15px;
-  border-radius: 50%;
-  background: inherit;
-  pointer-events: none;
-}
-
-.knob::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: 8px;
-  right: 8px;
-  height: 14px;
-  background: inherit;
 }
 
 .row-main {
@@ -481,8 +303,8 @@ button:disabled {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 14px;
-  min-height: 76px;
-  padding: 14px 6px 14px 16px;
+  min-height: 68px;
+  padding: 12px 6px 12px 14px;
   border: none;
   border-radius: inherit;
   background: none;
@@ -491,27 +313,24 @@ button:disabled {
 }
 
 .row-main:hover {
-  background: rgb(255 255 255 / 0.14);
+  background: rgb(255 255 255 / 0.16);
 }
 
-/* A badge: the initial on a round of felt. On a piece, the felt is white. */
+/* A badge: the initial in a circle of the puzzle's colour; white on a card. */
 .tile {
   display: inline-grid;
   flex-shrink: 0;
   place-items: center;
   border-radius: 50%;
-  background: var(--grain), var(--piece);
+  background: var(--piece);
   color: var(--ink);
-  font-family: var(--round);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1;
-  box-shadow: 0 3px 0 rgb(0 0 0 / 0.14);
   user-select: none;
 }
 
-.piece .tile {
-  background: var(--grain), var(--sticker);
-  color: var(--on-sticker);
+.card .tile {
+  background: rgb(255 255 255 / 0.85);
 }
 
 .title {
@@ -528,69 +347,62 @@ button:disabled {
 }
 
 .name {
-  font: 600 20px/1.2 var(--round);
+  font: 800 18px/1.25 var(--text);
 }
 
 .by {
-  font: 800 13px/1.35 var(--text);
+  font: 700 13px/1.35 var(--text);
   opacity: 0.72;
 }
 
 .mark {
   display: flex;
   align-items: center;
-  gap: 6px;
 }
 
-/* Done: a sticker with a tick and the grade. */
-.sticker {
+/* Done: a tick and the grade. */
+.done-mark {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  max-width: 9.5em;
-  padding: 5px 11px 5px 7px;
+  max-width: 9em;
+  padding: 4px 10px 4px 7px;
   overflow: hidden;
   border-radius: 999px;
-  background: var(--grain), var(--sticker);
-  color: var(--on-sticker);
-  font: 700 15px/1 var(--round);
+  background: rgb(255 255 255 / 0.85);
+  color: var(--ink);
+  font: 800 14px/1.2 var(--text);
   white-space: nowrap;
   text-overflow: ellipsis;
-  box-shadow: 0 3px 0 rgb(0 0 0 / 0.14);
-  transform: rotate(-3deg);
 }
 
-.sticker svg {
+.done-mark svg {
   flex-shrink: 0;
-  color: var(--green);
+  color: #1f8a57;
 }
 
-/* The next one: outlined, ready to place. */
-.piece.current {
-  outline: 3px dashed rgb(255 255 255 / 0.92);
-  outline-offset: -7px;
+/* The next one: ringed. */
+.card.current {
+  box-shadow: 0 0 0 3px #ffffff;
 }
 
 .up-next {
-  padding: 5px 11px;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.55);
-  font: 700 13px/1 var(--round);
+  background: var(--ink);
+  color: #ffffff;
+  font: 800 12px/1.2 var(--text);
   white-space: nowrap;
 }
 
-/* Skipped: the piece fades into the board. */
-.piece.skipped {
-  background: var(--grain), color-mix(in srgb, var(--piece) 38%, var(--bg));
+/* Skipped: faded. */
+.card.skipped {
+  opacity: 0.45;
 }
 
-.piece.skipped .name {
+.card.skipped .name {
   text-decoration: line-through;
   text-decoration-thickness: 2px;
-}
-
-.piece.skipped .tile {
-  opacity: 0.6;
 }
 
 .row-menu {
@@ -599,15 +411,15 @@ button:disabled {
 
 .menu {
   position: absolute;
-  top: calc(100% - 6px);
-  right: 6px;
+  top: calc(100% - 4px);
+  right: 4px;
   z-index: 5;
   min-width: 170px;
   padding: 6px;
-  border-radius: 14px;
-  background: var(--grain), var(--paper);
-  color: var(--on-paper);
-  box-shadow: var(--lift);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--on-surface);
+  box-shadow: var(--shadow);
 }
 
 .menu button {
@@ -615,9 +427,9 @@ button:disabled {
   width: 100%;
   padding: 10px 12px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   background: none;
-  font: 600 16px/1.2 var(--round);
+  font: 700 15px/1.2 var(--text);
   text-align: left;
 }
 
@@ -630,7 +442,6 @@ button:disabled {
 .rows.editing {
   position: relative;
   display: block;
-  filter: none;
 }
 
 .edit-row {
@@ -644,16 +455,15 @@ button:disabled {
   gap: 10px;
   padding: 0 6px;
   border-radius: 14px;
-  background: var(--grain), var(--paper);
-  color: var(--on-paper);
-  box-shadow: 0 3px 0 var(--paper-edge);
+  background: var(--surface);
+  color: var(--on-surface);
   transition: transform 0.18s ease;
 }
 
 .edit-row.dragging {
   z-index: 2;
   transition: none;
-  box-shadow: var(--lift);
+  box-shadow: var(--shadow);
 }
 
 .edit-row .by {
@@ -667,7 +477,7 @@ button:disabled {
   height: 48px;
   border: none;
   background: none;
-  color: var(--paper-soft);
+  color: var(--surface-soft);
   touch-action: none;
   cursor: grab;
 }
@@ -683,44 +493,43 @@ button:disabled {
 /* Slimmer than elsewhere, so a phone has room for the name. */
 .edit-actions .icon-button {
   width: 34px;
-  color: var(--paper-soft);
+  color: var(--surface-soft);
 }
 
 .edit-actions .icon-button:not(:disabled):hover {
   background: rgb(0 0 0 / 0.06);
-  color: var(--on-paper);
+  color: var(--on-surface);
 }
 
 .icon-button.remove:not(:disabled):hover {
-  color: var(--coral-edge);
+  color: #c4532f;
 }
 
 /* ---- Adding puzzles. ---- */
 
 .finder {
-  margin: 36px 0 48px;
+  margin: 32px 0 48px;
 }
 
 .finder h2 {
-  margin: 0 0 12px;
-  font: 700 26px/1.15 var(--round);
+  margin: 0 0 10px;
+  font: 800 20px/1.2 var(--text);
   color: var(--on-bg);
 }
 
 .finder.prominent h2 {
-  font-size: 32px;
+  font-size: 26px;
 }
 
 .search {
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 54px;
-  padding: 0 8px 0 18px;
-  border-radius: 999px;
-  background: var(--grain), var(--paper);
-  color: var(--paper-soft);
-  box-shadow: 0 4px 0 var(--paper-edge);
+  height: 50px;
+  padding: 0 8px 0 16px;
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--surface-soft);
 }
 
 .search input {
@@ -730,13 +539,13 @@ button:disabled {
   border: none;
   background: none;
   outline: none;
-  color: var(--on-paper);
+  color: var(--on-surface);
   /* 16px or more, so iPhone Safari doesn't zoom in on focus. */
-  font: 700 18px/1 var(--text);
+  font: 700 17px/1 var(--text);
 }
 
 .search input::placeholder {
-  color: var(--paper-soft);
+  color: var(--surface-soft);
 }
 
 .search input::-webkit-search-cancel-button {
@@ -746,7 +555,7 @@ button:disabled {
 .results {
   display: grid;
   gap: 8px;
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -757,10 +566,9 @@ button:disabled {
   align-items: center;
   gap: 12px;
   padding: 10px 10px 10px 12px;
-  border-radius: 16px;
-  background: var(--grain), var(--paper);
-  color: var(--on-paper);
-  box-shadow: 0 3px 0 var(--paper-edge);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--on-surface);
 }
 
 .result .by {
@@ -771,21 +579,15 @@ button:disabled {
 .added {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
 }
 
 .add {
   border: none;
   border-radius: 50%;
-  background: var(--grain), var(--coral);
+  background: var(--coral);
   color: var(--ink);
-  box-shadow: 0 3px 0 var(--coral-edge);
-}
-
-.add:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--coral-edge);
 }
 
 .added {
@@ -800,62 +602,52 @@ button:disabled {
 .starters {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
+  gap: 8px;
+  margin-top: 16px;
 }
 
-/* A suggestion: a piece to pick up. */
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 14px 9px 11px;
+  padding: 8px 14px 8px 10px;
   border: none;
-  border-radius: 14px;
-  background: var(--grain), var(--piece, var(--paper));
+  border-radius: 12px;
+  background: var(--piece, var(--surface));
   color: var(--ink);
-  font: 600 16px/1.2 var(--round);
-  box-shadow: 0 4px 0 rgb(0 0 0 / 0.18);
-}
-
-.chip:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 rgb(0 0 0 / 0.18);
+  font: 800 15px/1.2 var(--text);
 }
 
 .by-link {
-  margin-top: 18px;
+  margin-top: 16px;
   color: var(--on-bg);
 }
 
 .link-form {
   display: grid;
   gap: 10px;
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
 .link-form input {
-  height: 50px;
-  padding: 0 18px;
+  height: 48px;
+  padding: 0 16px;
   border: none;
-  border-radius: 999px;
-  background: var(--grain), var(--paper);
-  color: var(--on-paper);
-  font: 700 17px/1 var(--text);
-  box-shadow: 0 3px 0 var(--paper-edge);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--on-surface);
+  font: 700 16px/1 var(--text);
   outline: none;
 }
 
 .link-form input[aria-invalid='true'] {
-  box-shadow:
-    0 0 0 3px var(--coral),
-    0 3px 0 var(--paper-edge);
+  box-shadow: 0 0 0 3px var(--coral);
 }
 
 .error {
   margin: 0;
   color: var(--on-bg);
-  font: 700 15px/1.3 var(--round);
+  font: 800 14px/1.3 var(--text);
 }
 
 .link-actions {
@@ -866,10 +658,10 @@ button:disabled {
   color: var(--on-bg);
 }
 
-/* ---- The felt card along the bottom, its knob like the next piece waiting. ---- */
+/* ---- The bar along the bottom. ---- */
 
 .page.with-player {
-  padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  padding-bottom: calc(110px + env(safe-area-inset-bottom));
 }
 
 .player {
@@ -879,32 +671,20 @@ button:disabled {
   bottom: 0;
   z-index: 10;
   padding-bottom: env(safe-area-inset-bottom);
-  border-radius: 24px 24px 0 0;
-  background: var(--grain), var(--paper);
-  color: var(--on-paper);
-  box-shadow: 0 -8px 26px rgb(16 48 45 / 0.22);
-}
-
-.player-knob {
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  width: 36px;
-  height: 36px;
-  margin-left: -18px;
-  border-radius: 50%;
-  background: inherit;
+  border-radius: 18px 18px 0 0;
+  background: var(--surface);
+  color: var(--on-surface);
+  box-shadow: 0 -4px 20px rgb(16 48 45 / 0.15);
 }
 
 .player-inner {
-  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
   max-width: 680px;
-  min-height: 80px;
+  min-height: 76px;
   margin: 0 auto;
-  padding: 14px max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
+  padding: 12px max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
 }
 
 .np {
@@ -915,10 +695,10 @@ button:disabled {
 }
 
 .np-label {
-  font: 700 12px/1.3 var(--round);
-  letter-spacing: 0.12em;
+  font: 800 11px/1.3 var(--text);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--paper-soft);
+  color: var(--surface-soft);
 }
 
 .np-line {
@@ -931,8 +711,8 @@ button:disabled {
 
 .np-name {
   min-width: 0;
-  color: var(--on-paper);
-  font: 700 19px/1.2 var(--round);
+  color: var(--on-surface);
+  font: 800 17px/1.25 var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -940,40 +720,38 @@ button:disabled {
 
 .np-sub {
   font: 700 13px/1.5 var(--text);
-  color: var(--paper-soft);
+  color: var(--surface-soft);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .np-sub b {
-  color: var(--on-paper);
+  color: var(--on-surface);
 }
 
 /* The grade, a little yellow label. */
 .np-sub .grade {
   margin-right: 6px;
-  padding: 1px 8px;
+  padding: 1px 7px;
   border-radius: 999px;
-  background: var(--grain), var(--yellow);
+  background: var(--yellow);
   color: var(--ink);
-  font: 700 12px/1.4 var(--round);
+  font: 800 12px/1.4 var(--text);
 }
 
 .np-all-done {
   flex: 1;
   margin: 0;
-  font: 700 22px/1.1 var(--round);
-  color: var(--on-paper);
+  font: 800 18px/1.2 var(--text);
+  color: var(--on-surface);
 }
 
 .player .star {
   flex-shrink: 0;
-  transform: rotate(-12deg);
-  filter: drop-shadow(1px 2px 0 rgb(0 0 0 / 0.2));
 }
 
-/* A narrow phone keeps the card's room for names: its badge goes, and the button slims. */
+/* A narrow phone keeps the bar's room for names: its badge goes, and the button slims. */
 @media (max-width: 420px) {
   .player-inner {
     gap: 10px;
@@ -984,13 +762,12 @@ button:disabled {
   }
 
   .next {
-    height: 48px;
     padding: 0 14px 0 16px;
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 
-/* ---- Sheets (a playlist link, Settings): a sheet of felt. ---- */
+/* ---- Sheets (a playlist link, Settings). ---- */
 
 .sheet-backdrop {
   position: fixed;
@@ -999,7 +776,7 @@ button:disabled {
   display: grid;
   align-items: end;
   justify-items: center;
-  background: rgb(8 30 28 / 0.5);
+  background: rgb(8 30 28 / 0.45);
 }
 
 .sheet {
@@ -1007,11 +784,11 @@ button:disabled {
   max-width: 500px;
   max-height: 85dvh;
   overflow: auto;
-  padding: 22px max(22px, env(safe-area-inset-right)) max(22px, env(safe-area-inset-bottom)) max(22px, env(safe-area-inset-left));
-  border-radius: 26px 26px 0 0;
-  background: var(--grain), var(--paper);
-  color: var(--on-paper);
-  box-shadow: var(--lift);
+  padding: 20px max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  border-radius: 20px 20px 0 0;
+  background: var(--surface);
+  color: var(--on-surface);
+  box-shadow: var(--shadow);
 }
 
 @media (min-width: 560px) {
@@ -1020,13 +797,13 @@ button:disabled {
   }
 
   .sheet {
-    border-radius: 26px;
+    border-radius: 20px;
   }
 }
 
 .sheet h2 {
   margin: 0;
-  font: 700 26px/1.15 var(--round);
+  font: 800 22px/1.2 var(--text);
 }
 
 .sheet-head {
@@ -1038,8 +815,8 @@ button:disabled {
 
 .sheet-sub {
   margin: 4px 0 14px;
-  font: 700 14px/1.4 var(--text);
-  color: var(--paper-soft);
+  font: 600 14px/1.4 var(--text);
+  color: var(--surface-soft);
 }
 
 .sheet-list {
@@ -1077,21 +854,21 @@ button:disabled {
 
 .setting h3 {
   margin: 6px 0;
-  font: 700 21px/1.2 var(--round);
+  font: 800 18px/1.25 var(--text);
 }
 
 .setting h4 {
   margin: 20px 0 6px;
-  font: 700 13px/1.2 var(--round);
-  letter-spacing: 0.12em;
+  font: 800 12px/1.2 var(--text);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--paper-soft);
+  color: var(--surface-soft);
 }
 
 .setting-sub,
 .setting-alt {
   margin: 0;
-  color: var(--paper-soft);
+  color: var(--surface-soft);
 }
 
 .setting-alt {
@@ -1101,7 +878,7 @@ button:disabled {
 .steps {
   margin: 0;
   padding-left: 22px;
-  color: var(--paper-soft);
+  color: var(--surface-soft);
 }
 
 .steps li + li {
@@ -1114,85 +891,64 @@ button:disabled {
   font-weight: 800;
 }
 
-/* Keys, as little felt keycaps. */
 kbd {
   display: inline-block;
   min-width: 1.7em;
   margin: 0 1px;
   padding: 0 6px;
-  border-radius: 7px;
-  background: var(--grain), var(--sticker);
-  color: var(--on-sticker);
-  font: 700 13px/1.6 var(--round);
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--key);
+  color: var(--on-surface);
+  font: 700 12px/1.7 var(--text);
   text-align: center;
-  box-shadow: 0 3px 0 var(--sticker-edge);
 }
 
 .setting code {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgb(0 0 0 / 0.07);
-  color: var(--on-paper);
-  font: 700 14px/1.4 var(--round);
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 0.06);
+  color: var(--on-surface);
+  font: 700 13px/1.5 var(--text);
   white-space: nowrap;
 }
 
-/* The bookmark to drag: a coral piece, so it's clear what to pick up. */
+/* The bookmark to drag. */
 .bookmarklet {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 15px 8px 11px;
-  border-radius: 14px;
-  background: var(--grain), var(--coral);
+  padding: 8px 14px 8px 10px;
+  border-radius: 12px;
+  background: var(--coral);
   color: var(--ink);
-  font: 700 16px/1.2 var(--round);
+  font: 800 15px/1.2 var(--text);
   text-decoration: none;
-  box-shadow: 0 4px 0 var(--coral-edge);
   cursor: grab;
 }
 
-.bookmarklet:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 var(--coral-edge);
-}
-
-/* ---- A message: a yellow piece that pops in. ---- */
+/* ---- A message. ---- */
 
 .toast {
   position: fixed;
   left: 50%;
-  bottom: calc(110px + env(safe-area-inset-bottom));
+  bottom: calc(100px + env(safe-area-inset-bottom));
   z-index: 30;
   margin: 0;
-  padding: 11px 20px;
-  border-radius: 16px;
-  background: var(--grain), var(--yellow);
-  color: var(--ink);
-  font: 700 17px/1 var(--round);
-  box-shadow:
-    0 4px 0 var(--yellow-edge),
-    var(--lift);
-  transform: translateX(-50%) rotate(-2deg);
-  animation: pop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
-}
-
-@keyframes pop {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) scale(0.6) rotate(-8deg);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) rotate(-2deg);
-  }
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: var(--on-bg);
+  color: var(--bg);
+  font: 800 15px/1.2 var(--text);
+  box-shadow: var(--shadow);
+  transform: translateX(-50%);
 }
 
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,
   ::after {
-    animation: none !important;
     transition: none !important;
   }
 }
