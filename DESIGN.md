@@ -310,6 +310,8 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **Not yet tried:** a finished NYT game. The test browser won't open nytimes.com, so those rules come from the games' code, not from use. A game whose markers change gets the question instead of a wrong answer, and its rule is fixed in `rules.ts`.
 
 ## Settings (2026-10-13, branch `settings`)
+*The bookmarklet's setup was cut to one step, desktop only, behind a switch; see "Settings, a name, and your own games to start".*
+
 - **The gear,** top right of the header, opens Settings: a sheet like the playlist link's (bottom sheet on phones, centred on wider screens). It closes with ×, Escape, or a click outside.
 - **Why:** the bookmarklet is optional, and the no-setup flow (Back, then ▶ Next) works without it. So its setup lives in Settings, off the playlist. It used to be a card below the search box.
 - **Setting up the bookmarklet:**
@@ -392,7 +394,7 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
     - It's clear at the top of the page and turns to frosted glass as the list scrolls under it. The title fades into it as the big one passes beneath.
     - That's tied to scrolling in CSS (scroll-driven animations), with no script, so the page stays eligible for the back/forward cache. A browser without them shows the bar frosted throughout, with no small title.
   - **The cover:** a 2 × 2 mosaic of the first four puzzles' artwork, as Apple Music makes a cover from a playlist's albums. With fewer than four, it's the first one's alone. An empty playlist has a grey cover with a grid symbol.
-  - **Under the cover:** "Today's Puzzles", then "Puzzle Playlist" in the key colour where Apple Music names the curator, then the date and "2 of 6 done" in small capitals.
+  - **Under the cover:** "Today's Puzzles", then the date and "2 of 6 done" in small capitals. (A "Puzzle Playlist" line between them, where Apple Music names the curator, was dropped later; see "Settings, a name, and your own games to start".)
   - **Play and Shuffle,** side by side.
     - Play becomes Resume once something's been played or skipped today, and All Done at the end.
     - It plays the same puzzle as the mini player, and the row marked next.
@@ -446,3 +448,28 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **A hairline** edges every icon, as Apple Music edges artwork, so a white icon keeps its shape on a white page. The ▶ marking the next puzzle has a darker wash under it, so it shows on white icons.
 - **Adding an icon for a new catalog puzzle:** save its site's apple-touch-icon (or its favicon, as a PNG) in `public/icons/`, no more than 256px across, and list it in `src/icons.ts`. A test fails if a catalog puzzle has neither an icon nor a place on the no-icon list.
 - The nine colours in `src/pieces.ts` now colour only the tiles with initials.
+
+## Settings, a name, and your own games to start (2026-10-14, branch `preferences`)
+- **The owner's list:**
+  - the bookmarklet as its own switch, desktop only, with its instructions cut down
+  - ordinary settings, such as light and dark
+  - Strokes and Mountweazel in every new playlist
+  - renaming the playlist
+  - no "Puzzle Playlist" line under its name
+- **Settings** is grouped the way the Settings app groups things. It's kept in `playlist:settings` (`src/settings.ts`).
+  - **Appearance:** Automatic, Light or Dark, as a segmented control.
+    - Automatic follows the device, as before. Light and Dark hold whatever the device says.
+    - The colours follow `data-theme` on `<html>`. A small script in `index.html` sets it from the saved setting before the page is drawn.
+    - `src/theme.ts` keeps it in step. On Automatic it follows the device as it switches, and checks again whenever the page is shown. The browser's own colour around the page (`theme-color`) follows too.
+  - **Mark Done When I Come Back** (on by default): coming back from a puzzle ticks it, with Not Yet to undo.
+    - Off, coming back ticks nothing, and the bar offers Done beside Next. That's how first-party games already behave until they report they're done.
+    - This one wasn't on the list: it's a setting that matters for how the playlist plays.
+  - **Puzzle Done Bookmark (Desktop only)** (off by default) is a switch.
+    - On, it shows the one step: drag ✓ Puzzle done to the bookmarks bar (⌘⇧B shows it).
+    - The Mac key shortcut, copying the code by hand, and the iPhone steps are gone.
+- **Renaming:** in Edit, the name is a field to type in. It's kept in `playlist:name`, up to 40 characters.
+  - Emptied, it goes back to "Today's Puzzles".
+  - It's the page's title, the top bar's title once scrolled, and the share sheet's title. A playlist link doesn't carry it.
+- **The line under the name** is gone. That was "Puzzle Playlist", where Apple Music names a playlist's curator. Now it's the name, then the date and progress.
+- **A new playlist starts with Strokes and Mountweazel:** the first time a device opens the page, with nothing saved. A playlist emptied on purpose stays empty.
+  - Mountweazel doesn't report when it's done yet, so coming back from it doesn't tick it. The bar offers Done instead.

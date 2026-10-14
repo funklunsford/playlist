@@ -17,6 +17,9 @@ export interface Playlist {
 
 export const EMPTY: Playlist = { ids: [], links: [] };
 
+/** A new playlist, the first time a device opens the page: your own two games, to start. */
+export const NEW_PLAYLIST: Playlist = { ids: ['strokes', 'mountweazel'], links: [] };
+
 /** Tile colours for puzzles added by link, picked by their id. */
 const LINK_COLORS = ['#7a5af8', '#e0644f', '#2f9e8f', '#c98a1b', '#3f7fd8', '#b8487a', '#5d8a2f', '#6a6f86'];
 

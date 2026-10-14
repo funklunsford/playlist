@@ -4,7 +4,7 @@
 import { addDays } from './day';
 import { signalDate } from './firstParty';
 import type { Day, Launch, Mark } from './player';
-import { EMPTY, type LinkPuzzle, type Playlist } from './playlist';
+import { EMPTY, NEW_PLAYLIST, type LinkPuzzle, type Playlist } from './playlist';
 import { SHUFFLE_OFF, type Shuffle } from './shuffle';
 
 /** The part of localStorage the playlist uses, so tests can hand it a stand-in. */
@@ -66,8 +66,21 @@ export const ITEMS_KEY = 'playlist:items';
 const isLink = (v: unknown): v is LinkPuzzle =>
   !!v && typeof v === 'object' && ['id', 'name', 'url'].every((k) => typeof (v as Record<string, unknown>)[k] === 'string');
 
-/** The saved playlist, or an empty one if there's none (or it can't be read). */
+/** Whether anything is saved under a key, readable or not. */
+function has(kv: KeyValue, key: string): boolean {
+  try {
+    return kv.getItem(key) !== null;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * The saved playlist. With none saved yet, it's a new one, with your own games; one emptied on purpose stays empty,
+ * as does one that can't be read.
+ */
 export function loadPlaylist(kv: KeyValue): Playlist {
+  if (!has(kv, ITEMS_KEY)) return NEW_PLAYLIST;
   const v = readJson(kv, ITEMS_KEY) as Partial<Playlist> | null;
   if (!v || !Array.isArray(v.ids)) return EMPTY;
   return {
@@ -77,6 +90,31 @@ export function loadPlaylist(kv: KeyValue): Playlist {
 }
 
 export const savePlaylist = (kv: KeyValue, list: Playlist) => writeJson(kv, ITEMS_KEY, list);
+
+// ---- The playlist's name. ----
+
+export const NAME_KEY = 'playlist:name';
+export const DEFAULT_NAME = "Today's Puzzles";
+/** The longest a name can be. */
+export const NAME_LENGTH = 40;
+
+/** The playlist's name, or the default if it hasn't been renamed. */
+export function loadName(kv: KeyValue): string {
+  const v = readJson(kv, NAME_KEY);
+  return (typeof v === 'string' && v.trim().slice(0, NAME_LENGTH).trim()) || DEFAULT_NAME;
+}
+
+/** Keeps a new name; an empty one, or the default, goes back to the default. */
+export function saveName(kv: KeyValue, name: string) {
+  const clean = name.trim().slice(0, NAME_LENGTH).trim();
+  if (clean && clean !== DEFAULT_NAME) writeJson(kv, NAME_KEY, clean);
+  else
+    try {
+      kv.removeItem(NAME_KEY);
+    } catch {
+      /* blocked: nothing was saved either */
+    }
+}
 
 export const SHUFFLE_KEY = 'playlist:shuffle';
 

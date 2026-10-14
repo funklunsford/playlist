@@ -1,6 +1,22 @@
 import { describe, expect, it } from 'vitest';
 import { doneKey, parseDoneKey, readSignals } from './firstParty';
-import { dayKey, LAUNCH_KEY, loadDay, loadLaunch, loadShuffle, memoryStorage, prune, saveDay, saveLaunch, saveShuffle, SHUFFLE_KEY } from './store';
+import {
+  dayKey,
+  DEFAULT_NAME,
+  LAUNCH_KEY,
+  loadDay,
+  loadLaunch,
+  loadName,
+  loadShuffle,
+  memoryStorage,
+  NAME_KEY,
+  prune,
+  saveDay,
+  saveLaunch,
+  saveName,
+  saveShuffle,
+  SHUFFLE_KEY,
+} from './store';
 
 describe("today's marks", () => {
   it('come back as saved, per date', () => {
@@ -48,6 +64,25 @@ describe('Shuffle', () => {
     const kv = memoryStorage();
     kv.setItem(SHUFFLE_KEY, JSON.stringify({ on: 'yes' }));
     expect(loadShuffle(kv).on).toBe(false);
+  });
+});
+
+describe("the playlist's name", () => {
+  it("is Today's Puzzles until it's renamed, and comes back as renamed", () => {
+    const kv = memoryStorage();
+    expect(loadName(kv)).toBe(DEFAULT_NAME);
+    saveName(kv, '  Breakfast puzzles ');
+    expect(loadName(kv)).toBe('Breakfast puzzles');
+  });
+
+  it('goes back to the default when emptied, and is cut short when long', () => {
+    const kv = memoryStorage();
+    saveName(kv, 'Mine');
+    saveName(kv, '   ');
+    expect(kv.getItem(NAME_KEY)).toBeNull();
+    expect(loadName(kv)).toBe(DEFAULT_NAME);
+    saveName(kv, 'x'.repeat(60));
+    expect(loadName(kv)).toHaveLength(40);
   });
 });
 
