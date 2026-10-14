@@ -18,7 +18,7 @@ This doc settled the design before anything was built. "Puzzle Playlist" is a wo
 | Two players | Each device keeps its own playlist and progress, with no server or sign-in. A playlist is sent as a link |
 | How puzzles open | **In the same tab.** ▶ takes the tab to the puzzle, and Back returns to the playlist. **One tap per puzzle**, never a jump without one (see below). Nothing is framed |
 | What counts as done | **First-party games report it themselves. For other sites, coming back to the playlist counts as done**, and "Not yet" undoes it |
-| The look | Apple's Human Interface Guidelines, laid out like an Apple Music playlist: a cover made from the puzzles, Play beside a Shuffle switch, plain rows, and a floating mini player, in the system's font and colours (see "The Apple way, with Shuffle"). No previews of the games |
+| The look | Apple's Human Interface Guidelines, laid out like an Apple Music playlist: each puzzle with its own site's icon, a cover mixed from the first four as Spotify mixes one, Play beside a Shuffle switch, plain rows, and a floating mini player, in the system's font and colours (see "The Apple way, with Shuffle" and "Real icons, and a cover mixed from them"). No previews of the games |
 
 ## What the browser allows (tested 2026-10-13)
 **Framing doesn't work.** Each site's headers were checked with curl, then each site was framed from `funklunsford.github.io` in a Chromium browser.
@@ -425,3 +425,22 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - The key colour is mint: Apple's own in dark mode (#63e6e2), and darkened in light mode (#00766f) so text in it reads at 4.5:1 or better, even on the grey buttons.
 - **Accessibility:** touch targets are 44 × 44 points or more. Reduce Motion stills the sheets, menus and messages. Reduce Transparency makes the frosted glass solid.
 - **The icon:** the cover's four colours, with a white ▶ in the middle. The bookmarklet's bar on puzzle pages takes the key colour too.
+
+## Real icons, and a cover mixed from them (2026-10-14, branch `icons`)
+- **The owner's call:** each puzzle shows its site's own icon, and the playlist's cover mixes the first few, as Spotify's does.
+- **Where the icons come from:** each site's own, as it gives one to a browser. That's its home-screen icon (`apple-touch-icon`, about 180px) where it has one, else its favicon.
+  - They're copies, kept in `public/icons/` and listed in `src/icons.ts`, so the page asks nothing of other sites as it opens, as with the type before.
+  - Most are full squares, shown edge to edge.
+  - Marks on a clear background (Contexto, Octordle, Pips, Murdle, Tradle) sit smaller, on a white plate.
+  - An icon with rounded corners of its own sits on its own colour: Strokes, LinkedIn and Semantle.
+  - A small favicon (Murdle's is 32px) is never drawn larger than itself.
+- **A few special cases:**
+  - The Mini and The Crossword use the icons their pages show in a browser tab, not the Times' generic "T".
+  - Every LinkedIn game has LinkedIn's icon, as their pages give no other.
+  - Bracket City has The Atlantic's icon: its page turns scripts away, so its own couldn't be fetched.
+  - Poeltl's site has no icon, so it keeps its initial on its colour. So does any puzzle whose icon won't load.
+- **Puzzles added by link** try their site's home-screen icon, then its favicon, straight from that site and with no referrer, then their initial.
+- **The cover** is made as Spotify and Apple Music make a playlist's: the first four puzzles with different icons, in a 2 × 2 mosaic. With fewer than four different icons, it's the first one alone. A puzzle whose icon is already on the cover (a second LinkedIn game) is passed over, as a second song from the same album is.
+- **A hairline** edges every icon, as Apple Music edges artwork, so a white icon keeps its shape on a white page. The ▶ marking the next puzzle has a darker wash under it, so it shows on white icons.
+- **Adding an icon for a new catalog puzzle:** save its site's apple-touch-icon (or its favicon, as a PNG) in `public/icons/`, no more than 256px across, and list it in `src/icons.ts`. A test fails if a catalog puzzle has neither an icon nor a place on the no-icon list.
+- The nine colours in `src/pieces.ts` now colour only the tiles with initials.
