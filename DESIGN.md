@@ -303,4 +303,8 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - Only buttons, and links that go nowhere, are ever pressed. A rule with its own steps (Wordle, Connections, Strands, Clues by Sam) presses only those, not any Share on the page.
   - The Mini counts only congratulations that are on show and say "You solved" or "Congratulations".
   - The bookmark's base is the playlist's folder, even if the page was opened as `…/index.html`.
+- **Tried on the live site** (the deployed `check.js`, loaded the way the bookmark loads it, in a Chromium browser):
+  - **Framed, finished by skipping to the end:** the check pressed Framed's own SHARE and caught "Framed #1677 🎥 🟥🟥🟥🟥🟥🟥". It went back to the playlist, which ticked Framed "Indie · X/6".
+  - **Ten fresh, unfinished games** (Octordle, Quordle, Squaredle, Murdle, Globle, Costcodle, Nerdle, Semantle, Waffle, Clues by Sam): each asked "Can't tell whether … is finished". None ticked, each stayed on its page, and no tab opened.
+  - **The playlist page itself:** "This is the playlist. Click it on a puzzle instead."
 - **Not yet tried:** a finished NYT game. The test browser won't open nytimes.com, so those rules come from the games' code, not from use. A game whose markers change gets the question instead of a wrong answer, and its rule is fixed in `rules.ts`.
