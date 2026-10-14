@@ -40,7 +40,13 @@ describe('the rule for a page', () => {
     expect(octordle?.state).toBeUndefined();
     expect(octordle?.result?.test('Daily Octordle #1234')).toBe(true);
     expect(octordle?.result?.test('Daily Quordle 1234')).toBe(false);
-    expect(ruleFor('https://boxofficega.me/')?.result?.test('🎬 Box Office Game – October 13')).toBe(true);
+    expect(ruleFor('https://boxofficega.me/')?.result?.test('Box Office Game #412\n🟩🟩🟨⬛⬛')).toBe(true);
+  });
+
+  it("doesn't take a share-the-game message for a result", () => {
+    const octordle = ruleFor('https://www.merriam-webster.com/games/octordle/');
+    expect(octordle?.result?.test('Play Octordle with me! https://octordle.com')).toBe(false);
+    expect(octordle?.result?.test('Daily Octordle #1234\n8️⃣4️⃣\n🟩🟩')).toBe(true);
   });
 
   it("is nothing for a site the catalog doesn't have", () => {
@@ -102,8 +108,10 @@ describe('The Mini', () => {
     expect(mini.score!(doc)).toBe('0:41');
     expect(mini.result).toBeUndefined();
   });
-  it("can't tell otherwise", () => {
+  it("can't tell otherwise, or from congratulations that are hidden or say nothing", () => {
     expect(mini.state!(page('<div class="timer-count">0:12</div>'))).toBeUndefined();
+    expect(mini.state!(page('<div class="xwd__congrats-container"></div>'))).toBeUndefined();
+    expect(mini.state!(page('<div hidden><div class="xwd__congrats-modal">Congratulations!</div></div>'))).toBeUndefined();
   });
 });
 
@@ -147,6 +155,12 @@ describe('finding buttons', () => {
   it("puts a game's own Share first, and leaves out sharing elsewhere", () => {
     const doc = page('<a>Share on Facebook</a><button aria-label="Share"></button><button>Share this puzzle with friends</button><button>Share Your Results</button>');
     expect(shareButtons(doc).map((b) => b.textContent || b.getAttribute('aria-label'))).toEqual(['Share', 'Share Your Results']);
+  });
+
+  it("passes over links that would leave the page, but not ones that don't", () => {
+    const doc = page('<a href="https://twitter.com/intent">Share</a><a href="/share" target="_blank">Share</a><a href="#share">Share</a>');
+    expect(shareButtons(doc).map((b) => b.getAttribute('href'))).toEqual(['#share']);
+    expect(findStep(page('<a href="/results">View Results</a>'), 'View Results')).toBeUndefined();
   });
 
   it('passes over hidden ones', () => {

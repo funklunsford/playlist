@@ -57,6 +57,13 @@ describe("catching a game's share text", () => {
     expect(navigator.share).toBe(share);
   });
 
+  it("presses only a rule's own steps, not any Share on the page", async () => {
+    let pressed = false;
+    button('Share', () => (pressed = true));
+    expect(await shareText(document, rule('nyt-wordle'))).toBeUndefined();
+    expect(pressed).toBe(false);
+  });
+
   it('presses nothing for a game whose share has no result (The Mini)', async () => {
     let pressed = false;
     button('Share', () => (pressed = true));

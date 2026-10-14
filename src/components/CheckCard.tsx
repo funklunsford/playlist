@@ -4,7 +4,8 @@ import { CheckIcon } from './icons';
 
 /** Where to get the bookmarklet: drag it to the bookmarks bar on a computer, or copy it into a Safari bookmark. */
 export function CheckCard({ onToast }: { onToast(text: string): void }) {
-  const code = useMemo(() => bookmarklet(location.origin + location.pathname), []);
+  // The playlist's folder, even if this page was opened as …/index.html.
+  const code = useMemo(() => bookmarklet(new URL('./', location.href).href), []);
   const link = useRef<HTMLAnchorElement>(null);
 
   // React won't put a javascript: address on a link, so it goes on by hand.

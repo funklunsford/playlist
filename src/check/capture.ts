@@ -61,15 +61,16 @@ export function capture(): Capture {
 const wait = (ms: number) => new Promise<undefined>((resolve) => setTimeout(resolve, ms));
 
 /**
- * The game's own share text, by pressing the rule's buttons in turn (a step not on the page is passed over),
- * then any Share button there is. Undefined if nothing was shared, or what was shared isn't the game's result.
+ * The game's own share text, by pressing the rule's buttons in turn (a step not on the page is passed over), or,
+ * for a rule without steps, the page's Share buttons. Undefined if nothing was shared, or what was shared isn't
+ * the game's result.
  */
 export async function shareText(doc: Document, rule: Rule): Promise<string | undefined> {
   if (!rule.result) return undefined;
   const result = rule.result;
   const caught = capture();
   try {
-    const presses = [...(rule.share ?? []).map((step) => () => findStep(doc, step)), () => shareButtons(doc)[0], () => shareButtons(doc)[1]];
+    const presses = rule.share ? rule.share.map((step) => () => findStep(doc, step)) : [() => shareButtons(doc)[0], () => shareButtons(doc)[1]];
     for (const press of presses) {
       const button = press();
       if (!button) continue;

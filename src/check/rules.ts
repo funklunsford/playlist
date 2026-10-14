@@ -24,7 +24,7 @@ export interface Rule {
   /** Buttons to press in turn to reach the game's own Share: each a button's words, or a CSS selector. */
   share?: string[];
   /** What the game's shared result looks like. A rule without one never presses Share. */
-  result?: RegExp;
+  result?: { test(text: string): boolean };
 }
 
 /** Words as they read: lower case, letters and digits only. */
@@ -45,6 +45,13 @@ function shown(el: Element): boolean {
 
 const BUTTONS = 'button, [role="button"], a';
 
+/** Whether pressing it stays on the page: a button, or a link that goes nowhere (no address, "#…", or script). */
+function pressable(el: Element): boolean {
+  if (el.tagName !== 'A') return true;
+  const href = el.getAttribute('href');
+  return el.getAttribute('target') !== '_blank' && (href === null || href === '' || href.startsWith('#') || href.startsWith('javascript:'));
+}
+
 /** Whatever a button says: its words, else its label. */
 const labelOf = (el: Element) => plain(el.textContent) || plain(el.getAttribute('aria-label')) || plain(el.getAttribute('title'));
 
@@ -52,13 +59,13 @@ const labelOf = (el: Element) => plain(el.textContent) || plain(el.getAttribute(
 export function findStep(doc: Document, step: string): HTMLElement | undefined {
   if (/^[[.#]/.test(step)) return [...doc.querySelectorAll<HTMLElement>(step)].find(shown);
   const want = plain(step);
-  const buttons = [...doc.querySelectorAll<HTMLElement>(BUTTONS)].filter(shown);
+  const buttons = [...doc.querySelectorAll<HTMLElement>(BUTTONS)].filter((b) => shown(b) && pressable(b));
   return buttons.find((b) => labelOf(b) === want) ?? buttons.find((b) => labelOf(b).startsWith(want));
 }
 
 /** A game's own Share buttons, the likeliest first. Ones for sharing elsewhere (Facebook, a link…) are left out. */
 export function shareButtons(doc: Document): HTMLElement[] {
-  const buttons = [...doc.querySelectorAll<HTMLElement>(BUTTONS)].filter(shown);
+  const buttons = [...doc.querySelectorAll<HTMLElement>(BUTTONS)].filter((b) => shown(b) && pressable(b));
   const exact = buttons.filter((b) => /^(share( your)?( results?| score)?|share text|copy( results?)?)$/.test(labelOf(b)));
   const loose = buttons.filter(
     (b) => !exact.includes(b) && /\bshare\b/.test(labelOf(b)) && !/facebook|twitter|whatsapp|email|link|friend|custom|bluesky|threads/.test(labelOf(b)),
@@ -136,7 +143,10 @@ const mini: Rule = {
   id: 'nyt-mini',
   name: 'The Mini',
   matches: at('nyt-mini'),
-  state: (doc) => (doc.querySelector('.xwd__congrats-modal, .xwd__congrats-container, .xwd__congrats-moment') ? 'done' : undefined),
+  state(doc) {
+    const congrats = [...doc.querySelectorAll('.xwd__congrats-modal, .xwd__congrats-container, .xwd__congrats-moment')];
+    return congrats.some((el) => shown(el) && /you solved|congratulations/i.test(textOf(el))) ? 'done' : undefined;
+  },
   score: (doc) => textOf(doc.querySelector('.timer-count')) || undefined,
 };
 
@@ -179,11 +189,23 @@ const OWN = [wordle, connections, strands, mini, pips, cluesBySam, ...yours];
 /** A game's name as a pattern for its share text: "Box Office Game" matches "box office game". */
 const named = (name: string) => new RegExp(name.replace(/^the\s+/i, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s*'), 'i');
 
+/**
+ * What only a result has, beside the game's name: a puzzle number ("#1234"), coloured squares, a score like 3/6,
+ * or a time like 1:23. So "Play Octordle with me!" from a share-the-game button doesn't count.
+ */
+const RESULTISH = /#\s?\d+|[🟩🟨🟥🟦🟪🟧🟫⬛⬜]|(?:^|\s)[\dX]{1,2}\/\d{1,2}(?=[\s*]|$)|\b\d{1,2}:\d{2}\b/mu;
+
+/** A result from the game: it names the game, and looks like a result. */
+const resultOf = (name: string) => {
+  const game = named(name);
+  return { test: (text: string) => game.test(text) && RESULTISH.test(text) };
+};
+
 const plainRules: Rule[] = CATALOG.filter((p) => !OWN.some((r) => r.id === p.id) && /^https?:/.test(p.url)).map((p) => ({
   id: p.id,
   name: p.name,
   matches: at(p.id),
-  result: named(p.name),
+  result: resultOf(p.name),
 }));
 
 export const RULES: readonly Rule[] = [...OWN, ...plainRules];

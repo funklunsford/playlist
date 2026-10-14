@@ -297,5 +297,10 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **Tried:**
   - The real bookmark loader, on a page the catalog doesn't know, served locally: it asked, and "Count it as done" went back to the playlist. The playlist matched the page by address, ticked it, handled the launch and cleaned the address.
   - A checked result with a score shows on its row.
-  - The rules are tested against pages built from the games' markers, and capture against a stand-in game, in 51 tests (`happy-dom`).
+  - The rules and capture are tested against pages built from the games' markers and a stand-in game (29 tests, with `happy-dom`). The score parser is tested against share texts in the games' formats (21 tests).
+- **Guards against a wrong tick**, from a review before shipping:
+  - A plain rule's share text must name the game *and* look like a result (a puzzle number, coloured squares, a 3/6 score or a time), so "Play Octordle with me!" doesn't count.
+  - Only buttons, and links that go nowhere, are ever pressed. A rule with its own steps (Wordle, Connections, Strands, Clues by Sam) presses only those, not any Share on the page.
+  - The Mini counts only congratulations that are on show and say "You solved" or "Congratulations".
+  - The bookmark's base is the playlist's folder, even if the page was opened as `…/index.html`.
 - **Not yet tried:** a finished NYT game. The test browser won't open nytimes.com, so those rules come from the games' code, not from use. A game whose markers change gets the question instead of a wrong answer, and its rule is fixed in `rules.ts`.
