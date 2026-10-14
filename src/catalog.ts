@@ -103,7 +103,7 @@ export const CATALOG: readonly Puzzle[] = [
   { id: 'word-salad', name: 'Word Salad', publisher: 'indie', url: 'https://wordsalad.app/', aliases: ['themed words'], color: '#6cae4a' },
   { id: 'wordshake', name: 'Wordshake', publisher: 'indie', url: 'https://wordshake.com/', aliases: ['boggle', 'word shake'], color: '#4c929d' },
   { id: 'phrasicle', name: 'Phrasicle', publisher: 'indie', url: 'https://phrasicle.com/', aliases: ['phrase', 'phrases'], color: '#00c8e4' },
-  { id: 'weaver', name: 'Weaver', publisher: 'indie', url: 'https://wordwormdormdork.com/', aliases: ['word ladder', 'wordwormdormdork'], color: '#7a5af8' },
+  { id: 'weaver', name: 'Weaver', publisher: 'indie', url: 'https://wordwormdormdork.com/weaver/', aliases: ['word ladder', 'wordwormdormdork'], color: '#7a5af8' },
   { id: 'shiftogram', name: 'Shiftogram', publisher: 'indie', url: 'https://shiftogram.com/', aliases: ['sliding', 'crossword'], color: '#7c90c1' },
   { id: 'tylogram', name: 'Tylogram', publisher: 'indie', url: 'https://tylogr.am/current', aliases: ['sliding'], color: '#c0392b', daily: false, note: 'New Tuesdays and Fridays' },
   { id: 'minute-cryptic', name: 'Minute Cryptic', publisher: 'indie', url: 'https://www.minutecryptic.com/', aliases: ['cryptic', 'crossword clue'], color: '#3b6fd8' },
