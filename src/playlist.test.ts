@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { EMPTY, add, addLink, move, normalizeUrl, puzzlesOf, remove } from './playlist';
+import { EMPTY, NEW_PLAYLIST, add, addLink, move, normalizeUrl, puzzlesOf, remove } from './playlist';
 import { ITEMS_KEY, loadPlaylist, memoryStorage, savePlaylist } from './store';
 
 describe('the playlist', () => {
@@ -69,8 +69,14 @@ describe('the saved playlist', () => {
     expect(loadPlaylist(kv)).toEqual(list);
   });
 
-  it('is empty when there is none, or it is unreadable', () => {
+  it('starts with your own two games when there is none yet', () => {
+    expect(loadPlaylist(memoryStorage())).toEqual(NEW_PLAYLIST);
+    expect(puzzlesOf(NEW_PLAYLIST).map((p) => p.name)).toEqual(['Strokes', 'Mountweazel']);
+  });
+
+  it('stays empty once emptied, and is empty when unreadable', () => {
     const kv = memoryStorage();
+    savePlaylist(kv, EMPTY);
     expect(loadPlaylist(kv)).toEqual(EMPTY);
     kv.setItem(ITEMS_KEY, '{not json');
     expect(loadPlaylist(kv)).toEqual(EMPTY);

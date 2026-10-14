@@ -1,10 +1,14 @@
 import type { Puzzle } from '../catalog';
 import { longDate } from '../day';
+import { NAME_LENGTH } from '../store';
 import { Artwork } from './Artwork';
 import { CheckIcon, PlayIcon, ShuffleIcon } from './icons';
 
 interface Props {
-  title: string;
+  /** The playlist's name. */
+  name: string;
+  /** Renames the playlist: while editing, the name is a field to type in. */
+  onRename(name: string): void;
   date: string;
   puzzles: readonly Puzzle[];
   /** How many are done today. */
@@ -20,17 +24,32 @@ interface Props {
 }
 
 /**
- * The top of the playlist, as a music app shows one: its cover, its title, the date and how far today has got, and
+ * The top of the playlist, as a music app shows one: its cover, its name, the date and how far today has got, and
  * Play beside Shuffle. Shuffle is a switch: on, ▶ and Next take the puzzles in a shuffled order (src/shuffle.ts).
+ * While editing, the name can be changed.
  */
-export function PlaylistHeader({ title, date, puzzles, done, started, editing, next, onPlay, shuffle, onShuffle }: Props) {
+export function PlaylistHeader({ name, onRename, date, puzzles, done, started, editing, next, onPlay, shuffle, onShuffle }: Props) {
   const total = puzzles.length;
   return (
     <section className="hero" aria-label="Today's playlist">
       <Artwork puzzles={puzzles} />
       <div className="hero-text">
-        <h1>{title}</h1>
-        <p className="curator">Puzzle Playlist</p>
+        {editing ? (
+          <h1>
+            <input
+              className="name-field"
+              value={name}
+              onChange={(e) => onRename(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+              maxLength={NAME_LENGTH}
+              aria-label="Playlist name"
+              autoComplete="off"
+              enterKeyHint="done"
+            />
+          </h1>
+        ) : (
+          <h1>{name}</h1>
+        )}
         <p className="meta">
           {longDate(date)}
           {total > 0 && ` · ${done === total ? 'All done' : `${done} of ${total} done`}`}

@@ -7,21 +7,27 @@ import { applySignals, arrive, barFor, mark, nextUp, unplayed, type Arrival, typ
 import { fromShared, playlistLink, readLink, withShared, type Shared } from './link';
 import { pieceColor } from './pieces';
 import { add, addLink, move, puzzlesOf, remove, type Playlist } from './playlist';
+import { loadSettings, saveSettings, SETTINGS_KEY, type Settings } from './settings';
 import { newSeed, playOrder } from './shuffle';
 import {
   browserStorage,
+  DEFAULT_NAME,
   ITEMS_KEY,
   loadDay,
   loadLaunch,
+  loadName,
   loadPlaylist,
   loadShuffle,
+  NAME_KEY,
   prune,
   saveDay,
   saveLaunch,
+  saveName,
   savePlaylist,
   saveShuffle,
   SHUFFLE_KEY,
 } from './store';
+import { applyTheme } from './theme';
 import { EditList } from './components/EditList';
 import { ImportSheet } from './components/ImportSheet';
 import { NavBar } from './components/NavBar';
@@ -34,6 +40,8 @@ import { SearchBox } from './components/SearchBox';
 // One storage for the page, with days older than 90 tidied away as it opens.
 const kv = browserStorage();
 prune(kv, localDate());
+// Light or dark, as set (index.html has already drawn the page so), and following the device on Automatic.
+applyTheme(loadSettings(kv).theme);
 
 /** Your own games, which say for themselves when they're done (src/firstParty.ts). */
 const reportsDone = (id: string) => !!catalogPuzzle(id)?.firstParty;
@@ -51,9 +59,13 @@ interface Today {
   back: Back | null;
 }
 
-/** Arriving on the page: acts on the saved launch (once), and saves what that changes. */
+/**
+ * Arriving on the page: acts on the saved launch (once), and saves what that changes. With "Mark Done When I Come
+ * Back" off, every puzzle is left for you to tick, as your own games are until they say they're done.
+ */
 function settle(ids: readonly string[], arrival: Arrival): Today {
   const date = localDate();
+  const { doneOnReturn } = loadSettings(kv);
   const r = arrive({
     today: date,
     now: Date.now(),
@@ -61,7 +73,7 @@ function settle(ids: readonly string[], arrival: Arrival): Today {
     launch: loadLaunch(kv),
     day: loadDay(kv, date),
     signals: readSignals(kv, ids.filter(reportsDone), date),
-    reportsDone,
+    reportsDone: (id) => reportsDone(id) || !doneOnReturn,
   });
   if (r.changed) {
     saveDay(kv, date, r.day);
@@ -99,7 +111,6 @@ function checked(list: Playlist, done: Done): { today: Today; missing: boolean }
 
 const NOT_IN_PLAYLIST = "That puzzle isn't in your playlist";
 
-const TITLE = "Today's Puzzles";
 
 /** How the page opens: back from a check, or by Back, or afresh. */
 function open(list: Playlist): { today: Today; toast: string | null } {
@@ -123,14 +134,33 @@ export function App() {
   // A playlist link this page was opened with (#add=…), waiting for Add or Replace mine.
   const [incoming, setIncoming] = useState<Shared | null>(() => readLink(location.hash));
   const [toast, setToast] = useState<string | null>(() => opening?.toast ?? null);
-  const [settings, setSettings] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settings, setSettings] = useState(() => loadSettings(kv));
   const [shuffle, setShuffle] = useState(() => loadShuffle(kv));
+  // The playlist's name, as typed while it's being renamed.
+  const [name, setName] = useState(() => loadName(kv));
   const puzzles = puzzlesOf(list);
   const ids = puzzles.map((p) => p.id);
 
   const update = (next: Playlist) => {
     setList(next);
     savePlaylist(kv, next);
+  };
+
+  /** The name as shown: as typed, or the default while it's empty. */
+  const shownName = name.trim() || DEFAULT_NAME;
+
+  /** Renames the playlist as it's typed: it's kept trimmed, and an empty name is the default. */
+  const rename = (typed: string) => {
+    setName(typed);
+    saveName(kv, typed);
+  };
+
+  /** Changes a setting; a new theme shows at once. */
+  const changeSettings = (next: Settings) => {
+    setSettings(next);
+    saveSettings(kv, next);
+    applyTheme(next.theme);
   };
 
   useEffect(() => {
@@ -140,14 +170,22 @@ export function App() {
       const l = loadPlaylist(kv);
       setList(l);
       setShuffle(loadShuffle(kv));
+      setName(loadName(kv));
+      setSettings(loadSettings(kv));
       setToday(settle(l.ids, 'back'));
     };
     // Shown again after another tab or app: maybe a new day, or one of your games finished meanwhile.
     const onVisible = () => document.visibilityState === 'visible' && setToday((t) => reread(loadPlaylist(kv).ids, t));
-    // Another tab changed the playlist, Shuffle, today's marks, or one of your games said it was done.
+    // Another tab changed the playlist, its name, the settings, Shuffle, today's marks, or one of your games said it
+    // was done.
     const onStorage = (e: StorageEvent) => {
       if (e.key === ITEMS_KEY) setList(loadPlaylist(kv));
-      else if (e.key === SHUFFLE_KEY) setShuffle(loadShuffle(kv));
+      else if (e.key === NAME_KEY) setName(loadName(kv));
+      else if (e.key === SETTINGS_KEY) {
+        const s = loadSettings(kv);
+        setSettings(s);
+        applyTheme(s.theme);
+      } else if (e.key === SHUFFLE_KEY) setShuffle(loadShuffle(kv));
       else if (e.key === null || e.key.startsWith('playlist:day:') || parseDoneKey(e.key)) setToday((t) => reread(loadPlaylist(kv).ids, t));
     };
     addEventListener('pageshow', onShow);
@@ -192,6 +230,11 @@ export function App() {
     if (!puzzles.length) setEditing(false);
   }, [puzzles.length]);
 
+  // Once editing's done, the name is as it's kept: trimmed, and the default if it was left empty.
+  useEffect(() => {
+    if (!editing) setName(loadName(kv));
+  }, [editing]);
+
   /** Takes this tab to a puzzle. Only ever called from a tap, so Back can return here (see DESIGN.md). */
   const play = (id: string) => {
     const p = puzzles.find((q) => q.id === id);
@@ -212,7 +255,7 @@ export function App() {
     const url = playlistLink(list, location.origin + location.pathname);
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'Puzzle Playlist', text: 'My daily puzzles', url });
+        await navigator.share({ title: shownName, text: 'My daily puzzles', url });
         return;
       } catch (e) {
         if ((e as Error).name === 'AbortError') return;
@@ -265,15 +308,16 @@ export function App() {
   return (
     <div className="app">
       <NavBar
-        title={TITLE}
+        title={shownName}
         editing={editing}
         onEdit={puzzles.length ? () => setEditing(!editing) : undefined}
         onShare={puzzles.length ? share : undefined}
-        onSettings={() => setSettings(true)}
+        onSettings={() => setSettingsOpen(true)}
       />
       <main className={puzzles.length && !editing ? 'page with-player' : 'page'}>
         <PlaylistHeader
-          title={TITLE}
+          name={editing ? name : shownName}
+          onRename={rename}
           date={today.date}
           puzzles={puzzles}
           done={ids.filter((id) => today.day[id]?.status === 'done').length}
@@ -330,7 +374,7 @@ export function App() {
           onCancel={() => closeIncoming()}
         />
       )}
-      {settings && <SettingsSheet onClose={() => setSettings(false)} onToast={setToast} />}
+      {settingsOpen && <SettingsSheet settings={settings} onChange={changeSettings} onClose={() => setSettingsOpen(false)} onToast={setToast} />}
       {toast && (
         <p className="toast" role="status">
           {toast}

@@ -3,11 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <!-- Light or dark comes from the device, in CSS (src/styles.css), so it's right before the first paint. -->
     <meta name="color-scheme" content="light dark" />
-    <!-- The browser's own colour around the page: the page's white, or black by night. -->
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <!-- The browser's own colour around the page: white, or black in dark mode (set just below). -->
+    <meta name="theme-color" content="#ffffff" />
+    <!-- Light or dark before the first paint: the saved setting (src/settings.ts), else as the device is. -->
+    <script>
+      (function () {
+        var theme = 'auto';
+        try {
+          theme = JSON.parse(localStorage.getItem('playlist:settings')).theme || 'auto';
+        } catch (e) {}
+        var dark = theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', dark ? '#000000' : '#ffffff');
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <title>Puzzle Playlist</title>
     <meta name="description" content="Today's puzzles in one place: start the first, and the next is a tap away." />
