@@ -47,6 +47,8 @@ describe('search', () => {
     ['four by three', '4×3'],
     ['metazoa', 'Metazooa'],
     ['animal', 'Metazooa'],
+    ['metaflora', 'Metaflora'],
+    ['plant', 'Metaflora'],
   ])('finds %j as %s', (query, name) => {
     expect(top(query)).toBe(name);
   });
@@ -65,6 +67,10 @@ describe('search', () => {
 
   it('finds both of Hank Green\'s games by "hank green"', () => {
     expect(ids('hank green').sort()).toEqual(['four-by-three', 'smush']);
+  });
+
+  it('finds both of Trainwreck Labs\' games by "trainwreck labs"', () => {
+    expect(ids('trainwreck labs').sort()).toEqual(['metaflora', 'metazooa']);
   });
 
   it('finds your own games by "yours"', () => {

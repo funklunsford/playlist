@@ -83,6 +83,7 @@ export const CATALOG: readonly Puzzle[] = [
   { id: 'box-office-game', name: 'Box Office Game', publisher: 'indie', url: 'https://boxofficega.me/', aliases: ['movies'], color: '#b23a48' },
   { id: 'krillion', name: 'Krillion', publisher: 'indie', url: 'https://www.krillion.org/', aliases: ['trivia', 'rare answers'], color: '#092238' },
   { id: 'metazooa', name: 'Metazooa', publisher: 'indie', url: 'https://metazooa.com/play/daily', aliases: ['animal', 'animals', 'zoology', 'biology', 'tree of life', 'trainwreck labs'], color: '#03170c' },
+  { id: 'metaflora', name: 'Metaflora', publisher: 'indie', url: 'https://flora.metazooa.com/play/daily', aliases: ['plant', 'plants', 'botany', 'biology', 'tree of life', 'trainwreck labs'], color: '#03170c' },
 
   // Hank Green's daily word games.
   { id: 'smush', name: 'Smush', publisher: 'hankgreen', url: 'https://www.hankgreen.com/smush/', aliases: ['smushier'], color: '#e7b416' },

@@ -556,3 +556,9 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **Its address is the daily game itself,** metazooa.com/play/daily. The site's home page is an introduction with an "Enter the zoo!" button, so starting there would cost a second tap.
 - **Its icon** is the site's home-screen turtle. It's a mark on a clear background, so it's drawn smaller, on white.
 - "metazoa", "animal", "biology" and "tree of life" find it. The catalog is now 73 puzzles.
+
+## Metaflora (2026-10-15, branch `metaflora`)
+- **The owner's request:** Metaflora, Metazooa's sister game from Trainwreck Labs, with a mystery plant in place of an animal.
+- **It opens at flora.metazooa.com/play/daily,** the daily game itself, as Metazooa does.
+- **Its icon** is the site's home-screen leaf, inset on white like Metazooa's turtle.
+- "plant", "botany" and "biology" find it, and "trainwreck labs" finds both games. The catalog is now 74 puzzles.
