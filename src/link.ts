@@ -1,6 +1,6 @@
 // A playlist as a link, to send to each other:
 //
-//   https://funklunsford.github.io/playlist/#add=nyt-wordle,nyt-connections,clues-by-sam,strokes
+//   https://strokes.fun/playlist/#add=nyt-wordle,nyt-connections,clues-by-sam,strokes
 //
 // Catalog puzzles go by id. One added by its address goes as "name|address", URL-encoded, so its commas and
 // bars can't be mistaken for the link's own.

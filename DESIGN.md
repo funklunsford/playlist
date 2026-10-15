@@ -41,7 +41,7 @@ This doc settled the design before anything was built. "Puzzle Playlist" is a wo
 - That also rules out playing the first puzzle as soon as the site opens.
 
 **A web page can't see inside another site.**
-- **First-party games** share an origin with the playlist (`funklunsford.github.io`), so they report finishing themselves.
+- **First-party games** report finishing themselves when they share the playlist's origin: on strokes.fun, Strokes (see "Moved to strokes.fun").
 - **Everything else** is counted done on coming back.
 - **Phase 2** reads the game's copied share result to confirm it and keep the score.
 - **Seeing NYT finish with no input from the player** would need an extension or an app. That's ruled out.
@@ -153,7 +153,7 @@ A small ranking function written for this, with tests. The catalog is small, so 
   - A signal newer than a "Not yet" ticks the game again; an older one doesn't.
 - **Strokes:** one write, where it saves today's daily result.
 - **Mountweazel:** a write when a page is finished. Its save format is changing on its `climb` branch, so this comes after that lands.
-- **This only works while all three sites share `funklunsford.github.io`.** A custom domain, if ever added, goes on the user site so all three move together.
+- **This only works for games on the playlist's origin** (`readsDone`). On strokes.fun that's Strokes. Mountweazel, on funklunsford.github.io, is ticked for coming back (see "Moved to strokes.fun").
 
 ### Sharing a playlist
 - The link looks like `…/playlist/#add=nyt-wordle,nyt-connections,clues-by-sam,strokes`. Entries added by link travel as `name|url`, URL-encoded.
@@ -222,7 +222,7 @@ A small ranking function written for this, with tests. The catalog is small, so 
   4. Reloading the page fresh shows ▶ Continue. Skip a puzzle, then finish the rest, and All done appears.
   5. A playlist link adds its puzzles after localStorage is cleared.
 - **After deploying:**
-  - Play Strokes from the playlist at funklunsford.github.io/playlist/, solve it, and go back. It should be ticked, with ▶ Next on the next puzzle.
+  - Play Strokes from the playlist at strokes.fun/playlist/, solve it, and go back. It should be ticked, with ▶ Next on the next puzzle.
   - Run the iPhone checks on both phones.
 
 ## Phase 1 built (2026-10-13)
@@ -514,3 +514,20 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **A new publisher, Hank Green,** so a row says whose games these are, and "hank green" finds both. "4x3" and "four by three" find 4×3.
 - **They share one icon,** Hank Green's 3 × 3 grid of coloured squares, as his site gives both games the same. It's kept once, as `hankgreen.svg`.
 - The catalog is now 72 puzzles.
+
+## Moved to strokes.fun (2026-10-15, branch `strokes-fun`)
+- **The owner's calls:**
+  - Strokes now lives at https://strokes.fun, and the playlist moves with it, to https://strokes.fun/playlist/.
+  - Mountweazel stays on funklunsford.github.io.
+- **How it's served:**
+  - Strokes' Cloudflare Pages site forwards `/playlist/…` to this repo's GitHub Pages site, through a Pages Function in Strokes' repo (`functions/playlist/[[path]].js`).
+  - This repo publishes as before, and strokes.fun shows each publish at once.
+  - In the browser the playlist is on strokes.fun, so it shares Strokes' localStorage and sees Strokes' done key.
+- **Whose done keys it reads** (`readsDone` in `src/firstParty.ts`): your own games on the playlist's own origin, checked against the page's address.
+  - On strokes.fun that's Strokes.
+  - Mountweazel writes its key on funklunsford.github.io, out of reach, so it's ticked for coming back, like anyone's. (On the github.io address, it's the other way round.)
+  - It keeps `firstParty`, because the bookmarklet's check runs on Mountweazel's own page and reads its key there.
+- **What changed:**
+  - Strokes' catalog address is https://strokes.fun/, which is also how the bookmarklet's check recognises its page.
+  - The check's fallback return address is strokes.fun/playlist/. The bookmarklet itself takes the address of the page it's installed from.
+- **Starting fresh on strokes.fun:** saved playlists and history stay with the old address's storage, and a bookmarklet installed from it returns there. Install it again from strokes.fun/playlist/.

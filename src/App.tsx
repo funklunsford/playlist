@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { catalogPuzzle } from './catalog';
 import { localDate } from './day';
 import { readDone, resolveDone, type Done } from './done';
-import { parseDoneKey, readSignals } from './firstParty';
+import { parseDoneKey, readSignals, readsDone } from './firstParty';
 import { applySignals, arrive, barFor, mark, nextUp, unplayed, type Arrival, type Back, type Day, type Status } from './player';
 import { fromShared, playlistLink, readLink, withShared, type Shared } from './link';
 import { pieceColor } from './pieces';
@@ -43,8 +43,8 @@ prune(kv, localDate());
 // Light or dark, as set (index.html has already drawn the page so), and following the device on Automatic.
 applyTheme(loadSettings(kv).theme);
 
-/** Your own games, which say for themselves when they're done (src/firstParty.ts). */
-const reportsDone = (id: string) => !!catalogPuzzle(id)?.firstParty;
+/** Your own games on this page's origin, which say for themselves when they're done (src/firstParty.ts). */
+const reportsDone = (id: string) => readsDone(catalogPuzzle(id), location.href);
 
 /** How this page came to be showing: by Back or Forward, or opened afresh (or reloaded). */
 function arrivalNow(): Arrival {

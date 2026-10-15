@@ -32,7 +32,7 @@ export interface Puzzle {
   aliases?: string[];
   /** Its tile's colour. */
   color: string;
-  /** One of your own games, on the playlist's origin: it says when it's done (see src/firstParty.ts). */
+  /** One of your own games: it writes a done key when it's finished, which the playlist reads when they share an origin (src/firstParty.ts). */
   firstParty?: boolean;
   /** False for a puzzle that isn't new each day. "Done" means "played today" either way. */
   daily?: boolean;
@@ -53,7 +53,7 @@ export const CATALOG: readonly Puzzle[] = [
   { id: 'nyt-sudoku', name: 'Sudoku', publisher: 'nyt', url: 'https://www.nytimes.com/puzzles/sudoku', color: '#f39c32' },
 
   // Your own
-  { id: 'strokes', name: 'Strokes', publisher: 'yours', url: 'https://funklunsford.github.io/strokes/', aliases: ['diplets', 'word maze'], color: '#6f5899', firstParty: true },
+  { id: 'strokes', name: 'Strokes', publisher: 'yours', url: 'https://strokes.fun/', aliases: ['diplets', 'word maze'], color: '#6f5899', firstParty: true },
   { id: 'mountweazel', name: 'Mountweazel', publisher: 'yours', url: 'https://funklunsford.github.io/mountweazel/', aliases: ['mount weazel', 'fake words', 'archaic words'], color: '#26241f', firstParty: true, daily: false },
 
   // Independent and others

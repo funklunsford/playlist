@@ -31,7 +31,7 @@ describe('the rule for a page', () => {
     expect(ruleFor('https://www.nytimes.com/games/connections')?.id).toBe('nyt-connections');
     expect(ruleFor('https://www.nytimes.com/crosswords/game/mini')?.id).toBe('nyt-mini');
     expect(ruleFor('https://cluesbysam.com/')?.id).toBe('clues-by-sam');
-    expect(ruleFor('https://funklunsford.github.io/strokes/')?.id).toBe('strokes');
+    expect(ruleFor('https://strokes.fun/')?.id).toBe('strokes');
   });
 
   it("is a plain one, matching the game's name, for the rest of the catalog", () => {
