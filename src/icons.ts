@@ -60,6 +60,7 @@ export const ICONS: Readonly<Record<string, Icon>> = {
   'box-office-game': { file: 'box-office-game.png' },
   krillion: { file: 'krillion.png' },
   metazooa: { file: 'metazooa.png', inset: 0.8 },
+  metaflora: { file: 'metaflora.png', inset: 0.8 },
   // Hank Green's games share one icon.
   smush: { file: 'hankgreen.svg' },
   'four-by-three': { file: 'hankgreen.svg' },
