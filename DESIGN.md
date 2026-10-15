@@ -508,3 +508,9 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 ## LinkedIn's games taken out (2026-10-14, branch `no-linkedin`)
 - **The owner's call:** Queens, Tango, Zip, Pinpoint and Crossclimb are gone from the catalog, along with the LinkedIn publisher and LinkedIn's icon. The catalog is now 70 puzzles.
 - **A saved playlist that had any of them** just stops showing them. The playlist leaves out ids the catalog no longer has, and the same goes for a playlist link that names them.
+
+## Smush and 4×3 (2026-10-14, branch `hank-green`)
+- **The owner's request:** Hank Green's two daily word games, from the links on his own homepage. Smush is at hankgreen.com/smush/, and 4×3 at hankgreen.com/fourbythree/. Sites named "4x3" elsewhere are copies.
+- **A new publisher, Hank Green,** so a row says whose games these are, and "hank green" finds both. "4x3" and "four by three" find 4×3.
+- **They share one icon,** Hank Green's 3 × 3 grid of coloured squares, as his site gives both games the same. It's kept once, as `hankgreen.svg`.
+- The catalog is now 72 puzzles.
