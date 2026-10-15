@@ -222,7 +222,7 @@ A small ranking function written for this, with tests. The catalog is small, so 
   4. Reloading the page fresh shows ▶ Continue. Skip a puzzle, then finish the rest, and All done appears.
   5. A playlist link adds its puzzles after localStorage is cleared.
 - **After deploying:**
-  - Play Strokes from the playlist at strokes.fun/playlist/, solve it, and go back. It should be ticked, with ▶ Next on the next puzzle.
+  - Play Mountweazel from the playlist at funklunsford.github.io/playlist/, finish it, and go back. It should be ticked by its own done mark, with ▶ Next on the next puzzle.
   - Run the iPhone checks on both phones.
 
 ## Phase 1 built (2026-10-13)
@@ -516,6 +516,8 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - The catalog is now 72 puzzles.
 
 ## Moved to strokes.fun (2026-10-15, branch `strokes-fun`)
+*Undone the same day: the playlist's home is github.io again, and there's no strokes.fun/playlist. See "Home at github.io, and funklunsford.com".*
+
 - **The owner's calls:**
   - Strokes now lives at https://strokes.fun, and the playlist moves with it, to https://strokes.fun/playlist/.
   - Mountweazel stays on funklunsford.github.io.
@@ -531,3 +533,20 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - Strokes' catalog address is https://strokes.fun/, which is also how the bookmarklet's check recognises its page.
   - The check's fallback return address is strokes.fun/playlist/. The bookmarklet itself takes the address of the page it's installed from.
 - **Starting fresh on strokes.fun:** saved playlists and history stay with the old address's storage, and a bookmarklet installed from it returns there. Install it again from strokes.fun/playlist/.
+
+## Home at github.io, and funklunsford.com (2026-10-15, branch `github-home`)
+- **The owner's calls:**
+  - The playlist's home is its own GitHub Pages site, https://funklunsford.github.io/playlist/.
+  - strokes.fun/playlist shouldn't exist. Strokes' repo removed its forwarding function the same day.
+  - The owner's domain, funklunsford.com, forwards:
+    - /puzzleplaylist to the playlist
+    - /mountweazel to Mountweazel
+    - /strokes to strokes.fun
+    Its site is its own repo, funklunsford/funklunsford.com.
+- **Whose done keys it reads** (`readsDone`): on github.io that's Mountweazel, which shares the origin again. Strokes, on strokes.fun, is ticked for coming back.
+- **Back to github.io:**
+  - the bookmarklet check's fallback return address
+  - the README
+  - the workflow note
+  - the examples in comments and tests
+- **Saved data:** anything saved at strokes.fun/playlist/ stays with that origin, and isn't carried back. A Puzzle done bookmark installed there needs installing again from github.io.

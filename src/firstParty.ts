@@ -10,8 +10,8 @@
 // The playlist reads these for the games on its own origin (readsDone), when it opens and whenever it's shown
 // again. It also reads them as they're written, from the 'storage' event a game in another tab causes. It
 // forgets them after 90 days, along with its own records (prune, in src/store.ts). Your games on another origin
-// (Mountweazel, on funklunsford.github.io) still write theirs, out of the playlist's reach: they're ticked for
-// coming back, like anyone's, and the bookmarklet's check reads their key on their own page.
+// (Strokes, on strokes.fun) still write theirs, out of the playlist's reach: they're ticked for coming back,
+// like anyone's, and the bookmarklet's check reads their key on their own page.
 
 import type { KeyValue } from './store';
 

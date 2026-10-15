@@ -9,4 +9,4 @@ npm test
 npm run build
 ```
 
-Play it at **https://strokes.fun/playlist/**. Strokes' site (funklunsford/word-puzzle, `functions/playlist/`) forwards it from GitHub Pages, so it shares Strokes' origin and sees when Strokes is done. Every merge to `main` is tested and published to GitHub Pages, https://funklunsford.github.io/playlist/, by GitHub Actions (`.github/workflows/deploy.yml`), with Pages set to build from Actions; strokes.fun shows it at once.
+Play it at **https://funklunsford.github.io/playlist/**, also reached from https://funklunsford.com/puzzleplaylist. Every merge to `main` is tested and published there by GitHub Actions (`.github/workflows/deploy.yml`), with Pages set to build from Actions.
