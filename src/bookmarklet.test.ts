@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { bookmarklet } from './bookmarklet';
 
-const BASE = 'https://funklunsford.github.io/playlist/';
+const BASE = 'https://strokes.fun/playlist/';
 
 describe('the bookmarklet', () => {
   const code = bookmarklet(BASE);

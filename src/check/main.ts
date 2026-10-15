@@ -9,7 +9,7 @@ import { ruleFor } from './rules';
 import { scoreOf } from './score';
 
 /** The playlist, if the bookmarklet doesn't say (it always does). */
-const PLAYLIST = 'https://funklunsford.github.io/playlist/';
+const PLAYLIST = 'https://strokes.fun/playlist/';
 
 // The script element that loaded this, read now: it's only known while the script first runs.
 const base = document.currentScript?.getAttribute('data-playlist') || PLAYLIST;
