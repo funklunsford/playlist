@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { fromShared, playlistLink, readLink, withShared } from './link';
 import { add, addLink, EMPTY, puzzlesOf } from './playlist';
 
-const BASE = 'https://strokes.fun/playlist/';
+const BASE = 'https://funklunsford.github.io/playlist/';
 
 describe('playlist links', () => {
   it('carry catalog puzzles by id, in order', () => {

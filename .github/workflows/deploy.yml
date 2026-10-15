@@ -1,6 +1,6 @@
 # Every push to main (a merged pull request) is tested, built and published to the site,
-# https://funklunsford.github.io/playlist/ (GitHub Pages on this repo, built by Actions). Players use it at
-# https://strokes.fun/playlist/, which Strokes' site forwards from there.
+# https://funklunsford.github.io/playlist/ (GitHub Pages on this repo, built by Actions), which
+# funklunsford.com/puzzleplaylist forwards to.
 # Pull requests are tested and built, but not published.
 name: Test and deploy
 
