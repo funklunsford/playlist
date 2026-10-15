@@ -2,7 +2,7 @@
 // every `url` is the puzzle's final address: `npm run check-catalog` confirms they all still answer, and
 // flags any that now redirect.
 
-export type PublisherId = 'nyt' | 'mw' | 'atlantic' | 'wapo' | 'guardian' | 'indie' | 'yours';
+export type PublisherId = 'nyt' | 'mw' | 'atlantic' | 'wapo' | 'guardian' | 'hankgreen' | 'indie' | 'yours';
 
 export interface Publisher {
   /** How a row names it. */
@@ -17,6 +17,7 @@ export const PUBLISHERS: Record<PublisherId, Publisher> = {
   atlantic: { label: 'The Atlantic', aliases: ['the atlantic'] },
   wapo: { label: 'Washington Post', aliases: ['washington post', 'wapo'] },
   guardian: { label: 'The Guardian', aliases: ['the guardian'] },
+  hankgreen: { label: 'Hank Green', aliases: ['hank green', 'hankgreen'] },
   indie: { label: 'Indie', aliases: ['indie'] },
   yours: { label: 'Yours', aliases: ['yours', 'ours', 'funklunsford'] },
 };
@@ -81,6 +82,10 @@ export const CATALOG: readonly Puzzle[] = [
   { id: 'poeltl', name: 'Poeltl', publisher: 'indie', url: 'https://poeltl.dunk.town/', aliases: ['nba', 'basketball'], color: '#e46b2c' },
   { id: 'box-office-game', name: 'Box Office Game', publisher: 'indie', url: 'https://boxofficega.me/', aliases: ['movies'], color: '#b23a48' },
   { id: 'krillion', name: 'Krillion', publisher: 'indie', url: 'https://www.krillion.org/', aliases: ['trivia', 'rare answers'], color: '#092238' },
+
+  // Hank Green's daily word games.
+  { id: 'smush', name: 'Smush', publisher: 'hankgreen', url: 'https://www.hankgreen.com/smush/', aliases: ['smushier'], color: '#e7b416' },
+  { id: 'four-by-three', name: '4×3', publisher: 'hankgreen', url: 'https://www.hankgreen.com/fourbythree/', aliases: ['4x3', 'four by three', 'fourbythree'], color: '#5b8def' },
 
   // Indie word games people play daily, from r/wordgames' thread "What daily word games are you playing that are NOT
   // part of a platform" (November 2025), in the order the thread ranks them.

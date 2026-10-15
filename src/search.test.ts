@@ -42,6 +42,9 @@ describe('search', () => {
     ['tylogram', 'Tylogram'],
     ['bridge of truth', 'Bridge of Truth'],
     ['second scramble', 'Second Scramble'],
+    ['smush', 'Smush'],
+    ['4x3', '4×3'],
+    ['four by three', '4×3'],
   ])('finds %j as %s', (query, name) => {
     expect(top(query)).toBe(name);
   });
@@ -56,6 +59,10 @@ describe('search', () => {
 
   it('finds nothing by "linkedin", whose games were taken out', () => {
     expect(ids('linkedin')).toEqual([]);
+  });
+
+  it('finds both of Hank Green\'s games by "hank green"', () => {
+    expect(ids('hank green').sort()).toEqual(['four-by-three', 'smush']);
   });
 
   it('finds your own games by "yours"', () => {

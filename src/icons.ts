@@ -59,6 +59,9 @@ export const ICONS: Readonly<Record<string, Icon>> = {
   anthropeum: { file: 'anthropeum.png' },
   'box-office-game': { file: 'box-office-game.png' },
   krillion: { file: 'krillion.png' },
+  // Hank Green's games share one icon.
+  smush: { file: 'hankgreen.svg' },
+  'four-by-three': { file: 'hankgreen.svg' },
   // The Atlantic's, as its site keeps Bracket City's own from scripts.
   'bracket-city': { file: 'bracket-city.png' },
   'wapo-keyword': { file: 'wapo-keyword.jpg' },
