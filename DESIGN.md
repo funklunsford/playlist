@@ -550,3 +550,9 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - the workflow note
   - the examples in comments and tests
 - **Saved data:** anything saved at strokes.fun/playlist/ stays with that origin, and isn't carried back. A Puzzle done bookmark installed there needs installing again from github.io.
+
+## Metazooa (2026-10-15, branch `metazooa`)
+- **The owner's request:** Metazooa, Trainwreck Labs' daily animal game. You find the day's mystery animal by guessing species, and each guess narrows it down the tree of life.
+- **Its address is the daily game itself,** metazooa.com/play/daily. The site's home page is an introduction with an "Enter the zoo!" button, so starting there would cost a second tap.
+- **Its icon** is the site's home-screen turtle. It's a mark on a clear background, so it's drawn smaller, on white.
+- "metazoa", "animal", "biology" and "tree of life" find it. The catalog is now 73 puzzles.

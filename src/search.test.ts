@@ -45,6 +45,8 @@ describe('search', () => {
     ['smush', 'Smush'],
     ['4x3', '4×3'],
     ['four by three', '4×3'],
+    ['metazoa', 'Metazooa'],
+    ['animal', 'Metazooa'],
   ])('finds %j as %s', (query, name) => {
     expect(top(query)).toBe(name);
   });
