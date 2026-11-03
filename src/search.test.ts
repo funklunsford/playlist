@@ -49,6 +49,10 @@ describe('search', () => {
     ['animal', 'Metazooa'],
     ['metaflora', 'Metaflora'],
     ['plant', 'Metaflora'],
+    ['trivia gauntlet', 'Trivia Gauntlet'],
+    ['word ladder', 'Word Ladder'],
+    ['where in the world', 'Where in the World'],
+    ['randle', 'Randle'],
   ])('finds %j as %s', (query, name) => {
     expect(top(query)).toBe(name);
   });
@@ -67,6 +71,10 @@ describe('search', () => {
 
   it('finds both of Hank Green\'s games by "hank green"', () => {
     expect(ids('hank green').sort()).toEqual(['four-by-three', 'smush']);
+  });
+
+  it('finds all four of DailyDle\'s games by "dailydle"', () => {
+    expect(ids('dailydle').sort()).toEqual(['dailydle-randle', 'dailydle-trivia-gauntlet', 'dailydle-where-in-the-world', 'dailydle-word-ladder']);
   });
 
   it('finds both of Trainwreck Labs\' games by "trainwreck labs"', () => {

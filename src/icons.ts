@@ -64,6 +64,11 @@ export const ICONS: Readonly<Record<string, Icon>> = {
   // Hank Green's games share one icon.
   smush: { file: 'hankgreen.svg' },
   'four-by-three': { file: 'hankgreen.svg' },
+  // DailyDle's: the emoji each page shows in a browser's tab, on the site's own near-black.
+  'dailydle-trivia-gauntlet': { file: 'dailydle-trivia-gauntlet.svg', plate: '#130f0d', inset: 0.7 },
+  'dailydle-word-ladder': { file: 'dailydle-word-ladder.svg', plate: '#130f0d', inset: 0.7 },
+  'dailydle-where-in-the-world': { file: 'dailydle-where-in-the-world.svg', plate: '#130f0d', inset: 0.7 },
+  'dailydle-randle': { file: 'dailydle-randle.svg', plate: '#130f0d', inset: 0.7 },
   // The Atlantic's, as its site keeps Bracket City's own from scripts.
   'bracket-city': { file: 'bracket-city.png' },
   'wapo-keyword': { file: 'wapo-keyword.jpg' },
