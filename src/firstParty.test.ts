@@ -3,13 +3,13 @@ import { readsDone } from './firstParty';
 
 describe('readsDone', () => {
   const strokes = { url: 'https://strokes.fun/', firstParty: true };
-  const mountweazel = { url: 'https://funklunsford.github.io/mountweazel/', firstParty: true };
+  const ours = { url: 'https://piecefull.app/dev/fake-game.html', firstParty: true };
   const wordle = { url: 'https://www.nytimes.com/games/wordle/index.html' };
 
-  const here = 'https://funklunsford.github.io/playlist/';
+  const here = 'https://piecefull.app/';
 
   it("reads your own games' done keys only on the playlist's own origin", () => {
-    expect(readsDone(mountweazel, here)).toBe(true);
+    expect(readsDone(ours, here)).toBe(true);
     // Strokes is on strokes.fun, out of reach: it's ticked for coming back.
     expect(readsDone(strokes, here)).toBe(false);
   });

@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  // Relative asset paths, so the built site works from any folder (GitHub Pages serves it at /playlist/).
+  // Relative asset paths, so the built site works from any folder: piecefull.app's root, or a preview's.
   base: './',
   // Strokes' dev server has 5173. A preview tool that assigns a port says which in PORT.
   server: { port: Number(process.env.PORT) || 5174, strictPort: true },

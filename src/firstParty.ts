@@ -1,6 +1,6 @@
 // Your own games say when they're done, through localStorage, which a page shares only with pages on its own
-// origin. Strokes and the playlist are both on strokes.fun (Strokes at its root, the playlist at /playlist/,
-// forwarded from its GitHub Pages site), so no server is needed. A game that finishes writes
+// origin, so no server is needed. The playlist is on piecefull.app and Strokes on strokes.fun, so for now only the
+// dev server's fake game (dev/fake-game.html) shares the playlist's origin. A game that finishes writes
 //
 //   localStorage.setItem(`puzzle-done:${game}:${date}`, JSON.stringify({ at: Date.now() }))
 //
@@ -30,7 +30,7 @@ export function parseDoneKey(key: string): { game: string; date: string } | null
 
 /**
  * Whether the playlist, at `here` (its own address), can read a puzzle's done key: one of your own games on the
- * playlist's origin. On strokes.fun that's Strokes; Mountweazel writes its key on funklunsford.github.io.
+ * playlist's origin. On piecefull.app that's none of them yet: Strokes writes its key on strokes.fun.
  */
 export function readsDone(puzzle: { url: string; firstParty?: boolean } | undefined, here: string): boolean {
   if (!puzzle?.firstParty) return false;
