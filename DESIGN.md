@@ -614,3 +614,7 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **Saved data doesn't move.** localStorage belongs to an origin, and the old one's page never runs again. Each player carries their playlist across with its Share link ("Replace mine"). Today's ticks and settings start over.
 - **Done keys:** no game of yours shares piecefull.app's origin. Strokes was already on strokes.fun, so it's ticked for coming back.
 - The bookmarklet check's fallback return address, the README, the workflow note and the examples in comments and tests now say piecefull.app.
+
+## DailyDle.com's games taken out (2026-11-03, branch `no-dailydle-com`)
+- **The owner's call:** the four games from dailydle.com are gone, along with the DailyDle publisher and their icons: Trivia Gauntlet, Word Ladder, Where in the World and Randle. They were added by misreading which DailyDle was meant. dailydle.org's games stay.
+- A saved playlist or playlist link that names them just leaves them out. The catalog is now 587 puzzles.
