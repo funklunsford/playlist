@@ -61,7 +61,8 @@ const typosAllowed = (q: string) => (q.length < 4 ? 0 : q.length < 7 ? 1 : 2);
 export function wordScore(q: string, w: string): number {
   if (q === w) return 1;
   if (w.startsWith(q)) return 0.9;
-  if (q.length >= 3 && w.includes(q)) return 0.7;
+  // Inside a word only from 4 letters: with hundreds of names, "nyt" is in "anything".
+  if (q.length >= 4 && w.includes(q)) return 0.7;
   const typos = typosAllowed(q);
   if (typos === 0) return 0;
   if (editDistance(q, w, typos) <= typos) return 0.6;
@@ -124,7 +125,10 @@ export function search(query: string, puzzles: readonly Puzzle[] = CATALOG): Puz
     if (missed) continue;
     let score = total / qs.length;
     if (item.name === asked) score += 0.5;
-    else if (item.name.startsWith(asked)) score += 0.25;
+    else if (item.name.startsWith(`${asked} `)) score += 0.25;
+    // Only the start of its first word ("octo" for Octordle) counts for less than a whole word elsewhere, so "bee"
+    // finds Spelling Bee before Beeline.
+    else if (item.name.startsWith(asked)) score += 0.05;
     scored.push({ item, score });
   }
   return scored.sort((a, b) => b.score - a.score || a.item.order - b.item.order).map((s) => s.item.puzzle);

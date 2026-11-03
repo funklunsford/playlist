@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- The tab mark. Deliberately NOT the app icon: at 16px the icon's paper
+       margin and -3° tilt turn to mush. Full-bleed yellow, heavy ink border and
+       an oversized glyph survive the shrink. Sibling of what's-the-word's "?".
+       Bars rather than a text "=" so no rasteriser has to find a font. -->
+  <rect x="2" y="2" width="60" height="60" rx="13" fill="#FFC42E" stroke="#17173A" stroke-width="4"/>
+  <rect x="16" y="23" width="32" height="7" rx="3.5" fill="#17173A"/>
+  <rect x="16" y="36" width="32" height="7" rx="3.5" fill="#17173A"/>
+</svg>

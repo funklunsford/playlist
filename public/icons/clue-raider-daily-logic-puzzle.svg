@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="Clue Raider">
+  <!-- Square app icon: petrol tile + brand bars (home-screen / favicon) -->
+  <rect x="0" y="0" width="80" height="80" rx="16" fill="#244B5A"/>
+  <g transform="translate(10 36)">
+    <rect x="0" y="0" width="18" height="8" rx="4" fill="#82a8cc"/>
+    <rect x="21" y="0" width="14" height="8" rx="4" fill="#d4b660"/>
+    <rect x="38" y="0" width="16" height="8" rx="4" fill="#c96b4b"/>
+    <rect x="57" y="0" width="12" height="8" rx="4" fill="#69a89c"/>
+  </g>
+</svg>

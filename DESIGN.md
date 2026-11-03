@@ -578,3 +578,23 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **What says the name:** the browser tab, and so a home-screen icon's label. Also the Puzzle done check's bar on a puzzle's page, and its "can't check this page" question.
   - A Puzzle done bookmark already installed keeps the old wording in its question until it's installed again. It works either way.
 - **The address doesn't change yet.** The site stays at funklunsford.github.io/playlist/ until piecefull.app's DNS is in place. Then piecefull.app becomes this repo's Pages domain.
+
+## dailydle.org's directory (2026-11-03, branch `dailydle-org`)
+- **The owner's request:** every playable game listed on dailydle.org, a directory of 577 daily games. (DailyDle.com's four games, added just before, came from misreading which DailyDle was meant.)
+- **Which joined, 514 of them:**
+  - The 551 that dailydle lists as daily.
+  - Less the 6 whose sites are gone (a 404, a lapsed host, a dead domain).
+  - Less answer and hint pages for LinkedIn's games, and a PC game.
+  - Less the 30 already in the catalog by address or by name. Krillion's separate daily modes on krillion.io are kept.
+- **Checking they play:** every site was fetched.
+  - 513 answered from here.
+  - 53 more reset the connection on this network but answered from check-host.net's server in Germany. A home network or ISP filter blocks them, so they may not open on that Wi-Fi.
+- **Names** drop the descriptions sites put in their titles. "Twixtle: Daily Word Puzzle" becomes "Twixtle", but "Futbolle: Who's That?" stays whole. Two different games with one name each say whose they are: "Chainle (zalize)".
+- **Icons:** 473 have their own, fetched as before, then shrunk to 128px.
+  - Sites this network couldn't reach gave theirs through Google's favicon service.
+  - A picture shared by games on different sites is a template's default, so those games get letter tiles. So do sites with nothing over 16px, or no icon at all: 41 in all.
+  - A studio's games that share one icon keep it: roughly.is, Zalize, Smashcut.
+- **Search:** each game's dailydle category is its alias, so "geography" or "trivia" lists those. With 592 names, two rules tightened:
+  - A query matches inside a word only from 4 letters. "nyt" was finding "Anything Grid".
+  - A query that's only the start of a name's first word gets a smaller bonus, so "bee" finds Spelling Bee before Beeline.
+- The catalog is now 592 puzzles.

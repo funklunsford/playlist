@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Suspectle">
+  <!-- Apple touch icon: same magnifier mark, larger canvas. -->
+  <rect width="180" height="180" rx="40" fill="#0b1119"/>
+  <g fill="none" transform="translate(26 26) scale(4)">
+    <circle cx="13.5" cy="13.5" r="8.5" stroke="#c9a227" stroke-width="1.6"/>
+    <circle cx="13.5" cy="13.5" r="6.4" stroke="#8a6f2a" stroke-width="0.8"/>
+    <path d="M19.8 19.8 L27 27" stroke="#c9a227" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M9.5 10.5 C10.5 8.6 12 7.6 14 7.4" stroke="#efd9a0" stroke-width="1.1" stroke-linecap="round" opacity="0.8"/>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Cluestand">
+  <!--
+    Cluestand Icon — Colorful Magnifying Glass.
+    A clean magnifying glass containing a vibrant 2x2 grid representing the puzzles.
+  -->
+  <style>
+    .ink { stroke: #181513; }
+    .tile-y { fill: #f6c445; }
+    .tile-g { fill: #14a35b; }
+    .tile-b { fill: #3498db; }
+    .tile-p { fill: #9b59b6; }
+    @media (prefers-color-scheme: dark) { .ink { stroke: #f5f1ea; } }
+  </style>
+  <!-- Handle (Diagonal) -->
+  <path class="ink" d="M 37 37 L 50 50" stroke-width="6" stroke-linecap="round" fill="none" />
+  <!-- Lens (Circle) -->
+  <circle class="ink" cx="26" cy="26" r="15" stroke-width="6" fill="none" />
+  <!-- Puzzle Grid -->
+  <rect class="tile-y" x="18" y="18" width="7" height="7" rx="1.5" />
+  <rect class="tile-g" x="27" y="18" width="7" height="7" rx="1.5" />
+  <rect class="tile-b" x="18" y="27" width="7" height="7" rx="1.5" />
+  <rect class="tile-p" x="27" y="27" width="7" height="7" rx="1.5" />
+</svg>
