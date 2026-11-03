@@ -598,3 +598,9 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
   - A query matches inside a word only from 4 letters. "nyt" was finding "Anything Grid".
   - A query that's only the start of a name's first word gets a smaller bonus, so "bee" finds Spelling Bee before Beeline.
 - The catalog is now 592 puzzles.
+
+## Mountweazel taken out (2026-11-03, branch `no-mountweazel`)
+- **The owner's call:** Mountweazel is gone from the catalog, along with its icon. It's no longer among the search box's starter chips either.
+- **New playlists** now start with Strokes, Connections and Wordle.
+- **A saved playlist or playlist link that names it** just leaves it out, as with LinkedIn's games.
+- The first-party done signal is unchanged. Strokes still uses it, and `readsDone` still checks origins. The catalog is now 591 puzzles.

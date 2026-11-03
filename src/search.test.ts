@@ -17,7 +17,6 @@ describe('search', () => {
     ['bee', 'Spelling Bee'],
     ['octo', 'Octordle'],
     ['quardle', 'Quordle'],
-    ['mountweasel', 'Mountweazel'],
     ['puzzmo', 'Puzzmo'],
     ['strand', 'Strands'],
     ['murdel', 'Murdle'],
@@ -81,8 +80,8 @@ describe('search', () => {
     expect(ids('trainwreck labs').sort()).toEqual(['metaflora', 'metazooa']);
   });
 
-  it('finds your own games by "yours"', () => {
-    expect(ids('yours')).toEqual(['strokes', 'mountweazel']);
+  it('finds your own game by "yours"', () => {
+    expect(ids('yours')).toEqual(['strokes']);
   });
 
   it('needs every word to match something', () => {
