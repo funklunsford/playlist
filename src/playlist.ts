@@ -17,7 +17,7 @@ export interface Playlist {
 
 export const EMPTY: Playlist = { ids: [], links: [] };
 
-/** A new playlist, the first time a device opens the page: your own two games, then Connections and Wordle. */
+/** A new playlist, the first time a device opens the page: your own Strokes, then Connections, Wordle and Krillion. */
 export const NEW_PLAYLIST: Playlist = { ids: ['strokes', 'nyt-connections', 'nyt-wordle', 'krillion'], links: [] };
 
 /** Tile colours for puzzles added by link, picked by their id. */
