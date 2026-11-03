@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Hawfold">
+  <!--
+    A closed loop of hedge around an enclosed field. Handover F42.
+
+    THE PRODUCT'S OWN MARK, not a picture of one. A finished parish is a single
+    closed loop with a filled interior, and that is the whole of Hawfold in one
+    shape: it is what the daily produces, what spec 9.7's completion draws, and
+    what the share card and the print sheet carry.
+
+    Colours are spec 10.1's tokens, written as hex because an SVG served as a
+    file has no stylesheet to read custom properties from.
+
+    Drawn for 16px first, and the drawing is nearly all of the canvas. The
+    loop steps once rather than being a plain rectangle, because a rectangle at
+    that size reads as a border around the icon rather than as a boundary in
+    it, and the step is a tenth of the width so that it survives being four
+    pixels across. Stroke 4.5 on a 32 unit canvas is a hair over two device
+    pixels at 16px, which is the thinnest a line can be and still hold.
+
+    Brief D1 asks the designer for the wordmark, the favicon and an app icon
+    set, legible at 12mm and at 16px. This is a standing-in mark rather than
+    that deliverable, and it is honest about which it is: it uses the approved
+    palette and the product's own geometry, and it invents no visual language.
+  -->
+  <rect width="32" height="32" fill="#f4efe2"/>
+  <path d="M4.5 4.5 H18 V13 H27.5 V27.5 H4.5 Z"
+        fill="#e2e9ce"
+        stroke="#2f5233"
+        stroke-width="4.5"
+        stroke-linejoin="round"/>
+</svg>

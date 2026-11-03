@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="2" y="2" width="60" height="60" rx="12" fill="#ede6d8"/>
+  <rect x="2" y="52" width="60" height="10" rx="5" fill="#d9cfba"/>
+  <text x="30" y="46" font-family="ui-monospace, monospace" font-size="40" font-weight="bold" text-anchor="middle" fill="#14171f">P</text>
+  <text x="51" y="20" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" text-anchor="middle" fill="#e8b44c">3</text>
+</svg>

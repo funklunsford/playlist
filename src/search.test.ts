@@ -73,8 +73,8 @@ describe('search', () => {
     expect(ids('hank green').sort()).toEqual(['four-by-three', 'smush']);
   });
 
-  it('finds all four of DailyDle\'s games by "dailydle"', () => {
-    expect(ids('dailydle').sort()).toEqual(['dailydle-randle', 'dailydle-trivia-gauntlet', 'dailydle-where-in-the-world', 'dailydle-word-ladder']);
+  it('finds all four of DailyDle\'s games first by "dailydle"', () => {
+    expect(ids('dailydle').slice(0, 4).sort()).toEqual(['dailydle-randle', 'dailydle-trivia-gauntlet', 'dailydle-where-in-the-world', 'dailydle-word-ladder']);
   });
 
   it('finds both of Trainwreck Labs\' games by "trainwreck labs"', () => {

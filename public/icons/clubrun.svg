@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">MatchIQ symbol</title>
+  <rect width="64" height="64" rx="14" fill="#facc15"/>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="32" cy="29" r="17" fill="none" stroke="#422006" stroke-width="10"/>
+    <path d="M43.5 41.5 54 52" stroke="#422006" stroke-width="10"/>
+    <path d="M32 8v43" stroke="#facc15" stroke-width="3.5"/>
+    <circle cx="32" cy="29" r="6.5" fill="#facc15" stroke="#422006" stroke-width="3.5"/>
+  </g>
+</svg>
