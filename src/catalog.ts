@@ -2,7 +2,7 @@
 // every `url` is the puzzle's final address: `npm run check-catalog` confirms they all still answer, and
 // flags any that now redirect.
 
-export type PublisherId = 'nyt' | 'mw' | 'atlantic' | 'wapo' | 'guardian' | 'hankgreen' | 'indie' | 'yours';
+export type PublisherId = 'nyt' | 'mw' | 'atlantic' | 'wapo' | 'guardian' | 'hankgreen' | 'dailydle' | 'indie' | 'yours';
 
 export interface Publisher {
   /** How a row names it. */
@@ -18,6 +18,7 @@ export const PUBLISHERS: Record<PublisherId, Publisher> = {
   wapo: { label: 'Washington Post', aliases: ['washington post', 'wapo'] },
   guardian: { label: 'The Guardian', aliases: ['the guardian'] },
   hankgreen: { label: 'Hank Green', aliases: ['hank green', 'hankgreen'] },
+  dailydle: { label: 'DailyDle', aliases: ['dailydle', 'daily dle'] },
   indie: { label: 'Indie', aliases: ['indie'] },
   yours: { label: 'Yours', aliases: ['yours', 'ours', 'funklunsford'] },
 };
@@ -88,6 +89,12 @@ export const CATALOG: readonly Puzzle[] = [
   // Hank Green's daily word games.
   { id: 'smush', name: 'Smush', publisher: 'hankgreen', url: 'https://www.hankgreen.com/smush/', aliases: ['smushier'], color: '#e7b416' },
   { id: 'four-by-three', name: '4×3', publisher: 'hankgreen', url: 'https://www.hankgreen.com/fourbythree/', aliases: ['4x3', 'four by three', 'fourbythree'], color: '#5b8def' },
+
+  // DailyDle's four daily games, all on dailydle.com.
+  { id: 'dailydle-trivia-gauntlet', name: 'Trivia Gauntlet', publisher: 'dailydle', url: 'https://www.dailydle.com/triviagauntlet.html', aliases: ['trivia', 'gauntlet', 'triviagauntlet'], color: '#e8743b' },
+  { id: 'dailydle-word-ladder', name: 'Word Ladder', publisher: 'dailydle', url: 'https://www.dailydle.com/wordladder.html', aliases: ['ladder'], color: '#3d6b4f' },
+  { id: 'dailydle-where-in-the-world', name: 'Where in the World', publisher: 'dailydle', url: 'https://www.dailydle.com/country-game.html', aliases: ['country', 'outline', 'geography'], color: '#2c3e50' },
+  { id: 'dailydle-randle', name: 'Randle', publisher: 'dailydle', url: 'https://www.dailydle.com/randle.html', aliases: ['ranking', 'rank', 'order'], color: '#8e5bb5' },
 
   // Indie word games people play daily, from r/wordgames' thread "What daily word games are you playing that are NOT
   // part of a platform" (November 2025), in the order the thread ranks them.

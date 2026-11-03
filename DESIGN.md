@@ -562,3 +562,13 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **It opens at flora.metazooa.com/play/daily,** the daily game itself, as Metazooa does.
 - **Its icon** is the site's home-screen leaf, inset on white like Metazooa's turtle.
 - "plant", "botany" and "biology" find it, and "trainwreck labs" finds both games. The catalog is now 74 puzzles.
+
+## DailyDle's games (2026-11-03, branch `dailydle`)
+- **The owner's request:** every playable game on dailydle.com. It hosts four of its own, all daily and all checked playing:
+  - Trivia Gauntlet: seven questions, one life
+  - Word Ladder
+  - Where in the World: today's country from its outline
+  - Randle: put seven things in order
+- **A new publisher, DailyDle,** as with Hank Green. Rows say whose they are, which matters for names as plain as "Word Ladder", and "dailydle" finds all four.
+- **Their icons** are the emoji each page shows in a browser's tab, saved as small SVGs. They sit on the site's near-black so Where in the World's white flag shows.
+- The catalog is now 78 puzzles.
