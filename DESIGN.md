@@ -604,3 +604,13 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **New playlists** now start with Strokes, Connections and Wordle.
 - **A saved playlist or playlist link that names it** just leaves it out, as with LinkedIn's games.
 - The first-party done signal is unchanged. Strokes still uses it, and `readsDone` still checks origins. The catalog is now 591 puzzles.
+
+## At piecefull.app (2026-11-03, branch `piecefull-app`)
+- **The owner's call:** serve the site only from piecefull.app, the domain they bought at Cloudflare.
+- **How:** Cloudflare's DNS points piecefull.app at GitHub Pages: four A records, four AAAA records, and `www` as a CNAME, all DNS only. piecefull.app is this repo's Pages custom domain, with HTTPS enforced. Every .app domain must be HTTPS, so the site doesn't open until GitHub's certificate is issued.
+- **The old address forwards.** GitHub sends funklunsford.github.io/playlist/… to piecefull.app/…, keeping the path and the `#…`.
+  - Old bookmarks and playlist links still work.
+  - An installed Puzzle done bookmark still loads its check through the forward, and comes back to piecefull.app.
+- **Saved data doesn't move.** localStorage belongs to an origin, and the old one's page never runs again. Each player carries their playlist across with its Share link ("Replace mine"). Today's ticks and settings start over.
+- **Done keys:** no game of yours shares piecefull.app's origin. Strokes was already on strokes.fun, so it's ticked for coming back.
+- The bookmarklet check's fallback return address, the README, the workflow note and the examples in comments and tests now say piecefull.app.

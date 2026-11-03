@@ -9,4 +9,4 @@ npm test
 npm run build
 ```
 
-Play it at **https://funklunsford.github.io/playlist/**, also reached from https://funklunsford.com/puzzleplaylist. Every merge to `main` is tested and published there by GitHub Actions (`.github/workflows/deploy.yml`), with Pages set to build from Actions.
+Play it at **https://piecefull.app**. Every merge to `main` is tested and published there by GitHub Actions (`.github/workflows/deploy.yml`), with Pages set to build from Actions and piecefull.app as its custom domain. Its first address, funklunsford.github.io/playlist/, forwards there.

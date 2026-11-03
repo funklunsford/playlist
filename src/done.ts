@@ -1,6 +1,6 @@
 // What the bookmarklet brings back to the playlist: which puzzle it checked, and the result, in the address.
 //
-//   …/playlist/#done=nyt-wordle&url=<the puzzle's page>&score=3%2F6&text=<the game's share text>&how=checked
+//   https://piecefull.app/#done=nyt-wordle&url=<the puzzle's page>&score=3%2F6&text=<the game's share text>&how=checked
 //
 // `done` is the catalog id when the check knew the game, else empty, and the playlist goes by `url`.
 // `how` says how it was decided: "checked" from the page, "asked" when the player said so, and "unchecked" when
