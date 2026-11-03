@@ -1,4 +1,4 @@
-# Puzzle Playlist: design doc and plan
+# Piecefull: design doc and plan
 
 ## Context
 Two players each visit every puzzle's own site, and play whichever puzzles they remember. This site gathers them into a **daily playlist that plays like Spotify**:
@@ -6,7 +6,7 @@ Two players each visit every puzzle's own site, and play whichever puzzles they 
 - Come back, and the playlist ticks it. One tap on **▶ Next** plays the next.
 - A puzzle is added by **typing its name**, with autocomplete that copes with misspellings and partial names. Nobody pastes a URL.
 
-This doc settled the design before anything was built. "Puzzle Playlist" is a working name.
+This doc settled the design before anything was built. "Puzzle Playlist" was its working name; it's now Piecefull (see "Named Piecefull").
 
 **Decided on 2026-10-13:**
 
@@ -572,3 +572,9 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 - **A new publisher, DailyDle,** as with Hank Green. Rows say whose they are, which matters for names as plain as "Word Ladder", and "dailydle" finds all four.
 - **Their icons** are the emoji each page shows in a browser's tab, saved as small SVGs. They sit on the site's near-black so Where in the World's white flag shows.
 - The catalog is now 78 puzzles.
+
+## Named Piecefull (2026-11-03, branch `piecefull`)
+- **The owner's call:** the site is Piecefull, after the domain they bought, piecefull.app. "Puzzle Playlist" was a working name. Earlier sections keep it where they record what was built at the time.
+- **What says the name:** the browser tab, and so a home-screen icon's label. Also the Puzzle done check's bar on a puzzle's page, and its "can't check this page" question.
+  - A Puzzle done bookmark already installed keeps the old wording in its question until it's installed again. It works either way.
+- **The address doesn't change yet.** The site stays at funklunsford.github.io/playlist/ until piecefull.app's DNS is in place. Then piecefull.app becomes this repo's Pages domain.

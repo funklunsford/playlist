@@ -34,7 +34,7 @@ export function overlay(): Overlay {
   bar.setAttribute('role', 'status');
   const who = document.createElement('span');
   who.className = 'who';
-  who.textContent = 'Puzzle Playlist';
+  who.textContent = 'Piecefull';
   const text = document.createElement('span');
   text.className = 'text';
   bar.append(who, text);
