@@ -618,3 +618,7 @@ A web page can't see inside another site, but a bookmarklet can: it's a bookmark
 ## DailyDle.com's games taken out (2026-11-03, branch `no-dailydle-com`)
 - **The owner's call:** the four games from dailydle.com are gone, along with the DailyDle publisher and their icons: Trivia Gauntlet, Word Ladder, Where in the World and Randle. They were added by misreading which DailyDle was meant. dailydle.org's games stay.
 - A saved playlist or playlist link that names them just leaves them out. The catalog is now 587 puzzles.
+
+## Krillion in new playlists (2026-11-03, branch `default-krillion`)
+- **The owner's call:** a new playlist now starts with Strokes, Connections, Wordle and Krillion. With four, its cover is the 2 × 2 grid.
+- As before, this only applies where `playlist:items` is missing. A playlist already saved is left alone.
