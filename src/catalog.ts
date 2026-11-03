@@ -55,7 +55,6 @@ export const CATALOG: readonly Puzzle[] = [
 
   // Your own
   { id: 'strokes', name: 'Strokes', publisher: 'yours', url: 'https://strokes.fun/', aliases: ['diplets', 'word maze'], color: '#6f5899', firstParty: true },
-  { id: 'mountweazel', name: 'Mountweazel', publisher: 'yours', url: 'https://funklunsford.github.io/mountweazel/', aliases: ['mount weazel', 'fake words', 'archaic words'], color: '#26241f', firstParty: true, daily: false },
 
   // Independent and others
   { id: 'clues-by-sam', name: 'Clues by Sam', publisher: 'indie', url: 'https://cluesbysam.com/', aliases: ['detective'], color: '#3d7f62' },

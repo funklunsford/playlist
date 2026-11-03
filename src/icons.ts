@@ -34,7 +34,6 @@ export const ICONS: Readonly<Record<string, Icon>> = {
   'nyt-tiles': { file: 'nyt-tiles.png' },
   'nyt-sudoku': { file: 'nyt-sudoku.png' },
   strokes: { file: 'strokes.svg', plate: '#17161c' },
-  mountweazel: { file: 'mountweazel.png' },
   'clues-by-sam': { file: 'clues-by-sam.png' },
   framed: { file: 'framed.png' },
   octordle: { file: 'octordle.png', inset: 0.86 },

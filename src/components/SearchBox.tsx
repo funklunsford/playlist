@@ -8,7 +8,7 @@ import { Tile } from './Tile';
 const SHOWN = 6;
 
 /** What an empty playlist suggests. */
-const STARTERS = ['nyt-wordle', 'nyt-connections', 'nyt-strands', 'nyt-mini', 'clues-by-sam', 'strokes', 'mountweazel'];
+const STARTERS = ['nyt-wordle', 'nyt-connections', 'nyt-strands', 'nyt-mini', 'clues-by-sam', 'strokes'];
 
 interface Props {
   /** The ids already in the playlist. */

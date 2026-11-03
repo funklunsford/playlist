@@ -4,7 +4,7 @@
 //
 //   localStorage.setItem(`puzzle-done:${game}:${date}`, JSON.stringify({ at: Date.now() }))
 //
-// `game` is its id in the catalog ('strokes', 'mountweazel'), and `date` is the local date it finished on, as
+// `game` is its id in the catalog ('strokes'), and `date` is the local date it finished on, as
 // YYYY-MM-DD (Strokes' localDate()). It may add `share`, its result text.
 //
 // The playlist reads these for the games on its own origin (readsDone), when it opens and whenever it's shown
