@@ -6,7 +6,7 @@
 /** The bookmarklet for the playlist at `base` (its address, ending in "/"). */
 export function bookmarklet(base: string): string {
   const b = JSON.stringify(base);
-  const fallback = `if(confirm("Puzzle Playlist can't check this page. Count the puzzle as done?"))location.href=b+"#done=&how=unchecked&url="+encodeURIComponent(location.href)`;
+  const fallback = `if(confirm("Piecefull can't check this page. Count the puzzle as done?"))location.href=b+"#done=&how=unchecked&url="+encodeURIComponent(location.href)`;
   return (
     `javascript:(function(){var b=${b},d=document;try{var s=d.createElement("script");` +
     `s.src=b+"check.js?"+Date.now();s.setAttribute("data-playlist",b);s.onerror=function(){${fallback}};` +

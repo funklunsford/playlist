@@ -1,4 +1,4 @@
-# Puzzle Playlist
+# Piecefull
 
 Today's puzzles as a playlist. Press ▶ and the first one opens in this tab; come back, and it's ticked, with ▶ Next on the one after. Add a puzzle by typing its name. [DESIGN.md](DESIGN.md) has the design, and what browsers do and don't allow.
 
